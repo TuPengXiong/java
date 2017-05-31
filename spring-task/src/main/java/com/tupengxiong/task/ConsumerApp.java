@@ -9,9 +9,17 @@ import org.springframework.stereotype.Component;
  * 	
  */
 @Component
-public class App {
+public class ConsumerApp extends Consumer<String>{
 
-    public void execute1(){
+	public ConsumerApp() {
+		super(null, null);
+	}
+	
+    public ConsumerApp(String dto, Producer<?> producer) {
+		super(dto, producer);
+	}
+
+	public void execute1(){
         System.out.printf("Task: %s, Current time: %s\n", 1, new Date().getTime());
     }
 
@@ -54,5 +62,16 @@ public class App {
     public void execute11(){
         System.out.printf("Task: %s, Current time: %s\n", 11, new Date().getTime());
     }
+
+	@Override
+	protected String getName() {
+		return "ConsumerApp";
+	}
+
+	@Override
+	public void doImpl() {
+		System.out.println("ConsumerApp.doImpl running " + new Date());
+		
+	}
 
 }
