@@ -99,16 +99,25 @@ public class Solr {
 			map.put("q", "*:*");
 			// 排序 id降序
 			map.put("sort", "id desc");
+
+			//返回的字段
+			map.put("fl", "username password id");
 			
 			//分页查询
 			map.put("start", "0");
 			map.put("rows", "5");
 			
+			//过滤
+			map.put("fq", "id [1 TO 12]");
+			
+			//返回的数据格式
+			map.put("wt", "json");
+			
 			SolrParams params = new MapSolrParams(map);
 			QueryResponse response = search(null, params);
 			for (int i = 0; i < response.getResults().getNumFound(); i++) {
 				SolrDocument o = response.getResults().get(i);
-				System.out.println(o.get("username") + "==>" + o.get("password"));
+				System.out.println(o.get("id") +"==>" + o.get("username") + "==>" + o.get("password"));
 			}
 			System.out.println(response.getResults().getNumFound());
 
