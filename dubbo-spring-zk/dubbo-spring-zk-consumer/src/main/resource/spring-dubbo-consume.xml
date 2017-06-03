@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 添加 DUBBO SCHEMA -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 应用名 -->
+	<dubbo:application name="dubbo-spring-zk-provider" />
+	<!-- 连接到哪个本地注册中心 -->
+	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"
+		client="zkClient" />
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<dubbo:protocol name="dubbo" port="20880" threadpool="cached"
+		threads="100" />
+	<!-- 远程服务代理 -->
+	<dubbo:reference id="greetingService"
+		interface="org.dubbo.spring.zk.provider.service.GreetingService" />
+</beans>
