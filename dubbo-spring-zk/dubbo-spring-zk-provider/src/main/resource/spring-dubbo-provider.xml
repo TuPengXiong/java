@@ -10,8 +10,8 @@
 	<!-- 应用名 -->
 	<dubbo:application name="dubbo-spring-zk-provider" />
 	<!-- 连接到哪个本地注册中心 -->
-	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"
-		client="zkClient" />
+	<dubbo:registry protocol="zookeeper" address="www.lovesher.com:2181"
+		client="zkclient" />
 	<!-- 用dubbo协议在20880端口暴露服务 缓存 -->
 	<dubbo:protocol name="dubbo" port="20880" threadpool="cached"
 		threads="100" />
@@ -19,5 +19,5 @@
 	<bean id="greetingService"
 		class="org.dubbo.spring.zk.provider.service.impl.GreetingServiceImpl"></bean>
 	<dubbo:service timeout="3000"
-		interface="org.dubbo.spring.zk.provider.service.GreetingService" ref="greetingService" />
+		interface="org.dubbo.spring.zk.inteface.service.GreetingService" ref="greetingService" />
 </beans>
