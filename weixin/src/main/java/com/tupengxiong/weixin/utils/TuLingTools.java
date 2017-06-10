@@ -38,6 +38,9 @@ public class TuLingTools {
 
 	@Resource
 	private ResponseMsg responseMsg;
+	
+	@Resource
+	private RestTemplate restTemplate;
 
 	/**
 	 * 获取图灵的返回信息
@@ -55,7 +58,6 @@ public class TuLingTools {
 		} catch (UnsupportedEncodingException e) {
 			logger.error("TuLingTools  getResponseFromTuLing UnsupportedEncodingException");
 		}
-		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		JSONObject jsonObject = new JSONObject();
