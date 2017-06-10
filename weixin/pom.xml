@@ -159,6 +159,9 @@
 				<version>6.1.26</version>
 				<configuration>
 					<scanIntervalSeconds>2</scanIntervalSeconds>
+					<webApp>
+						<contextPath>/weixin</contextPath>
+					</webApp>
 					<connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
 							<port>16400</port>
