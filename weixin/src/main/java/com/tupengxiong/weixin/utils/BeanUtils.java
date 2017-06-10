@@ -43,7 +43,7 @@ public class BeanUtils {
 			classType = field.getType();
 			Method method = className.getDeclaredMethod("set" + element.getName(), classType);
 			convert(classType, method, element.getText(), obj);
-		} catch (NoSuchMethodException | SecurityException e) {
+		} catch (NoSuchMethodException  e) {
 			logger.error(new StringBuilder("NoSuchMethodException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		} catch (NoSuchFieldException e) {
@@ -60,6 +60,9 @@ public class BeanUtils {
 					.append(" Method =set").append(element.getName()));
 		} catch (ParseException e) {
 			logger.error(new StringBuilder("ParseException className=").append(className.getName())
+					.append(" Method =set").append(element.getName()));
+		}catch (SecurityException e) {
+			logger.error(new StringBuilder("SecurityException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		}
 
