@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tupengxiong.weixin.bean.WxBase;
 import com.tupengxiong.weixin.bean.WxText;
 import com.tupengxiong.weixin.service.WxService;
+import com.tupengxiong.weixin.utils.TuLingTools;
 import com.tupengxiong.weixin.utils.XmlForBeanUtils;
 
 @Controller("WxController")
@@ -37,6 +38,9 @@ public class WxController {
 
 	@Resource
 	XmlForBeanUtils xmlUtis;
+	
+	@Resource
+	TuLingTools tuLingTools;
 
 	@RequestMapping(path = "/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -73,7 +77,8 @@ public class WxController {
 			WxBase wxBase = xmlUtis.parseToWxBase(reqcontent);
 			if (wxBase.getMsgType().equals("text")) {
 				WxText wxText = xmlUtis.parseToWxText(reqcontent);
-				System.out.println(wxText);
+				resp = tuLingTools.getWxResp(wxText);
+				System.out.println(resp);
 			}
 		}
 
