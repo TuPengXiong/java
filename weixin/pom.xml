@@ -178,7 +178,7 @@
 					<!-- http port -->
 					<port>16400</port>
 					<!-- application path always starts with /-->
-					<path>/</path>
+					<path>/weixin</path>
 					<!-- optional path to a context file -->
 					<contextFile>${tomcatContextXml}</contextFile>
 					<!-- optional system propoerties you want to add -->
