@@ -71,4 +71,20 @@
 		<property name="mapperLocations" value="classpath:ibatis/*.xml" />
 		<property name="dataSource" ref="dataSourceGroup" />
 	</bean>
+	
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg index="0">
+			<list>
+				<bean id="byteArrayHttpMessageConverter" class="org.springframework.http.converter.ByteArrayHttpMessageConverter"></bean>
+				<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+					<constructor-arg value="UTF-8"></constructor-arg>
+				</bean>
+				<bean id="resourceHttpMessageConverter" class="org.springframework.http.converter.ResourceHttpMessageConverter"></bean>
+				<bean id="sourceHttpMessageConverter" class="org.springframework.http.converter.xml.SourceHttpMessageConverter"></bean>
+				<bean id="allEncompassingFormHttpMessageConverter" class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"></bean>
+				<bean id="jaxb2RootElementHttpMessageConverter" class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"></bean>
+				<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+			</list>
+		</constructor-arg>
+	</bean>
 </beans>
