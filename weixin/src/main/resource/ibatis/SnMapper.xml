@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tupengxiong.weixin.bean.mapper.SnMapper">
+	<!-- 字段映射 -->
+	<resultMap type="com.tupengxiong.weixin.bean.Sn" id="SnResult">
+		<id column="id" property="id" />
+		<result column="create_date" property="createDate" />
+		<result column="modify_date" property="modifyDate" />
+		<result column="last_value" property="lastValue" />
+		<result column="version" property="version" />
+		<result column="sn_type" property="snType" />
+	</resultMap>
+
+	<!-- 更新序列号表 -->
+	<update id="update" parameterType="com.tupengxiong.weixin.bean.Sn">
+		update dw_sn set last_value = #{lastValue},version=version+1 where
+		version=#{version} and
+		sn_type=#{snType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+	</update>
+
+	<!-- 更新序列号表 -->
+	<insert id="insert" parameterType="com.tupengxiong.weixin.bean.Sn">
+		insert into dw_sn(last_value,version,create_date,modify_date,sn_type)
+		values(#{lastValue},#{version},#{createDate},CURRENT_TIMESTAMP(),#{snType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler})
+	</insert>
+
+	<!-- 查询sn -->
+	<select id="getLastSn" resultMap="SnResult">
+		select * from dw_sn where sn_type =
+		#{snType}
+	</select>
+</mapper>
