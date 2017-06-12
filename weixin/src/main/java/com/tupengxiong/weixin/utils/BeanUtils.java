@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -25,13 +26,9 @@ public class BeanUtils {
 		List<String> fieldNames = new ArrayList<String>();
 		for (int i = 0; i < fields.length; i++) {
 			fieldNames.add(fields[i].getName());
-			logger.info(fields[i].getName());
 		}
-		logger.info(superFields.length);
-		logger.info(className.getSuperclass().getName());
 		for (int i = 0; i < superFields.length; i++) {
 			fieldNames.add(superFields[i].getName());
-			logger.info(superFields[i].getName());
 		}
 		return fieldNames;
 	}
@@ -111,7 +108,14 @@ public class BeanUtils {
 		if (xclass.toString().equals("class java.lang.String")) {
 			setMethod.invoke(tObject, value);
 		} else if (xclass.toString().equals("class java.util.Date")) {
-			setMethod.invoke(tObject, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(value));
+			Date time = new Date();
+			try {
+				Long sec = Long.parseLong(tObject.toString());
+				time = new Date(sec * 1000L);
+			} catch (NumberFormatException e) {
+
+			}
+			setMethod.invoke(tObject,time);
 		} else if (xclass.toString().equals("class java.lang.Boolean")) {
 			Boolean boolname = true;
 			if (value.equals("否") || value.equals("false")) {
