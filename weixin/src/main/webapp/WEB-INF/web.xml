@@ -7,19 +7,14 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath*:/applicationContext-mvc.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
+			<param-value>
 			classpath*:/applicationContext.xml,
 			classpath*:/applicationContext-mvc.xml,
 			classpath*:/applicationContext-mapper.xml
 		</param-value>
-	</context-param>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>springmvc</servlet-name>

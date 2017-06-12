@@ -11,7 +11,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.stereotype.Component;
 
-import com.tupengxiong.weixin.bean.WxBase;
 import com.tupengxiong.weixin.bean.WxText;
 
 @Component
@@ -37,20 +36,17 @@ public class XmlForBeanUtils {
 		return wxText;
 	}
 
-	public WxBase parseToWxBase(String text) {
-		WxBase wxBase = new WxBase();
+	public String parseToMsgType(String text) {
+		String msg = "text";
+		Document document;
 		try {
-			Document document = DocumentHelper.parseText(text);
+			document = DocumentHelper.parseText(text);
 			Element root = document.getRootElement();
-			List<String> elementNames = beanUtils.beanFieldNames(WxText.class);
-			for (int i = 0; i < elementNames.size(); i++) {
-				Element element = root.element(beanUtils.indexChractarToUpperCase(elementNames.get(i)));
-				beanUtils.fillfieldValueByNotRootElement(element, wxBase);
-			}
+			msg = root.element("MsgType").getText();
 		} catch (DocumentException e) {
-			logger.error(new StringBuilder("XmlForBeanUtils parseToWxBase ").append("text = ").append(text));
+			logger.error(new StringBuilder("XmlForBeanUtils parseToMsgType ").append("text = ").append(text));
 		}
-		return wxBase;
+		return msg;
 	}
 
 }

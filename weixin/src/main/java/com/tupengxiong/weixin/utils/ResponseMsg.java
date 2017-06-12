@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
 
-import javax.annotation.Resource;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -33,7 +32,7 @@ public class ResponseMsg {
 		root.addElement("ToUserName").setText(text.getToUserName());
 		root.addElement("FromUserName").setText(text.getFromUserName());
 		root.addElement("CreateTime").setText(text.getCreateTime().toString());
-		root.addElement("MsgType").setText(text.getMsgType());
+		root.addElement("MsgType").setText("text");
 		root.addElement("Content").setText(text.getContent());
 		StringWriter strWtr = new StringWriter();
 		OutputFormat format = OutputFormat.createPrettyPrint();
@@ -67,20 +66,18 @@ public class ResponseMsg {
 		root.addElement("ToUserName").setText(text.getToUserName());
 		root.addElement("FromUserName").setText(text.getFromUserName());
 		root.addElement("CreateTime").setText(text.getCreateTime().toString());
-		root.addElement("MsgType").setText(text.getMsgType());
+		root.addElement("MsgType").setText("news");
 		root.addElement("ArticleCount").setText(String.valueOf(articles.size()));
 
 		// 填充图文信息
 		Element fXML = root.addElement("Articles");
-		Element mXML = null;
 
 		for (int i = 0; i <= articles.size(); i++) {
-			mXML = fXML.addElement("item");
+			Element mXML = fXML.addElement("item");
 			mXML.addElement("Title").setText(articles.get(i).getTitle());
 			mXML.addElement("Description").setText((articles.get(i).getDescription()));
 			mXML.addElement("PicUrl").setText(articles.get(i).getPicUrl());
 			mXML.addElement("Url").setText(articles.get(i).getUrl());
-			fXML.add(mXML);
 		}
 		StringWriter strWtr = new StringWriter();
 		OutputFormat format = OutputFormat.createPrettyPrint();

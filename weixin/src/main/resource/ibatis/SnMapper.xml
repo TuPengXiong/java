@@ -4,8 +4,8 @@
 	<!-- 字段映射 -->
 	<resultMap type="com.tupengxiong.weixin.bean.Sn" id="SnResult">
 		<id column="id" property="id" />
-		<result column="create_date" property="createDate" />
-		<result column="modify_date" property="modifyDate" />
+		<result column="create_time" property="createTime" />
+		<result column="modify_time" property="modifyTime" />
 		<result column="last_value" property="lastValue" />
 		<result column="version" property="version" />
 		<result column="sn_type" property="snType" />
@@ -15,13 +15,13 @@
 	<update id="update" parameterType="com.tupengxiong.weixin.bean.Sn">
 		update dw_sn set last_value = #{lastValue},version=version+1 where
 		version=#{version} and
-		sn_type=#{snType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+		sn_type=#{snType}
 	</update>
 
 	<!-- 更新序列号表 -->
 	<insert id="insert" parameterType="com.tupengxiong.weixin.bean.Sn">
 		insert into dw_sn(last_value,version,create_date,modify_date,sn_type)
-		values(#{lastValue},#{version},#{createDate},CURRENT_TIMESTAMP(),#{snType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler})
+		values(#{lastValue},#{version},#{createDate},CURRENT_TIMESTAMP(),#{snType})
 	</insert>
 
 	<!-- 查询sn -->

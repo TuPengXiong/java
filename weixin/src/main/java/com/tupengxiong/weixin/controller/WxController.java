@@ -1,25 +1,14 @@
 package com.tupengxiong.weixin.controller;
 
 import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -38,11 +27,11 @@ public class WxController {
 
 	@Resource
 	XmlForBeanUtils xmlUtis;
-	
+
 	@Resource
 	TuLingTools tuLingTools;
 
-	@RequestMapping(path = "/wxNotify")
+	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/html;charset=UTF-8");
 		@SuppressWarnings("unchecked")
@@ -74,8 +63,8 @@ public class WxController {
 		}
 
 		if (null != reqcontent) {
-			WxBase wxBase = xmlUtis.parseToWxBase(reqcontent);
-			if (wxBase.getMsgType().equals("text")) {
+			String type = xmlUtis.parseToMsgType(reqcontent);
+			if (type.equals("text")) {
 				WxText wxText = xmlUtis.parseToWxText(reqcontent);
 				resp = tuLingTools.getWxResp(wxText);
 				System.out.println(resp);

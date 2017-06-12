@@ -24,7 +24,7 @@ public abstract class DO {
 	/**
 	 * 记录修改时间
 	 */
-	private Long modifyDate;
+	private Long modifyTime;
 
 	public DO() {
 		super();
@@ -38,12 +38,12 @@ public abstract class DO {
 		this.delStatus = delStatus;
 	}
 
-	public Long getModifyDate() {
-		return modifyDate;
+	public void setModifyTime(Long modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 
-	public void setModifyDate(Long modifyDate) {
-		this.modifyDate = modifyDate;
+	public Long getModifyTime() {
+		return modifyTime;
 	}
 
 	public Long getCreateTime() {
