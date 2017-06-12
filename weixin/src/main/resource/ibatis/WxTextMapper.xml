@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tupengxiong.weixin.bean.mapper.WxTextMapper">
+	<!-- 字段映射 -->
+	<resultMap type="com.tupengxiong.weixin.bean.WxText" id="WxTextResult">
+		<id column="id" property="id" />
+		<result column="content" property="content" />
+		<result column="create_time" property="createTime" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="from_user_name" property="fromUserName" />
+		<result column="to_user_name" property="toUserName" />
+		<result column="msg_id" property="msgId" />
+		<result column="msg_type" property="msgType" />
+	</resultMap>
+
+	<!-- 更新序列号表 -->
+	<update id="update" parameterType="com.tupengxiong.weixin.bean.WxText">
+		UPDATE wx_text 
+		SET
+		<if test="content !=null"> `content` = #{content},</if>
+		<if test="createTime !=null"> `create_time` = #{createTime},</if>
+		<if test="fromUserName !=null"> `from_user_name` = #{fromUserName},</if>
+		<if test="toUserName !=null"> `to_user_name` = #{toUserName},</if>
+		<if test="msgId !=null"> `msg_id` = #{msgId},</if>
+		<if test="msgType !=null"> `msgType` = #{msg_type},</if>
+		`modifytime` = CURRENT_TIMESTAMP() WHERE `id` = #{id}
+	</update>
+
+	<!-- 更新序列号表 -->
+	<insert id="insert" parameterType="com.tupengxiong.weixin.bean.WxText">
+		insert into
+		wx_text(content,create_time,modify_time,from_user_name,to_user_name,msg_id,msg_type)
+		values(#{content},#{createTime},CURRENT_TIMESTAMP(),fromUserName,toUserName,msgId,msgType)
+	</insert>
+
+	<!--删除：根据主键ID删除 -->
+	<delete id="deleteById">
+		delete from wx_text
+		where `id` = #{id}
+	</delete>
+</mapper>

@@ -1,7 +1,14 @@
 package com.tupengxiong.weixin.bean;
 
-public class WxArticle {
+import java.io.Serializable;
 
+public class WxArticle implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 817676299367717355L;
+	
 	private String title; // 图文消息标题
 	private String description; // 图文消息描述
 	private String picUrl; // 图片链接，支持JPG、PNG格式，较好的效果为大图360*200，小图200*200

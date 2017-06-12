@@ -25,7 +25,7 @@ public class WxController {
 	WxService wxService;
 
 	@Resource
-	XmlForBeanUtils xmlUtis;
+	XmlForBeanUtils xmlForBeanUtils;
 
 	@Resource
 	TuLingUtils tuLingTools;
@@ -62,9 +62,9 @@ public class WxController {
 		}
 
 		if (null != reqcontent) {
-			String type = xmlUtis.parseToMsgType(reqcontent);
+			String type = xmlForBeanUtils.parseToMsgType(reqcontent);
 			if (type.equals("text")) {
-				WxText wxText = xmlUtis.parseToWxText(reqcontent);
+				WxText wxText = xmlForBeanUtils.parseToWxText(reqcontent);
 				resp = tuLingTools.getWxResp(wxText);
 				System.out.println(resp);
 			}

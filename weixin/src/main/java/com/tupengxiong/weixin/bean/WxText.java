@@ -1,9 +1,16 @@
 package com.tupengxiong.weixin.bean;
 
+import java.io.Serializable;
+
 /**
  * @author tupx
  */
-public class WxText extends WxBase{
+public class WxText extends WxBase implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5649128178861636139L;
 
 	private Long id;
 

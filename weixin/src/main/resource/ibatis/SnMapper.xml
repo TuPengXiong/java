@@ -13,26 +13,20 @@
 
 	<!-- 更新序列号表 -->
 	<update id="update" parameterType="com.tupengxiong.weixin.bean.Sn">
-		update wx_sn set last_value = #{lastValue},version=version+1 where
+		update dw_sn set last_value = #{lastValue},version=version+1 where
 		version=#{version} and
 		sn_type=#{snType}
 	</update>
 
 	<!-- 更新序列号表 -->
 	<insert id="insert" parameterType="com.tupengxiong.weixin.bean.Sn">
-		insert into wx_sn(last_value,version,create_time,modifyTime,sn_type)
-		values(#{lastValue},#{version},#{createTime},CURRENT_TIMESTAMP(),#{snType})
+		insert into dw_sn(last_value,version,create_time,modify_time,sn_type)
+		values(#{lastValue},#{version},#{createDate},CURRENT_TIMESTAMP(),#{snType})
 	</insert>
 
 	<!-- 查询sn -->
 	<select id="getLastSn" resultMap="SnResult">
-		select * from wx_sn where sn_type =
+		select * from dw_sn where sn_type =
 		#{snType}
 	</select>
-	
-		<!--删除：根据主键ID删除-->
-	<delete id="deleteById">
-		 delete from wx_sn
-		 where `id` = #{id}
-	</delete>
 </mapper>
