@@ -9,12 +9,9 @@
 
 	<context:property-placeholder location="classpath*:/weixin.properties"
 		ignore-resource-not-found="true" ignore-unresolvable="true" />
-	<!-- <mvc:annotation-driven validator="validator" /> -->
+	<mvc:annotation-driven validator="validator" />
 
-	<context:component-scan base-package="com.tupengxiong.weixin">
-		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" 
-			/> -->
-	</context:component-scan>
+	<context:component-scan base-package="com.tupengxiong.weixin"/>
 
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -26,9 +23,9 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<!-- <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"> 
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"> 
 		<property name="validationMessageSource" ref="messageSource" /> </bean>
- -->
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="contentType" value="text/html; charset=UTF-8" />

@@ -24,7 +24,7 @@ public class TestController {
 	private SnMapper snMapper;
 	
 	@RequestMapping("/test")
-	public void test(HttpServletResponse response,String msg) throws IOException {
+	public void test(HttpServletResponse response,String msg){
 		WxText wxText = new WxText();
 		wxText.setFromUserName("fromUserName");
 		wxText.setToUserName("toUserName");
@@ -35,9 +35,13 @@ public class TestController {
 		}
 		wxText.setContent(content);
 		String resp = tuLingTools.getWxResp(wxText);
-		response.getWriter().write(resp);
-		response.getWriter().flush();
-		response.getWriter().close();
+		try {
+			response.getWriter().write(resp);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@RequestMapping("/sn")

@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.springframework.version>4.1.3.RELEASE</org.springframework.version>
+		<org.springframework.version>4.2.1.RELEASE</org.springframework.version>
 	</properties>
 
 	<dependencies>
@@ -20,12 +20,13 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework.version}</version>
+			<version>4.2.3.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -52,15 +53,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>4.2.0.Final</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>4.2.1.RELEASE</version>
+			<version>${org.springframework.version}</version>
 		</dependency>
 
 		<dependency>
@@ -132,6 +127,16 @@
 			<version>3.2.1</version>
 		</dependency>
 		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.20.0-GA</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.6.1</version>
@@ -171,7 +176,21 @@
 			<artifactId>dom4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.2.4.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cloudy.dscm</groupId>
+			<artifactId>cloudy-dscm</artifactId>
+			<version>1.0.37</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cloudy.cddl</groupId>
+			<artifactId>cloudy-cddl</artifactId>
+			<version>1.0.37</version>
+		</dependency>
 	</dependencies>
 
 	<build>
