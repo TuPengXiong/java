@@ -72,7 +72,7 @@ public class ResponseMsg {
 		// 填充图文信息
 		Element fXML = root.addElement("Articles");
 
-		for (int i = 0; i <= articles.size(); i++) {
+		for (int i = 0; i < articles.size(); i++) {
 			Element mXML = fXML.addElement("item");
 			mXML.addElement("Title").setText(articles.get(i).getTitle());
 			mXML.addElement("Description").setText((articles.get(i).getDescription()));

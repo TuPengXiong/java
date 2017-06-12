@@ -19,11 +19,16 @@ public class TestController {
 	TuLingTools tuLingTools;
 
 	@RequestMapping("/test")
-	public void test(HttpServletResponse response) throws IOException {
+	public void test(HttpServletResponse response,String msg) throws IOException {
 		WxText wxText = new WxText();
 		wxText.setFromUserName("fromUserName");
 		wxText.setToUserName("toUserName");
 		wxText.setCreateTime(10000l);
+		String content = "菜谱";
+		if(msg != null){
+			content = msg;
+		}
+		wxText.setContent(content);
 		String resp = tuLingTools.getWxResp(wxText);
 		response.getWriter().write(resp);
 		response.getWriter().flush();
