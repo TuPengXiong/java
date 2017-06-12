@@ -30,7 +30,7 @@ import com.tupengxiong.weixin.bean.WxText;
  * 图灵机器人
  */
 @Component
-public class TuLingTools {
+public class TuLingUtils {
 
 	private static final String api_ket = "4aa238fb3ff04fc4bb964060c8485e74";
 	private static final String api_secret = "3ed93627ba6ee059";
@@ -38,7 +38,7 @@ public class TuLingTools {
 	private static final Logger logger = Logger.getLogger(XmlForBeanUtils.class);
 
 	@Resource
-	private ResponseMsg responseMsg;
+	private WxResponseUtils responseMsg;
 	
 	@Resource
 	private RestTemplate restTemplate;

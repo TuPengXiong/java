@@ -14,7 +14,7 @@
 
 	<!-- mapper define begin -->
 	<bean id="pluginConfigAttributeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.tupengxiong.weixin.mapper.SnMapper" />
+		<property name="mapperInterface" value="com.tupengxiong.weixin.bean.mapper.SnMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 </beans>

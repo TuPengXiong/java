@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tupengxiong.weixin.bean.Sn;
 import com.tupengxiong.weixin.bean.WxText;
-import com.tupengxiong.weixin.mapper.SnMapper;
-import com.tupengxiong.weixin.utils.TuLingTools;
+import com.tupengxiong.weixin.bean.mapper.SnMapper;
+import com.tupengxiong.weixin.utils.TuLingUtils;
 
 @Service
 @RequestMapping("/test")
 public class TestController {
 
 	@Resource
-	TuLingTools tuLingTools;
+	TuLingUtils tuLingTools;
 	@Resource
 	private SnMapper snMapper;
 	
@@ -45,13 +45,19 @@ public class TestController {
 	}
 	
 	@RequestMapping("/sn")
-	public void sn(HttpServletResponse response,String msg) throws IOException {
+	public void sn(HttpServletResponse response,String msg){
 		Sn sn = new Sn();
 		sn.setCreateTime(new Date().getTime());
 		snMapper.insert(sn);
-		response.getWriter().write("success");
-		response.getWriter().flush();
-		response.getWriter().close();
+		try {
+			response.getWriter().write("success");
+			response.getWriter().flush();
+			response.getWriter().close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -15,10 +15,7 @@
 	<task:annotation-driven />
 	<context:property-placeholder location="classpath*:/weixin.properties"
 		ignore-resource-not-found="true" ignore-unresolvable="true" />
-	<context:component-scan base-package="com.tupengxiong.weixin">
-		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" 
-			/> -->
-	</context:component-scan>
+	<context:component-scan base-package="com.tupengxiong.weixin"/>
 
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.FixedLocaleResolver">

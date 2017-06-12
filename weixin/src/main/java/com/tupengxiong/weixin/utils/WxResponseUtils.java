@@ -16,7 +16,7 @@ import com.tupengxiong.weixin.bean.WxArticle;
 import com.tupengxiong.weixin.bean.WxText;
 
 @Component
-public class ResponseMsg {
+public class WxResponseUtils {
 
 	/**
 	 * 被动回复文本消息

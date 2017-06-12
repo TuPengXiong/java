@@ -1,4 +1,4 @@
-package com.tupengxiong.weixin.mapper;
+package com.tupengxiong.weixin.bean.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,5 @@
-package com.tupengxiong.weixin.mapper;
+package com.tupengxiong.weixin.bean.mapper;
+
 public interface Mapper<T> {
     /**
      * 对对象进行持久化操作，如果成功则返回持久化后的ID

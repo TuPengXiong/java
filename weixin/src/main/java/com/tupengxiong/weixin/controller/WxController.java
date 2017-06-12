@@ -12,10 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tupengxiong.weixin.bean.WxBase;
 import com.tupengxiong.weixin.bean.WxText;
 import com.tupengxiong.weixin.service.WxService;
-import com.tupengxiong.weixin.utils.TuLingTools;
+import com.tupengxiong.weixin.utils.TuLingUtils;
 import com.tupengxiong.weixin.utils.XmlForBeanUtils;
 
 @Controller("WxController")
@@ -29,13 +28,13 @@ public class WxController {
 	XmlForBeanUtils xmlUtis;
 
 	@Resource
-	TuLingTools tuLingTools;
+	TuLingUtils tuLingTools;
 
 	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/html;charset=UTF-8");
-		@SuppressWarnings("unchecked")
 		Map<String, String> params = new HashMap<String, String>();
+		@SuppressWarnings("rawtypes")
 		Enumeration enumeration = request.getParameterNames();
 		while (enumeration.hasMoreElements()) {
 			String name = enumeration.nextElement().toString();
