@@ -2,7 +2,7 @@ package com.tupengxiong.weixin.bean;
 
 import java.util.Date;
 
-public abstract class WxBase {
+public class WxBase {
 
 	/**
 	 * 数据状态：0，正常 1删除

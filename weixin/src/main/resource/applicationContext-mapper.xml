@@ -13,12 +13,12 @@
 	default-lazy-init="true">
 
 	<!-- mapper define begin -->
-	<bean id="SnMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="com.tupengxiong.weixin.bean.mapper.SnMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.tupengxiong.weixin.bean.mapper.SnMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 	
-	<bean id="WxTextMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="com.tupengxiong.weixin.bean.mapper.WxTextMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.tupengxiong.weixin.bean.mapper.WxTextMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>

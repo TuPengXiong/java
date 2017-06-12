@@ -19,10 +19,19 @@ public class BeanUtils {
 
 	public List<String> beanFieldNames(Class<?> className) {
 		Field[] fields = className.getDeclaredFields();
+		Field[] superFields = className.getSuperclass().getDeclaredFields();
 		Field.setAccessible(fields, true);
+		Field.setAccessible(superFields, true);
 		List<String> fieldNames = new ArrayList<String>();
 		for (int i = 0; i < fields.length; i++) {
 			fieldNames.add(fields[i].getName());
+			logger.info(fields[i].getName());
+		}
+		logger.info(superFields.length);
+		logger.info(className.getSuperclass().getName());
+		for (int i = 0; i < superFields.length; i++) {
+			fieldNames.add(superFields[i].getName());
+			logger.info(superFields[i].getName());
 		}
 		return fieldNames;
 	}
@@ -35,20 +44,35 @@ public class BeanUtils {
 		Class<?> className = obj.getClass();
 		Class<?> classType = null;
 		Field field = null;
+		Method method = null;
 		try {
-			field = obj.getClass().getDeclaredField(fieldName);
-			if (null == field) {
-				return;
+			try {
+				field = obj.getClass().getDeclaredField(fieldName);
+				field.setAccessible(true);
+				classType = field.getType();
+				method = obj.getClass().getDeclaredMethod("set" + element.getName(), classType);
+				method.setAccessible(true);
+			} catch (NoSuchFieldException e) {
+				logger.error(new StringBuilder("NoSuchFieldException className=").append(className.getName())
+						.append(" Field = ").append(fieldName));
 			}
-			classType = field.getType();
-			Method method = className.getDeclaredMethod("set" + element.getName(), classType);
+			if (null == field) {
+				try {
+					className = obj.getClass().getSuperclass();
+					field = obj.getClass().getSuperclass().getDeclaredField(fieldName);
+					classType = field.getType();
+					method = obj.getClass().getSuperclass().getDeclaredMethod("set" + element.getName(), classType);
+					method.setAccessible(true);
+				} catch (NoSuchFieldException e) {
+					logger.error(new StringBuilder("NoSuchFieldException className=").append(className.getName())
+							.append(" Field = ").append(fieldName));
+				}
+
+			}
 			convert(classType, method, element.getText(), obj);
-		} catch (NoSuchMethodException  e) {
+		} catch (NoSuchMethodException e) {
 			logger.error(new StringBuilder("NoSuchMethodException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
-		} catch (NoSuchFieldException e) {
-			logger.error(new StringBuilder("NoSuchFieldException className=").append(className.getName())
-					.append(" Field = ").append(fieldName));
 		} catch (IllegalAccessException e) {
 			logger.error(new StringBuilder("IllegalAccessException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
@@ -61,7 +85,7 @@ public class BeanUtils {
 		} catch (ParseException e) {
 			logger.error(new StringBuilder("ParseException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
-		}catch (SecurityException e) {
+		} catch (SecurityException e) {
 			logger.error(new StringBuilder("SecurityException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		}

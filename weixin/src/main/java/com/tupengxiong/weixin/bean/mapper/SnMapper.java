@@ -1,11 +1,9 @@
 package com.tupengxiong.weixin.bean.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import com.tupengxiong.weixin.bean.Sn;
 
-@Repository
 public interface SnMapper extends Mapper<Sn> {
 	
 	/**

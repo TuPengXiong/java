@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tupengxiong.weixin.bean.WxText;
+import com.tupengxiong.weixin.bean.mapper.WxTextMapper;
 import com.tupengxiong.weixin.service.WxService;
 import com.tupengxiong.weixin.utils.TuLingUtils;
 import com.tupengxiong.weixin.utils.XmlForBeanUtils;
@@ -29,6 +30,10 @@ public class WxController {
 
 	@Resource
 	TuLingUtils tuLingTools;
+	
+	@Resource
+	private WxTextMapper wxTextMapper;
+
 
 	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -65,8 +70,8 @@ public class WxController {
 			String type = xmlForBeanUtils.parseToMsgType(reqcontent);
 			if (type.equals("text")) {
 				WxText wxText = xmlForBeanUtils.parseToWxText(reqcontent);
+				wxTextMapper.insert(wxText);
 				resp = tuLingTools.getWxResp(wxText);
-				System.out.println(resp);
 			}
 		}
 

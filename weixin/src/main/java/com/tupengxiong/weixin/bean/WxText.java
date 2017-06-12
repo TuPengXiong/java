@@ -53,4 +53,15 @@ public class WxText extends WxBase implements Serializable{
 	public WxText(){
 		super();
 	}
+
+	@Override
+	public String toString() {
+		return "WxText [id=" + id + ", content=" + content + ", msgId=" + msgId + ", getToUserName()=" + getToUserName()
+				+ ", getFromUserName()=" + getFromUserName() + ", getMsgType()=" + getMsgType() + ", getDelStatus()="
+				+ getDelStatus() + ", getCreateTime()=" + getCreateTime() + ", getModifyTime()=" + getModifyTime()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
+	}
+	
+	
 }

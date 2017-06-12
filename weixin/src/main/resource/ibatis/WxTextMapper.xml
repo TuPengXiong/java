@@ -15,7 +15,7 @@
 
 	<!-- 更新序列号表 -->
 	<update id="update" parameterType="com.tupengxiong.weixin.bean.WxText">
-		UPDATE wx_text 
+		UPDATE wx_text
 		SET
 		<if test="content !=null"> `content` = #{content},</if>
 		<if test="createTime !=null"> `create_time` = #{createTime},</if>
@@ -30,7 +30,7 @@
 	<insert id="insert" parameterType="com.tupengxiong.weixin.bean.WxText">
 		insert into
 		wx_text(content,create_time,modify_time,from_user_name,to_user_name,msg_id,msg_type)
-		values(#{content},#{createTime},CURRENT_TIMESTAMP(),fromUserName,toUserName,msgId,msgType)
+		values(#{content},#{createTime},CURRENT_TIMESTAMP(),#{fromUserName},#{toUserName},#{msgId},#{msgType})
 	</insert>
 
 	<!--删除：根据主键ID删除 -->
@@ -38,4 +38,9 @@
 		delete from wx_text
 		where `id` = #{id}
 	</delete>
+
+	<select id="selectById" resultType="com.tupengxiong.weixin.bean.WxText">
+		SELECT * FROM wx_text WHERE
+		id = ${id}
+	</select>
 </mapper>
