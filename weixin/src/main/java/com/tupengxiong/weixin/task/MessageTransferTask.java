@@ -53,19 +53,18 @@ public class MessageTransferTask implements InitializingBean {
 	private static final Logger logger = Logger.getLogger(MessageTransferTask.class);
 
 	/**
-	 * 发送客服消息到指定用户的定时任务 1：30 小时执行一次
+	 * 发送客服消息到指定用户的定时任务 2分钟 小时执行一次
 	 * 
 	 * @author tupengxiong
 	 * @since JDK 1.7
 	 */
-	@Scheduled(fixedDelay = 5400000)
+	@Scheduled(fixedDelay = 120000)
 	public void wxText() {
-		Integer total = wxTextMapper.wxTextTotalCount(0);
 		Integer start = 0;
 		Integer nums = 1;
-		logger.info(new StringBuilder().append("total -------").append(total));
-		while (total > (start * nums)) {
-			List<WxText> list = wxTextMapper.selectBySendStatus(0, start * nums, nums);
+		List<WxText> list = wxTextMapper.selectBySendStatus(0, start, nums);
+		logger.info(new StringBuilder().append("list  size-------").append(list.size()));
+		while (list.size() == nums) {
 			for (WxText wxText : list) {
 				JSONObject json = new JSONObject();
 				json.put("touser", openId);
@@ -82,7 +81,7 @@ public class MessageTransferTask implements InitializingBean {
 					wxTextMapper.update(wxText2);
 				}
 			}
-			start++;
+			list = wxTextMapper.selectBySendStatus(0, start * nums, nums);
 		}
 	}
 
