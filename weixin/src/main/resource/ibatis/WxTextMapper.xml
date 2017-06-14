@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tupengxiong.weixin.bean.mapper.WxTextMapper">
 	<!-- 字段映射 -->
-	<resultMap type="com.tupengxiong.weixin.bean.WxText" id="WxTextResult">
+	<resultMap type="com.tupengxiong.weixin.bean.WxText" id="BaseResultMap">
 		<id column="id" property="id" />
 		<result column="content" property="content" />
 		<result column="create_time" property="createTime" />
@@ -10,7 +10,10 @@
 		<result column="from_user_name" property="fromUserName" />
 		<result column="to_user_name" property="toUserName" />
 		<result column="msg_id" property="msgId" />
+		<result column="name" property="name" />
 		<result column="msg_type" property="msgType" />
+		<result column="send_status" property="sendStatus" />
+		
 	</resultMap>
 
 	<!-- 更新序列号表 -->
@@ -22,15 +25,17 @@
 		<if test="fromUserName !=null"> `from_user_name` = #{fromUserName},</if>
 		<if test="toUserName !=null"> `to_user_name` = #{toUserName},</if>
 		<if test="msgId !=null"> `msg_id` = #{msgId},</if>
+		<if test="name !=null"> `name` = #{name},</if>
+		<if test="sendStatus !=null"> `send_status` = #{sendStatus},</if>
 		<if test="msgType !=null"> `msgType` = #{msg_type},</if>
-		`modifytime` = CURRENT_TIMESTAMP() WHERE `id` = #{id}
+		`modify_time` = CURRENT_TIMESTAMP() WHERE `id` = #{id}
 	</update>
 
 	<!-- 更新序列号表 -->
 	<insert id="insert" parameterType="com.tupengxiong.weixin.bean.WxText">
 		insert into
-		wx_text(content,create_time,modify_time,from_user_name,to_user_name,msg_id,msg_type)
-		values(#{content},#{createTime},CURRENT_TIMESTAMP(),#{fromUserName},#{toUserName},#{msgId},#{msgType})
+		wx_text(`content`,`create_time`,`modify_time`,`from_user_name`,`to_user_name`,`msg_id`,`msg_type`,`name`,`send_status`)
+		values(#{content},#{createTime},CURRENT_TIMESTAMP(),#{fromUserName},#{toUserName},#{msgId},#{msgType},#{name},#{sendStatus})
 	</insert>
 
 	<!--删除：根据主键ID删除 -->
@@ -39,8 +44,32 @@
 		where `id` = #{id}
 	</delete>
 
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		`id`,`content`,`create_time`,`modify_time`,`from_user_name`,`to_user_name`,`msg_id`,`msg_type`,`name`,`send_status`
+	</sql>
+
 	<select id="selectById" resultType="com.tupengxiong.weixin.bean.WxText">
-		SELECT * FROM wx_text WHERE
-		id = ${id}
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM wx_text WHERE
+		`id` = ${id}
 	</select>
+	
+	<select id="selectBySendStatus" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM wx_text WHERE
+		`send_status` = ${sendStatus}
+		ORDER BY `create_time` ASC
+		LIMIT #{start},#{end}
+	</select>
+	
+	<select id="wxTextTotalCount" resultType="java.lang.Integer">
+		SELECT IFNULL(count(1),0)
+		FROM wx_text WHERE
+		`send_status` = ${sendStatus}
+	</select>
+	
+	
 </mapper>

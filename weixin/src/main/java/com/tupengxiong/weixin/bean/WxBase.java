@@ -1,8 +1,18 @@
 package com.tupengxiong.weixin.bean;
 
 import java.util.Date;
-
-public class WxBase {
+/**
+ * 
+ * ClassName: WxBase <br/> 
+ * Function: TODO ADD FUNCTION. <br/> 
+ * Reason: TODO ADD REASON(可选). <br/> 
+ * date: 2017年6月14日 下午5:52:09 <br/> 
+ * 
+ * @author tupengxiong 
+ * @version  
+ * @since JDK 1.7
+ */
+public abstract class WxBase {
 
 	/**
 	 * 数据状态：0，正常 1删除

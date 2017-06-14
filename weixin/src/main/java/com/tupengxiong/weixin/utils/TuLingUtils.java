@@ -35,7 +35,7 @@ public class TuLingUtils {
 	private static final String api_ket = "4aa238fb3ff04fc4bb964060c8485e74";
 	private static final String api_secret = "3ed93627ba6ee059";
 	private static final String url = "http://www.tuling123.com/openapi/api";
-	private static final Logger logger = Logger.getLogger(XmlForBeanUtils.class);
+	private static final Logger logger = Logger.getLogger(TuLingUtils.class);
 
 	@Resource
 	private WxResponseUtils responseMsg;

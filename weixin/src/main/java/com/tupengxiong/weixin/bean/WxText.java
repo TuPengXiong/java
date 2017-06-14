@@ -3,7 +3,15 @@ package com.tupengxiong.weixin.bean;
 import java.io.Serializable;
 
 /**
- * @author tupx
+ * 
+ * ClassName: WxText <br/> 
+ * Function: TODO ADD FUNCTION. <br/> 
+ * Reason: TODO ADD REASON(可选). <br/> 
+ * date: 2017年6月14日 下午5:51:58 <br/> 
+ * 
+ * @author tupengxiong 
+ * @version  
+ * @since JDK 1.7
  */
 public class WxText extends WxBase implements Serializable{
 
@@ -23,8 +31,20 @@ public class WxText extends WxBase implements Serializable{
 	 * 消息的id
 	 */
 	private String msgId;
+	
+	private String name;
+	
+	private Integer sendStatus;
 
 
+
+	public Integer getSendStatus() {
+		return sendStatus;
+	}
+
+	public void setSendStatus(Integer sendStatus) {
+		this.sendStatus = sendStatus;
+	}
 
 	public Long getId() {
 		return id;
@@ -52,6 +72,14 @@ public class WxText extends WxBase implements Serializable{
 	
 	public WxText(){
 		super();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
