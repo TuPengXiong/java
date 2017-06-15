@@ -94,11 +94,6 @@
 	<bean id="redisSingleton" class="com.tupengxiong.weixin.redis.RedisSingleton">
 		<property name="ip" value="${redis.ip}"></property>
 		<property name="port" value="${redis.port}"></property>
-		<property name="poolMaxTotal" value="${jedis.pool.maxTotal}"></property>
-		<property name="poolMaxIdle" value="${jedis.pool.maxIdle}"></property>
-		<property name="poolMaxWaitMillis" value="${jedis.pool.maxWaitMillis}"></property>
-		<property name="poolTestOnBorrow" value="${jedis.pool.testOnBorrow}"></property>
-		<property name="poolTestOnReturn" value="${jedis.pool.testOnReturn}"></property>
 	</bean>
 	
 	<task:annotation-driven />

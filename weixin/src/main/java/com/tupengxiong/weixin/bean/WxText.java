@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 /**
  * 
- * ClassName: WxText <br/> 
- * Function: TODO ADD FUNCTION. <br/> 
- * Reason: TODO ADD REASON(可选). <br/> 
- * date: 2017年6月14日 下午5:51:58 <br/> 
+ * ClassName: WxText <br/>
+ * Function: TODO ADD FUNCTION. <br/>
+ * Reason: TODO ADD REASON(可选). <br/>
+ * date: 2017年6月14日 下午5:51:58 <br/>
  * 
- * @author tupengxiong 
- * @version  
+ * @author tupengxiong
+ * @version
  * @since JDK 1.7
  */
-public class WxText extends WxBase implements Serializable{
+public class WxText extends WxBase implements Serializable {
 
 	/**
 	 * 
@@ -31,12 +31,10 @@ public class WxText extends WxBase implements Serializable{
 	 * 消息的id
 	 */
 	private String msgId;
-	
+
 	private String name;
-	
-	private Integer sendStatus;
 
-
+	private Integer sendStatus = 0;
 
 	public Integer getSendStatus() {
 		return sendStatus;
@@ -69,8 +67,8 @@ public class WxText extends WxBase implements Serializable{
 	public void setMsgId(String msgId) {
 		this.msgId = msgId;
 	}
-	
-	public WxText(){
+
+	public WxText() {
 		super();
 	}
 
@@ -90,6 +88,5 @@ public class WxText extends WxBase implements Serializable{
 				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
 				+ "]";
 	}
-	
-	
+
 }
