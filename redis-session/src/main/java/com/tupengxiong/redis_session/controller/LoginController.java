@@ -11,6 +11,7 @@ package com.tupengxiong.redis_session.controller;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tupengxiong.redis_session.filter.SessionFilter;
-import com.tupengxiong.redis_session.redis.RedisSingleton;
+import com.tupengxiong.redis_session.redis.Redis;
 
 /**
  * ClassName:LoginController <br/>
@@ -35,11 +36,14 @@ import com.tupengxiong.redis_session.redis.RedisSingleton;
 @Controller("LoginController")
 public class LoginController {
 
+	@Resource
+	Redis redis;
+	
 	@RequestMapping("/login.do")
 	public void login(String username, String password, HttpServletResponse response, HttpServletRequest request)
 			throws ServletException, IOException {
 		if (username != null && password != null) {
-			RedisSingleton.getJedisInPool().append(username, "exist");
+			redis.append(username, "exist");
 			response.setHeader(SessionFilter.SESSIONANME, username);
 			request.getRequestDispatcher("/success.jsp").forward(request, response);
 		} else {

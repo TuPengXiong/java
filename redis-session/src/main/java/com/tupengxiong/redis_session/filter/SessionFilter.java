@@ -10,18 +10,17 @@
 package com.tupengxiong.redis_session.filter;
 
 import java.io.IOException;
-import java.util.Date;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tupengxiong.redis_session.redis.RedisSingleton;
+import com.tupengxiong.redis_session.redis.Redis;
 
 /**
  * ClassName:SessionFilter <br/>
@@ -43,6 +42,9 @@ public class SessionFilter extends OncePerRequestFilter {
 	private String loginUrl = "/index.jsp";
 	private String loginAction = "/login.do";
 	private Integer expireSecTime = 7200;
+	
+	@Resource
+	Redis redis;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -58,11 +60,11 @@ public class SessionFilter extends OncePerRequestFilter {
 		logger.info(new StringBuilder().append(currentUrl));
 		if (null != sessionValue) {
 			// redis 查找是否存在
-			if (null == RedisSingleton.getJedisInPool().get(sessionValue)) {
+			if (null == redis.get(sessionValue)) {
 				response.sendRedirect(loginUrl);
 			} else {
-				RedisSingleton.getJedisInPool().append(sessionValue, "exist");
-				RedisSingleton.getJedisInPool().expire(sessionValue, expireSecTime);
+				redis.append(sessionValue, "exist");
+				redis.expire(sessionValue, expireSecTime);
 				response.setHeader(SESSIONANME, sessionValue);
 				filterChain.doFilter(request, response);
 			}
