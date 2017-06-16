@@ -45,7 +45,7 @@ public class WxService {
 	RestTemplate restTemplate;
 
 	@Resource
-	Redis redisSingleton;
+	Redis redis;
 
 	/**
 	 * getSignature:验证签名/消息验证. <br/>
@@ -110,8 +110,8 @@ public class WxService {
 	 * @since JDK 1.7
 	 */
 	public String getAccessToken(String appId, String appSecret, boolean refresh) {
-		if (redisSingleton.getJedisInPool().get(appId) != null && !refresh) {
-			return redisSingleton.getJedisInPool().get(appId);
+		if (redis.get(appId) != null && !refresh) {
+			return redis.get(appId);
 		}
 		URI uri = null;
 		try {
@@ -128,8 +128,8 @@ public class WxService {
 				JSONObject json = new JSONObject(respEntity.getBody());
 				String access_token = json.getString("access_token");
 				Integer expires_in = json.getInt("expires_in") - 200;
-				redisSingleton.getJedisInPool().append(appId, access_token);
-				redisSingleton.getJedisInPool().expire(appId, expires_in);
+				redis.append(appId, access_token);
+				redis.expire(appId, expires_in);
 			} catch (JSONException e) {
 				logger.error(new StringBuilder("WxService  getAccessToken").append(respEntity));
 				return null;
@@ -143,7 +143,7 @@ public class WxService {
 		URI uri = null;
 		try {
 			uri = UriComponentsBuilder.fromHttpUrl(SEND_KEFU_MSG_URL)
-					.queryParam("access_token", redisSingleton.getJedisInPool().get(appId)).build().encode("UTF-8")
+					.queryParam("access_token", redis.get(appId)).build().encode("UTF-8")
 					.toUri();
 		} catch (UnsupportedEncodingException e) {
 			logger.error("TuLingTools  getResponseFromTuLing UnsupportedEncodingException");

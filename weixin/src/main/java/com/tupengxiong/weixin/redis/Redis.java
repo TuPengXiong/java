@@ -28,12 +28,12 @@ public class Redis {
 	public Redis() {
 		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		// 设置最大实例总数
-		jedisPoolConfig.setMaxTotal(150);
+		jedisPoolConfig.setMaxTotal(5);
 		// 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
-		jedisPoolConfig.setMaxIdle(30);
-		jedisPoolConfig.setMinIdle(10);
+		jedisPoolConfig.setMaxIdle(1);
+		jedisPoolConfig.setMinIdle(0);
 		// 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
-		jedisPoolConfig.setMaxWaitMillis(3 * 1000);
+		jedisPoolConfig.setMaxWaitMillis(5 * 1000);
 		// 在borrow一个jedis实例时，是否提前进行alidate操作；如果为true，则得到的jedis实例均是可用的；
 		jedisPoolConfig.setTestOnBorrow(true);
 		// 在还会给pool时，是否提前进行validate操作
@@ -47,14 +47,16 @@ public class Redis {
 	}
 
 	public Redis(String ip, int port) {
+		this.ip = "127.0.0.1";
+		this.port = port;
 		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		// 设置最大实例总数
-		jedisPoolConfig.setMaxTotal(150);
+		jedisPoolConfig.setMaxTotal(5);
 		// 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
-		jedisPoolConfig.setMaxIdle(30);
-		jedisPoolConfig.setMinIdle(10);
+		jedisPoolConfig.setMaxIdle(1);
+		jedisPoolConfig.setMinIdle(0);
 		// 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
-		jedisPoolConfig.setMaxWaitMillis(3 * 1000);
+		jedisPoolConfig.setMaxWaitMillis(5 * 1000);
 		// 在borrow一个jedis实例时，是否提前进行alidate操作；如果为true，则得到的jedis实例均是可用的；
 		jedisPoolConfig.setTestOnBorrow(true);
 		// 在还会给pool时，是否提前进行validate操作
@@ -64,7 +66,43 @@ public class Redis {
 		jedisPoolConfig.setSoftMinEvictableIdleTimeMillis(1000);
 		jedisPoolConfig.setTimeBetweenEvictionRunsMillis(1000);
 		jedisPoolConfig.setNumTestsPerEvictionRun(100);
-		pool = new JedisPool(jedisPoolConfig, ip, port, 5000, null, 0);
+		pool = new JedisPool(jedisPoolConfig, this.ip, this.port, 5000, null, 0);
+	}
+
+	public void set(String key, String value) {
+		Jedis jedis = getJedisInPool();
+		try {
+			jedis.set(key, value);
+		} finally {
+			this.pool.returnResourceObject(jedis);
+		}
+	}
+
+	public String get(String key) {
+		Jedis jedis = getJedisInPool();
+		try {
+			key = jedis.get(key);
+		} finally {
+			this.pool.returnResourceObject(jedis);
+		}
+		return key;
+	}
+
+	public void expire(String key, int value) {
+		Jedis jedis = getJedisInPool();
+		try {
+			jedis.expire(key, value);
+		} finally {
+			this.pool.returnResourceObject(jedis);
+		}
+	}
+	public void append(String key, String value) {
+		Jedis jedis = getJedisInPool();
+		try {
+			jedis.append(key, value);
+		} finally {
+			this.pool.returnResourceObject(jedis);
+		}
 	}
 
 	public String getIp() {
