@@ -53,12 +53,12 @@ public class MessageTransferTask implements InitializingBean {
 	private static final Logger logger = Logger.getLogger(MessageTransferTask.class);
 
 	/**
-	 * 发送客服消息到指定用户的定时任务 2分钟 小时执行一次
+	 * 发送客服消息到指定用户的定时任务 3s 执行一次
 	 * 
 	 * @author tupengxiong
 	 * @since JDK 1.7
 	 */
-	@Scheduled(fixedDelay = 120000)
+	@Scheduled(cron="0/5 * *  * * ? ")   //每5秒执行一次
 	public void wxText() {
 		Integer start = 0;
 		Integer nums = 1;

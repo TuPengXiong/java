@@ -91,7 +91,7 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="redisSingleton" class="com.tupengxiong.weixin.redis.RedisSingleton">
+	<bean id="redisSingleton" class="com.tupengxiong.weixin.redis.Redis">
 		<property name="ip" value="${redis.ip}"></property>
 		<property name="port" value="${redis.port}"></property>
 	</bean>

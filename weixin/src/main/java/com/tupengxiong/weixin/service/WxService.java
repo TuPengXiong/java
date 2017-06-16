@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.tupengxiong.weixin.redis.RedisSingleton;
+import com.tupengxiong.weixin.redis.Redis;
 
 @Service
 public class WxService {
@@ -43,6 +43,9 @@ public class WxService {
 
 	@Resource
 	RestTemplate restTemplate;
+
+	@Resource
+	Redis redisSingleton;
 
 	/**
 	 * getSignature:验证签名/消息验证. <br/>
@@ -106,10 +109,9 @@ public class WxService {
 	 * @return
 	 * @since JDK 1.7
 	 */
-	public String getAccessToken(String appId, String appSecret) {
-		String accessName = appId + "--access_token";
-		if (RedisSingleton.getJedisInPool().get(accessName) != null) {
-			return RedisSingleton.getJedisInPool().get(appId + "--access_token");
+	public String getAccessToken(String appId, String appSecret, boolean refresh) {
+		if (redisSingleton.getJedisInPool().get(appId) != null && !refresh) {
+			return redisSingleton.getJedisInPool().get(appId);
 		}
 		URI uri = null;
 		try {
@@ -126,8 +128,8 @@ public class WxService {
 				JSONObject json = new JSONObject(respEntity.getBody());
 				String access_token = json.getString("access_token");
 				Integer expires_in = json.getInt("expires_in") - 200;
-				RedisSingleton.getJedisInPool().append(accessName, access_token);
-				RedisSingleton.getJedisInPool().expire(appId + "--expires_in", expires_in);
+				redisSingleton.getJedisInPool().append(appId, access_token);
+				redisSingleton.getJedisInPool().expire(appId, expires_in);
 			} catch (JSONException e) {
 				logger.error(new StringBuilder("WxService  getAccessToken").append(respEntity));
 				return null;
@@ -137,12 +139,11 @@ public class WxService {
 	}
 
 	public Map<String, Object> sendKefuMsg(String appId, JSONObject json) {
-		String accessName = appId + "--access_token";
 		Map<String, Object> map = new HashMap<String, Object>();
 		URI uri = null;
 		try {
 			uri = UriComponentsBuilder.fromHttpUrl(SEND_KEFU_MSG_URL)
-					.queryParam("access_token", RedisSingleton.getJedisInPool().get(accessName)).build().encode("UTF-8")
+					.queryParam("access_token", redisSingleton.getJedisInPool().get(appId)).build().encode("UTF-8")
 					.toUri();
 		} catch (UnsupportedEncodingException e) {
 			logger.error("TuLingTools  getResponseFromTuLing UnsupportedEncodingException");

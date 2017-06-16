@@ -44,24 +44,24 @@ public class AccessTokenTask implements InitializingBean {
 	WxService wxService;
 
 	/**
-	 * 更新accessToken 
-	 * updateAccessToken:(更新accessToken). <br/> 
+	 * 更新accessToken updateAccessToken:(更新accessToken). <br/>
 	 * 一个半小时刷新一次
-	 * @author tupengxiong 
+	 * 
+	 * @author tupengxiong
 	 * @since JDK 1.7
 	 */
-	@Scheduled(fixedDelay = 5400000)
+	@Scheduled(cron="0/3 * *  * * ? ")   //每3秒执行一次
 	public void updateAccessToken() {
 		Date date = new Date();
-		logger.info(
-				new StringBuilder().append("AccessTokenTask updateAccessToken starting-------"));
-		wxService.getAccessToken(appId, appSecret);
+		logger.info(new StringBuilder().append("AccessTokenTask updateAccessToken starting-------"));
+		wxService.getAccessToken(appId, appSecret, false);
 		logger.info(new StringBuilder().append("AccessTokenTask updateAccessToken end ").append("waster ")
 				.append(new Date().getTime() - date.getTime()).append("ms-------"));
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		//wxService.getAccessToken(appId, appSecret, true);
 		logger.info(new StringBuilder().append("AccessTokenTask InitializingBean starting-------"));
 	}
 }
