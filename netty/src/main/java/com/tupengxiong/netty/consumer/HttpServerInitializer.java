@@ -29,7 +29,7 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast("aggregator", new HttpObjectAggregator(this.server.getAggregator()));
 		pipeline.addLast("encoder", new HttpResponseEncoder());
 
-		pipeline.addLast("handler", new HttpClientInboundHandler());
+		pipeline.addLast("handler", new HttpClientInboundHandler(this));
 	}
 
 	public HttpServer getServer() {

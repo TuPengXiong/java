@@ -30,6 +30,11 @@ public class HttpClientInboundHandler extends SimpleChannelInboundHandler<Object
 	private AttributeKey<Map<String, Object>> paramKey = AttributeKey.valueOf("param");
 	private AttributeKey<HttpRequest> requestKey = AttributeKey.valueOf("request");
 
+	public HttpClientInboundHandler(HttpServerInitializer initializer) {
+		this.initializer = initializer;
+	}
+
+	
 	public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
 		super.channelRegistered(ctx);
 	}
