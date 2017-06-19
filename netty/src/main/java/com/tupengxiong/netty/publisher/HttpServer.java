@@ -3,11 +3,11 @@ package com.tupengxiong.netty.publisher;
 import java.net.InetSocketAddress;
 
 import com.tupengxiong.netty.consumer.HttpServerInitializer;
+import com.tupengxiong.netty.listener.CContextLoaderListener;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.group.ChannelGroup;
@@ -26,6 +26,8 @@ public class HttpServer {
 	private ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 	private InternalLogger logger = InternalLoggerFactory.getInstance("HttpServer");
 	private ChannelHandler channelHandler;
+	private static HttpServer httpserver;
+	private CContextLoaderListener loader;
 	/**
 	 * 服务端口号
 	 */
@@ -103,6 +105,21 @@ public class HttpServer {
 		this.workGroup = workGroup;
 	}
 
+	public static HttpServer getInstance(CContextLoaderListener loader) {
+		if ((httpserver == null) && (loader != null)) {
+			httpserver = new HttpServer(loader);
+		}
+		return httpserver;
+	}
+
+	public HttpServer(CContextLoaderListener loader) {
+		this.loader = loader;
+	}
+
+	public static HttpServer getInstance() {
+		return httpserver;
+	}
+
 	public void startHttpserver() throws Exception {
 
 		bossGroup = new NioEventLoopGroup();
@@ -121,16 +138,22 @@ public class HttpServer {
 		this.bootstrap.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 		this.bootstrap.childOption(ChannelOption.SO_KEEPALIVE, Boolean.valueOf(this.keepalive));
 		this.bootstrap.childOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(true));
-		// 线程同步阻塞等待服务器绑定到指定端口,
-		final ChannelFuture f = this.bootstrap.bind(new InetSocketAddress(port)).sync(); // (7)
 		// 成功绑定到端口之后,给channel增加一个 管道关闭的监听器并同步阻塞,直到channel关闭,线程才会往下执行,结束进程。
+		final Channel channel;
+		try {
+			// 线程同步阻塞等待服务器绑定到指定端口,
+			channel = this.bootstrap.bind(this.port).sync().channel();
+		} catch (InterruptedException exc) {
+			this.logger.error(exc.getMessage());
+			throw exc;
+		}
 		new Thread(new Runnable() {
 
 			public void run() {
 				try {
-					f.channel().closeFuture().sync();
-				} catch (InterruptedException e) {
-					
+					channel.closeFuture().sync();
+				} catch (InterruptedException exc) {
+					exc.printStackTrace();
 				} finally {
 					workGroup.shutdownGracefully();
 					bossGroup.shutdownGracefully();
@@ -142,7 +165,9 @@ public class HttpServer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		HttpServer server = new HttpServer();
+		HttpServer server = getInstance(new CContextLoaderListener() {
+
+		});
 		ChannelHandler channelHandler = new HttpServerInitializer(server);
 		server.setChannelHandler(channelHandler);
 		server.startHttpserver();
@@ -214,6 +239,10 @@ public class HttpServer {
 
 	public void setChannelHandler(ChannelHandler channelHandler) {
 		this.channelHandler = channelHandler;
+	}
+
+	public void logger(String msg) {
+		getInstance().logger.info(msg);
 	}
 
 }
