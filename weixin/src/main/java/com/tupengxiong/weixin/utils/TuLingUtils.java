@@ -99,7 +99,7 @@ public class TuLingUtils {
 		JSONObject object = new JSONObject((String)map.get("body"));
 
 		List<WxArticle> articles = new ArrayList<WxArticle>();
-		System.out.println(object);
+		logger.info("获取到信息:"+object);
 		switch (code) {
 		case 100000:
 			// 文本类

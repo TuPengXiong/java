@@ -53,7 +53,7 @@ public class MessageTransferTask implements InitializingBean {
 	private static final Logger logger = Logger.getLogger(MessageTransferTask.class);
 
 	/**
-	 * 发送客服消息到指定用户的定时任务 3s 执行一次
+	 * 发送客服消息到指定用户的定时任务 5s 执行一次
 	 * 
 	 * @author tupengxiong
 	 * @since JDK 1.7
@@ -63,7 +63,7 @@ public class MessageTransferTask implements InitializingBean {
 		Integer start = 0;
 		Integer nums = 1;
 		List<WxText> list = wxTextMapper.selectBySendStatus(0, start, nums);
-		logger.info(new StringBuilder().append("list  size-------").append(list.size()));
+		//logger.info(new StringBuilder().append("list  size-------").append(list.size()));
 		while (list.size() == nums) {
 			for (WxText wxText : list) {
 				JSONObject json = new JSONObject();
@@ -72,7 +72,7 @@ public class MessageTransferTask implements InitializingBean {
 				JSONObject jsonContent = new JSONObject();
 				jsonContent.put("content", wxText.getContent() + "\r\n[" + wxText.getFromUserName() + "]");
 				json.put("text", jsonContent);
-				logger.info(json.toString());
+				//logger.info(json.toString());
 				Map map = wxService.sendKefuMsg(appId, json);
 				if (map.get("errmsg").equals("ok")) {
 					WxText wxText2 = new WxText();
