@@ -43,7 +43,31 @@ chown -R solr:solr solr-6.6.0/
  chmod +x solr-6.6.0/solr/bin/solr
 ```
 
-
+3. 启动
+```
+su solr 
+./solr-6.6.0/solr/bin/solr start -p 8983
+```
 ## 使用 
+```
+./solr-6.6.0/solr/bin/solr -help
+
+Usage: solr COMMAND OPTIONS
+       where COMMAND is one of: start, stop, restart, status, healthcheck, create, create_core, create_collection, delete, version, zk, auth
+
+  Standalone server example (start Solr running in the background on port 8984):
+
+    ./solr start -p 8984
+
+  SolrCloud example (start Solr running in SolrCloud mode using localhost:2181 to connect to Zookeeper, with 1g max heap size and remote Java debug options enabled):
+
+    ./solr start -c -m 1g -z localhost:2181 -a "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
+
+Pass -help after any COMMAND to see command-specific usage information,
+  such as:    ./solr start -help or ./solr stop -help
+
+start, stop, restart, status, healthcheck, create, create_core, create_collection, delete, version, zk, auth
+
+```
 
 ## 总结
