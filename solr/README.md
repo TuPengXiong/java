@@ -5,8 +5,29 @@
 1. Solr 中的每个 Document 需要有能唯一标识其自身的属性，默认情况下这个属性的名字是 id，在 Schema 配置文件中使用：<uniqueKey>id</uniqueKey>进行描述。
 
 ## 安装 
+*  [官网](http://lucene.apache.org/solr/)
+*  [官网下载](http://archive.apache.org/dist/lucene/solr/)
 
+在这里以 http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0-src.tgz  为例
+* 所需环境： JDK1.8+  操作系统：ubuntu
+1. 解压 
+```
+tar -zvxf solr-6.6.0-src.tgz
+```
+2. 解压结构
+```
+drwxr-xr-x  5 root root  4096 Jun 26 16:21 ./
+drwxr-xr-x 18 root root  4096 Jun 26 16:21 ../
+-rw-r--r--  1 root root 37347 May 30 10:02 build.xml
+drwxr-xr-x  9 root root  4096 Jun 26 16:21 dev-tools/
+-rw-r--r--  1 root root 12646 May 30 10:02 LICENSE.txt
+drwxr-xr-x 28 root root  4096 Jun 26 16:21 lucene/
+-rw-r--r--  1 root root 25549 May 30 10:02 NOTICE.txt
+-rw-r--r--  1 root root   441 May 30 10:02 README.txt
+drwxr-xr-x 15 root root  4096 Jun 26 16:21 solr/
+```
 ## 启动
+
 
 ## 使用 
 
