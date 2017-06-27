@@ -40,14 +40,17 @@ install_solr_service.sh
 Solr requires java, please install or set JAVA_HOME properly
 ```
 4. solr 用户没有安装JDK 设置所有用户的JDK
+
 ```
 vim /etc/bash.bashrc 
---文件末尾添加
+
+文件末尾添加
 export JAVA_HOME=/usr/local/java/jdk1.8.0_131
 export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 export PATH=$JAVA_HOME/bin:$PATH
----生效
+
+生效
 source /etc/bash.bashrc 
 ```
 
