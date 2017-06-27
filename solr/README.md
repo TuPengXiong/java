@@ -8,28 +8,27 @@
 *  [官网](http://lucene.apache.org/solr/)
 *  [官网下载](http://archive.apache.org/dist/lucene/solr/)
 
-在这里以 http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0-src.tgz  为例
+在这里以 http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz  为例
 * 所需环境： JDK1.8+  操作系统：ubuntu
 ```
-cd /usr/local/
-wget http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0-src.tgz
+mkdir /usr/local/solr
+cd /usr/local/solr/
+wget http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz
 ```
 1. 解压 获取 install_solr_service.sh
 ```
-tar xzf solr-6.6.0-src.tgz solr-6.6.0/solr/bin/install_solr_service.sh --strip-components=2
+ tar xzf solr-6.6.0.tgz solr-6.6.0/bin/install_solr_service.sh --strip-components=2
 ```
-2. 解压结构+可执行权限
+2. 解压结构
 ```
-bin/install_solr_service.sh
+install_solr_service.sh
 ```
 ## 启动 [参考](http://lucene.apache.org/solr/guide/6_6/solr-control-script-reference.html#solr-control-script-reference)
 1. 修改权限
 ```
-chmod +x bin/install_solr_service.sh
-```
 2. 启动
 ```
- sudo bash ./bin/install_solr_service.sh solr-6.6.0-src.tgz \
+ sudo bash ./install_solr_service.sh solr-6.6.0.tgz \
  -i /opt \
  -d /var/solr \
  -u solr \
@@ -53,25 +52,34 @@ source /etc/bash.bashrc
 ```
 
 5. 重新执行第二步
+```
+很奇怪 明明在java -version显示了JDK版本信息 但还是报
+Solr requires java, please install or set JAVA_HOME properly错误
 
+查看install_solr_service.sh 脚本 没办法 197行注释掉 再执行第二步 成功了（bug?）
+```
+6.结果
+```
+sudo service solr status
+
+ Loaded: loaded (/etc/init.d/solr; bad; vendor preset: enabled)
+   Active: active (exited) since Tue 2017-06-27 09:54:12 CST; 5min ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 11164 ExecStart=/etc/init.d/solr start (code=exited, status=0/SUCCESS
+
+Jun 27 09:53:58 lovesher.com systemd[1]: Starting LSB: Controls Apache Solr as a
+Jun 27 09:53:58 lovesher.com su[11168]: Successful su for solr by root
+Jun 27 09:53:58 lovesher.com su[11168]: + ??? root:solr
+Jun 27 09:53:58 lovesher.com su[11168]: pam_unix(su:session): session opened for
+Jun 27 09:54:04 lovesher.com solr[11164]: Warning: Available entropy is low. As
+Jun 27 09:54:04 lovesher.com solr[11164]: RNG might not work properly. To check
+Jun 27 09:54:12 lovesher.com solr[11164]: [242B blob data]
+Jun 27 09:54:12 lovesher.com solr[11164]: Started Solr server on port 8983 (pid=
+Jun 27 09:54:12 lovesher.com solr[11164]: [14B blob data]
+Jun 27 09:54:12 lovesher.com systemd[1]: Started LSB: Controls Apache Solr as a
+```
 ## 使用 
 ```
-./solr-6.6.0/solr/bin/solr -help
-
-Usage: solr COMMAND OPTIONS
-       where COMMAND is one of: start, stop, restart, status, healthcheck, create, create_core, create_collection, delete, version, zk, auth
-
-  Standalone server example (start Solr running in the background on port 8984):
-
-    ./solr start -p 8984
-
-  SolrCloud example (start Solr running in SolrCloud mode using localhost:2181 to connect to Zookeeper, with 1g max heap size and remote Java debug options enabled):
-
-    ./solr start -c -m 1g -z localhost:2181 -a "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=1044"
-
-Pass -help after any COMMAND to see command-specific usage information,
-  such as:    ./solr start -help or ./solr stop -help
-
 start, stop, restart, status, healthcheck, create, create_core, create_collection, delete, version, zk, auth
 
 ```
