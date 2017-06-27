@@ -21,7 +21,6 @@ tar xzf solr-6.6.0-src.tgz solr-6.6.0/solr/bin/install_solr_service.sh --strip-c
 2. 解压结构+可执行权限
 ```
 bin/install_solr_service.sh
-
 ```
 ## 启动 [参考](http://lucene.apache.org/solr/guide/6_6/solr-control-script-reference.html#solr-control-script-reference)
 1. 修改权限
@@ -41,7 +40,19 @@ chmod +x bin/install_solr_service.sh
 ```
 Solr requires java, please install or set JAVA_HOME properly
 ```
-4. 
+4. solr 用户没有安装JDK 设置所有用户的JDK
+```
+vim /etc/bash.bashrc 
+--文件末尾添加
+export JAVA_HOME=/usr/local/java/jdk1.8.0_131
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=$JAVA_HOME/bin:$PATH
+---生效
+source /etc/bash.bashrc 
+```
+
+5. 重新执行第二步
 
 ## 使用 
 ```
