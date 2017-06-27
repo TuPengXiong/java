@@ -83,6 +83,8 @@ Jun 27 09:54:12 lovesher.com solr[11164]: Started Solr server on port 8983 (pid=
 Jun 27 09:54:12 lovesher.com solr[11164]: [14B blob data]
 Jun 27 09:54:12 lovesher.com systemd[1]: Started LSB: Controls Apache Solr as a
 ```
+## 访问 http://host:8983/solr/#/
+![界面](http://7xo6kd.com1.z0.glb.clouddn.com/upload-ueditor-image-20170627-1498529196295098305.png)
 ## 使用 
 ```
 start, stop, restart, status, healthcheck, create, create_core, create_collection, delete, version, zk, auth
