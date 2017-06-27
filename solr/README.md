@@ -10,23 +10,25 @@
 
 在这里以 http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz  为例
 * 所需环境： JDK1.8+  操作系统：ubuntu
+
 ```
 mkdir /usr/local/solr
 cd /usr/local/solr/
 wget http://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz
 ```
 1. 解压 获取 install_solr_service.sh
+
 ```
  tar xzf solr-6.6.0.tgz solr-6.6.0/bin/install_solr_service.sh --strip-components=2
 ```
 2. 解压结构
+
 ```
 install_solr_service.sh
 ```
+
 ## 启动 [参考](http://lucene.apache.org/solr/guide/6_6/solr-control-script-reference.html#solr-control-script-reference)
-1. 修改权限
-```
-2. 启动
+1. 启动
 ```
  sudo bash ./install_solr_service.sh solr-6.6.0.tgz \
  -i /opt \
@@ -35,11 +37,11 @@ install_solr_service.sh
  -s solr \
  -p 8983
 ```
-3. 执行结果
+2. 执行结果
 ```
 Solr requires java, please install or set JAVA_HOME properly
 ```
-4. solr 用户没有安装JDK 设置所有用户的JDK
+3. solr 用户没有安装JDK 设置所有用户的JDK
 
 ```
 vim /etc/bash.bashrc 
@@ -54,12 +56,12 @@ export PATH=$JAVA_HOME/bin:$PATH
 source /etc/bash.bashrc 
 ```
 
-5. 重新执行第二步
+5. 重新执行第1步
 ```
 很奇怪 明明在java -version显示了JDK版本信息 但还是报
 Solr requires java, please install or set JAVA_HOME properly错误
 
-查看install_solr_service.sh 脚本 没办法 197行注释掉 再执行第二步 成功了（bug?）
+查看install_solr_service.sh 脚本 没办法 197行注释掉 再执行第1步 成功了（bug?）
 ```
 6.结果
 ```
