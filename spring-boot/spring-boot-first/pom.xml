@@ -38,11 +38,11 @@
            <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+            </dependency>
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>1.0.0</version>
+			<version>1.3.0</version>
 		</dependency>
 		<!-- 开发工具 自动重启== -->
 		<dependency>
@@ -60,6 +60,7 @@
 				<configuration>
 					<!-- 不排除开发工具 -->
 					<!-- <excludeDevtools>false</excludeDevtools> -->
+					<skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
