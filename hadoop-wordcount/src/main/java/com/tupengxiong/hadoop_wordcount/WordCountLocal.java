@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -17,10 +19,13 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
 import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.RunningJob;
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
 
 public class WordCountLocal {
+	
+	private static final Log logger = LogFactory.getLog(WordCountLocal.class);
 
 	public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
 		private final static IntWritable one = new IntWritable(1);
@@ -69,24 +74,25 @@ public class WordCountLocal {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		JobConf conf = config("WordCountLocal", WordCountLocal.class);
+		JobConf job = config("WordCountLocal", WordCountLocal.class);
 		// 设定输出的key和value类型
-		conf.setOutputKeyClass(Text.class);
-		conf.setOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
 
 		// 设定各个作业的类
-		conf.setMapperClass(Map.class);
-		conf.setCombinerClass(Reduce.class);
-		conf.setReducerClass(Reduce.class);
+		job.setMapperClass(Map.class);
+		job.setCombinerClass(Reduce.class);
+		job.setReducerClass(Reduce.class);
 
 		// 设定输入输出的格式
-		conf.setInputFormat(TextInputFormat.class);
-		conf.setOutputFormat(TextOutputFormat.class);
+		job.setInputFormat(TextInputFormat.class);
+		job.setOutputFormat(TextOutputFormat.class);
 
-		FileInputFormat.setInputPaths(conf, new Path("input"));
-		FileOutputFormat.setOutputPath(conf, new Path("output"));
+		FileInputFormat.setInputPaths(job, new Path("input"));
+		FileOutputFormat.setOutputPath(job, new Path("output"));
 
-		JobClient.runJob(conf);
+		RunningJob runningJob = JobClient.runJob(job);
+		logger.info("runningJob " + runningJob.getJobName());
 	}
 
 	// 加载Hadoop配置文件
