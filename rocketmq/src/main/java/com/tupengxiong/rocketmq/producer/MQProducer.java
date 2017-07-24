@@ -1,6 +1,5 @@
 package com.tupengxiong.rocketmq.producer;
 
-import org.junit.Test;
 
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
@@ -8,11 +7,10 @@ import com.alibaba.rocketmq.common.message.Message;
 
 public class MQProducer {
 
-	@Test
-	public void run(){
+	public static void run(){
 		DefaultMQProducer producer = new DefaultMQProducer("Producer");
 		producer.setVipChannelEnabled(false);
-		producer.setNamesrvAddr("106.15.93.50:9876");
+		producer.setNamesrvAddr("192.168.145.129:9876");
 		producer.setInstanceName("Producer");
 		try {
 			producer.start();
@@ -36,5 +34,9 @@ public class MQProducer {
 		} finally {
 			producer.shutdown();
 		}
+	}
+	
+	public static void main(String[] args) {
+		MQProducer.run();
 	}
 }

@@ -2,22 +2,19 @@ package com.tupengxiong.rocketmq.consumer;
 
 import java.util.List;
 
-import org.junit.Test;
 
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 import com.alibaba.rocketmq.common.message.Message;
 import com.alibaba.rocketmq.common.message.MessageExt;
 
 public class MQConsumer {
 
-	@Test
-	public void run() {
+	public static void run() {
 		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("PushConsumer");
-		consumer.setNamesrvAddr("106.15.93.50:9876");
+		consumer.setNamesrvAddr("192.168.145.129:9876");
 		consumer.setVipChannelEnabled(false);
 		consumer.setInstanceName("MQConsumer");
 		try {
@@ -30,6 +27,7 @@ public class MQConsumer {
 						ConsumeConcurrentlyContext Context) {
 					Message msg = list.get(0);
 					System.out.println(msg.toString());
+					System.out.println(new String(msg.getBody()));
 					return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 				}
 			});
@@ -37,6 +35,12 @@ public class MQConsumer {
 			System.out.println("Consumer Started.");
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}/*finally {
+			consumer.shutdown();
+		}*/
+	}
+	
+	public static void main(String[] args) {
+		MQConsumer.run();
 	}
 }
