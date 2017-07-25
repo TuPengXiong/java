@@ -6,5 +6,5 @@ package org.dubbo.spring.zk.inteface.service;
  */
 public interface GreetingService 
 {
-    void hello(String something);
+	String hello(String something);
 }

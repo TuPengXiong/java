@@ -13,6 +13,11 @@ public class JunitTestConsumer {
 		@SuppressWarnings("resource")
 		ApplicationContext cxt = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
 		GreetingService greetingService = (GreetingService) cxt.getBean("greetingService");
-		greetingService.hello("I am consumer");
+		try{
+			System.out.println(greetingService.hello("I am consumer"));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 }

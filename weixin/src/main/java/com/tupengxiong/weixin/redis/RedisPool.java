@@ -15,7 +15,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @version
  * @since JDK 1.7
  */
-public class Redis {
+public class RedisPool {
 
 	private JedisPool pool;
 	private String ip = "127.0.0.1";
@@ -25,7 +25,7 @@ public class Redis {
 		return this.pool.getResource();
 	}
 
-	public Redis() {
+	public RedisPool() {
 		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		// 设置最大实例总数
 		jedisPoolConfig.setMaxTotal(5);
@@ -46,8 +46,8 @@ public class Redis {
 		pool = new JedisPool(jedisPoolConfig, ip, port, 5000, null, 0);
 	}
 
-	public Redis(String ip, int port) {
-		this.ip = "127.0.0.1";
+	public RedisPool(String ip, int port) {
+		this.ip = ip;
 		this.port = port;
 		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
 		// 设置最大实例总数

@@ -43,10 +43,10 @@ public class MessageTransferTask implements InitializingBean {
 	public final static String appId = "wx23d70d36f886f949";
 
 	@Resource
-	WxTextMapper wxTextMapper;
+	private WxTextMapper wxTextMapper;
 
 	@Resource
-	WxService wxService;
+	private WxService wxService;
 
 	private static final String openId = "otuUIwwrKgYPWIngIkHkiDxfdmSQ";
 

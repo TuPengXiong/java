@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.cloudy.fastjson.JSONException;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.tupengxiong.weixin.redis.Redis;
+import com.tupengxiong.weixin.redis.RedisPool;
+
 
 @Service
 public class WxService {
@@ -42,10 +43,10 @@ public class WxService {
 	private static final Logger logger = Logger.getLogger(WxService.class);
 
 	@Resource
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Resource
-	Redis redis;
+	private RedisPool redis;
 
 	/**
 	 * getSignature:验证签名/消息验证. <br/>

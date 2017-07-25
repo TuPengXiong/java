@@ -8,7 +8,9 @@ import org.dubbo.spring.zk.inteface.service.GreetingService;
  */
 public class  GreetingServiceImpl implements GreetingService
 {
-    public void hello(String something){
-    	System.out.println("hello " + something);
+    public String hello(String something){
+    	throw new RuntimeException("hello "+something);
+    	/*System.out.println("hello " + something);
+    	return  "hello "+something;*/
     }
 }
