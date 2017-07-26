@@ -4,17 +4,21 @@ import java.io.DataInputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tupengxiong.weixin.bean.WxText;
 import com.tupengxiong.weixin.bean.mapper.WxTextMapper;
 import com.tupengxiong.weixin.service.WxService;
+import com.tupengxiong.weixin.task.MessageTransferTask;
 import com.tupengxiong.weixin.utils.TuLingUtils;
 import com.tupengxiong.weixin.utils.XmlForBeanUtils;
 
@@ -22,18 +26,23 @@ import com.tupengxiong.weixin.utils.XmlForBeanUtils;
 @RequestMapping("/api")
 public class WxController {
 
+	private static final Logger logger = Logger.getLogger(WxController.class);
 	@Resource
-	WxService wxService;
+	private WxService wxService;
 
 	@Resource
-	XmlForBeanUtils xmlForBeanUtils;
+	private XmlForBeanUtils xmlForBeanUtils;
 
 	@Resource
-	TuLingUtils tuLingTools;
-	
+	private TuLingUtils tuLingTools;
+
 	@Resource
 	private WxTextMapper wxTextMapper;
 
+	@Resource
+	private MessageTransferTask messageTransferTask;
+
+	private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(100);
 
 	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -63,15 +72,20 @@ public class WxController {
 				resp = "error";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 
 		if (null != reqcontent) {
 			String type = xmlForBeanUtils.parseToMsgType(reqcontent);
 			if (type.equals("text")) {
 				WxText wxText = xmlForBeanUtils.parseToWxText(reqcontent);
-				wxTextMapper.insert(wxText);
-				resp = tuLingTools.getWxResp(wxText);
+				//防重
+				Integer count = wxTextMapper.wxTextTotalMsgIdCount(wxText.getMsgId());
+				if(count == 0){
+					wxTextMapper.insert(wxText);
+					fixedThreadPool.execute(messageTransferTask);
+					resp = tuLingTools.getWxResp(wxText);
+				}
 			}
 		}
 
@@ -81,7 +95,7 @@ public class WxController {
 			response.getWriter().close();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 	}
 }

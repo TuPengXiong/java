@@ -53,7 +53,7 @@
 		SELECT 
 		<include refid="Base_Column_List" />
 		FROM wx_text WHERE
-		`id` = ${id}
+		`id` = #{id}
 	</select>
 	
 	<select id="selectBySendStatus" resultMap="BaseResultMap">
@@ -68,7 +68,13 @@
 	<select id="wxTextTotalCount" resultType="java.lang.Integer">
 		SELECT IFNULL(count(1),0)
 		FROM wx_text WHERE
-		`send_status` = ${sendStatus}
+		`send_status` = #{sendStatus}
+	</select>
+	
+	<select id="wxTextTotalMsgIdCount" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM wx_text WHERE
+		`msg_id` = #{msgId}
 	</select>
 	
 	

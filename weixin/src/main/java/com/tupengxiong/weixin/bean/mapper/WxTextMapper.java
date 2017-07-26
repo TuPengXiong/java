@@ -12,4 +12,6 @@ public interface WxTextMapper extends Mapper<WxText> {
 			@Param("end") int end);
 	
 	Integer wxTextTotalCount(@Param("sendStatus") Integer sendStatus);
+	
+	Integer wxTextTotalMsgIdCount(@Param("msgId") String msgId);
 }

@@ -41,7 +41,7 @@ public class AccessTokenTask implements InitializingBean {
 
 	private static final Logger logger = Logger.getLogger(AccessTokenTask.class);
 	@Resource
-	WxService wxService;
+	private WxService wxService;
 
 	/**
 	 * 更新accessToken updateAccessToken:(更新accessToken). <br/>

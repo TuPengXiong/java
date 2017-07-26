@@ -46,7 +46,7 @@ public class WxService {
 	private RestTemplate restTemplate;
 
 	@Resource
-	private RedisPool redis;
+	private RedisPool redisPool;
 
 	/**
 	 * getSignature:验证签名/消息验证. <br/>
@@ -111,8 +111,8 @@ public class WxService {
 	 * @since JDK 1.7
 	 */
 	public String getAccessToken(String appId, String appSecret, boolean refresh) {
-		if (redis.get(appId) != null && !refresh) {
-			return redis.get(appId);
+		if (redisPool.get(appId) != null && !refresh) {
+			return redisPool.get(appId);
 		}
 		URI uri = null;
 		try {
@@ -129,9 +129,9 @@ public class WxService {
 				JSONObject json = new JSONObject(respEntity.getBody());
 				String access_token = json.getString("access_token");
 				Integer expires_in = json.getInt("expires_in");
-				redis.set(appId, access_token);
-				redis.expire(appId, expires_in);
-				logger.info(new StringBuilder("WxService  getAccessToken").append(redis.get(appId)));
+				redisPool.set(appId, access_token);
+				redisPool.expire(appId, expires_in);
+				logger.info(new StringBuilder("WxService  getAccessToken").append(redisPool.get(appId)));
 			} catch (JSONException e) {
 				logger.error(new StringBuilder("WxService  getAccessToken").append(respEntity));
 				return null;
@@ -144,9 +144,9 @@ public class WxService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		URI uri = null;
 		try {
-			logger.info(new StringBuilder("WxService  getAccessToken").append(redis.get(appId)));
+			logger.info(new StringBuilder("WxService  getAccessToken").append(redisPool.get(appId)));
 			uri = UriComponentsBuilder.fromHttpUrl(SEND_KEFU_MSG_URL)
-					.queryParam("access_token", redis.get(appId)).build().encode("UTF-8")
+					.queryParam("access_token", redisPool.get(appId)).build().encode("UTF-8")
 					.toUri();
 		} catch (UnsupportedEncodingException e) {
 			logger.error("TuLingTools  getResponseFromTuLing UnsupportedEncodingException");
