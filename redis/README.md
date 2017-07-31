@@ -1,9 +1,9 @@
-## redis 集群 ubuntu
-# redis 下载
+# redis 集群 ubuntu
+## redis 下载
 1. [官网下载链接](https://redis.io/download)
 1. 版本号 4.0.1
 
-# 解压 编译
+## 解压 编译
 ```
 tar -zxvf redis-4.0.1.tar.gz
 cd redis-4.0.1
@@ -11,7 +11,7 @@ make
 
 cd src
 ```
-# redis的配置文件 
+## redis的配置文件 
 1. 新建一个文件夹 专门存配置文件
 ```
 mkdir redisConf
@@ -82,7 +82,7 @@ pidfile 进程文件的位置
 logfile 日志的配置文件
 ```
 
-# 启动 redis-server 回到redis-4.0.1/src目录下
+## 启动 redis-server 回到redis-4.0.1/src目录下
 ```
 ./redis-server ./redisConf/6379/6379.conf
 ./redis-server ./redisConf/6380/6380.conf
@@ -101,7 +101,7 @@ frist-t+   9362      1  0 13:07 ?        00:00:07 ./redis-server 0.0.0.0:6383 [c
 frist-t+   9367      1  0 13:07 ?        00:00:07 ./redis-server 0.0.0.0:6384 [cluster]
 ```
 
-# 至此 redis 各服务已经开启，集群还没有完全建立，还需用到 redis-trib.rb ruby写的一个脚本
+## 至此 redis 各服务已经开启，集群还没有完全建立，还需用到 redis-trib.rb ruby写的一个脚本
 ```
 # 安装ruby 安装过请略过
 sudo apt install ruby
@@ -159,7 +159,7 @@ S: d539a1566b0293001cce3d9c8bbd5558adb81978 127.0.0.1:6382
 >>> Check slots coverage...
 [OK] All 16384 slots covered.
 ```
-# 集群检验和分片处理
+## 集群检验和分片处理
 ```
 ## 集群检验
 ./redis-trib.rb check 127.0.0.1:6379
@@ -191,7 +191,7 @@ S: d539a1566b0293001cce3d9c8bbd5558adb81978 127.0.0.1:6382
 提示输入 yes
 ```
 
-# redis-trib.rb 命令
+## redis-trib.rb 命令
 ```
 ./redis-trib.rb help
 Usage: redis-trib <command> <options> <arguments ...>
@@ -232,7 +232,7 @@ Usage: redis-trib <command> <options> <arguments ...>
 For check, fix, reshard, del-node, set-timeout you can specify the host and port of any working node in the cluster.
 
 ```
-# redis分片  16384被分为3 份 存储在不同的redis服务上
+## redis分片  16384被分为3 份 存储在不同的redis服务上
 ```
 ./redis-cli -c -p  6379 
 127.0.0.1:6379> get 1
