@@ -232,7 +232,13 @@ Usage: redis-trib <command> <options> <arguments ...>
 For check, fix, reshard, del-node, set-timeout you can specify the host and port of any working node in the cluster.
 
 ```
-
+# redis分片  16384被分为3 份 存储在不同的redis服务上
+```
+./redis-cli -p -c 6379 
+127.0.0.1:6379> get 1
+-> Redirected to slot [9842] located at 127.0.0.1:6380
+"1"
+```
 
 
 
