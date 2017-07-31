@@ -185,7 +185,7 @@ S: d539a1566b0293001cce3d9c8bbd5558adb81978 127.0.0.1:6382
 
 
 ## 集群修复
-./redis-trib.rb check 127.0.0.1:6380
+./redis-trib.rb fix 127.0.0.1:6380
 # 错误
 [ERR] Not all 16384 slots are covered by nodes.
 提示输入 yes
