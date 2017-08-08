@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 /**
  * Created by tpx on 2017/7/12.
  */
-@Configuration
+//@Configuration
 //@EnableWebMvc //无需使用该注解，否则会覆盖掉SpringBoot的默认配置值
 public class WebMvcConf extends WebMvcConfigurerAdapter {
 
@@ -17,4 +17,5 @@ public class WebMvcConf extends WebMvcConfigurerAdapter {
         registry.addViewController("/hello").setViewName("hello");
         registry.addViewController("/login").setViewName("login");
     }
+
 }
