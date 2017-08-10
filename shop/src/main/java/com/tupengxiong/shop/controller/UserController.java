@@ -42,7 +42,7 @@ public class UserController {
     @RequestMapping(value = "/info", method = {RequestMethod.GET, RequestMethod.POST}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("isAuthenticated()")
     public String info(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+        User user = dtSpringSecurityService.getUser();
         if (null != user) {
             session.setAttribute("user", user);
         }
