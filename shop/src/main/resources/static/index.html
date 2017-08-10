@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE HTML>
- xmlns="http://www.w3.org/1999/" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html xmlns="http://www.w3.org/1999/" xmlns:th="http://www.thymeleaf.org">
+<head xmlns:th="http://www.w3.org/1999/xhtml">
 <meta charset="utf-8">
 <meta name="renderer" content="webkit|ie-comp|ie-stand">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -29,7 +29,7 @@
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
 		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.">管理后台</a>
-			<a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/page/aboutHui.">Friut</a>
+			<a class="logo navbar-logo-m f-l mr-10 visible-xs" href="//aboutHui.">Friut</a>
 			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 			<nav class="nav navbar-nav">
 				<ul class="cl">
@@ -48,7 +48,7 @@
 					<li>超级管理员</li>
 					<li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A"><span th:text="${session.user.username}">  <i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
-							<li><a href="#">退出</a></li>
+							<li><a th:href="@{/logout}">退出</a></li>
 						</ul>
 					</li>
 					<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
@@ -74,7 +74,7 @@
 			<dt><i class="Hui-iconfont">&#xe616;</i> 资讯管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/article-list" data-title="资讯管理" href="javascript:void(0)">资讯管理</a></li>
+					<li><a _href="/shop/article-list.html" data-title="资讯管理" href="javascript:void(0)">资讯管理</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -82,7 +82,7 @@
 			<dt><i class="Hui-iconfont">&#xe613;</i> 图片管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/picture-list" data-title="图片管理" href="javascript:void(0)">图片管理</a></li>
+					<li><a _href="/shop/picture-list.html" data-title="图片管理" href="javascript:void(0)">图片管理</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -90,9 +90,9 @@
 			<dt><i class="Hui-iconfont">&#xe620;</i> 产品管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/product-brand" data-title="品牌管理" href="javascript:void(0)">品牌管理</a></li>
-					<li><a _href="page/product-category" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>
-					<li><a _href="page/product-list" data-title="产品管理" href="javascript:void(0)">产品管理</a></li>
+					<li><a _href="/shop/product-brand.html" data-title="品牌管理" href="javascript:void(0)">品牌管理</a></li>
+					<li><a _href="/shop/product-category.html" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>
+					<li><a _href="/shop/product-list.html" data-title="产品管理" href="javascript:void(0)">产品管理</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -100,8 +100,7 @@
 			<dt><i class="Hui-iconfont">&#xe622;</i> 评论管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/http://h-ui.duoshuo.com/admin/" data-title="评论列表" href="javascript:;">评论列表</a></li>
-					<li><a _href="page/feedback-list" data-title="意见反馈" href="javascript:void(0)">意见反馈</a></li>
+					<li><a _href="/shop/feedback-list.html" data-title="意见反馈" href="javascript:void(0)">意见反馈</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -109,13 +108,12 @@
 			<dt><i class="Hui-iconfont">&#xe60d;</i> 会员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/member-list" data-title="会员列表" href="javascript:;">会员列表</a></li>
-					<li><a _href="page/member-del" data-title="删除的会员" href="javascript:;">删除的会员</a></li>
-					<li><a _href="page/member-level" data-title="等级管理" href="javascript:;">等级管理</a></li>
-					<li><a _href="page/member-scoreoperation" data-title="积分管理" href="javascript:;">积分管理</a></li>
-					<li><a _href="page/member-record-browse" data-title="浏览记录" href="javascript:void(0)">浏览记录</a></li>
-					<li><a _href="page/member-record-download" data-title="下载记录" href="javascript:void(0)">下载记录</a></li>
-					<li><a _href="page/member-record-share" data-title="分享记录" href="javascript:void(0)">分享记录</a></li>
+					<li><a _href="/shop/api/user/list" data-title="会员列表" href="javascript:;">会员列表</a></li>
+					<li><a _href="/shop/member-level.html" data-title="等级管理" href="javascript:;">等级管理</a></li>
+					<li><a _href="/shop/member-scoreoperation.html" data-title="积分管理" href="javascript:;">积分管理</a></li>
+					<li><a _href="/shop/member-record-browse.html" data-title="浏览记录" href="javascript:void(0)">浏览记录</a></li>
+					<li><a _href="/shop/member-record-download.html" data-title="下载记录" href="javascript:void(0)">下载记录</a></li>
+					<li><a _href="/shop/member-record-share.html" data-title="分享记录" href="javascript:void(0)">分享记录</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -123,9 +121,9 @@
 			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/admin-role" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
-					<li><a _href="page/admin-permission" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
-					<li><a _href="page/admin-list" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
+					<li><a _href="/shop/admin-role.html" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
+					<li><a _href="/shop/admin-permission.html" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
+					<li><a _href="/shop/admin-list.html" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -133,11 +131,11 @@
 			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="page/system-base" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
-					<li><a _href="page/system-category" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>
-					<li><a _href="page/system-data" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
-					<li><a _href="page/system-shielding" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>
-					<li><a _href="page/system-log" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
+					<li><a _href="/shop/system-base.html" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
+					<li><a _href="/shop/system-category.html" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>
+					<li><a _href="/shop/system-data.html" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
+					<li><a _href="/shop/system-shielding.html" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>
+					<li><a _href="/shop/system-log.html" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -156,7 +154,7 @@
 	<div id="iframe_box" class="Hui-article">
 		<div class="show_iframe">
 			<div style="display:none" class="loading"></div>
-			<iframe scrolling="yes" frameborder="0" src="welcome"></iframe>
+			<iframe scrolling="yes" frameborder="0" th:src="@{/welcome.html}"></iframe>
 		</div>
 	</div>
 </section>

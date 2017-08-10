@@ -57,6 +57,8 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .and()
                     .cors()
                 .and()
+                    .headers().frameOptions().disable()
+                .and()
                     .csrf()
                     .disable(); //防注入
     }

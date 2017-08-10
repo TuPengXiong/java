@@ -1,14 +1,3 @@
-/* -----------H-ui前端框架-------------
-* H-ui.admin.js v2.4
-* http://www.h-ui.net/
-* Created & Modified by guojunhui
-* Date modified 15:42 2016.03.14
-*
-* Copyright 2013-2016 北京颖杰联创科技有限公司 All rights reserved.
-* Licensed under MIT license.
-* http://opensource.org/licenses/MIT
-*
-*/
 var num=0,oUl=$("#min_title_list"),hide_nav=$("#Hui-tabNav");
 
 /*获取顶部选项卡总长度*/
