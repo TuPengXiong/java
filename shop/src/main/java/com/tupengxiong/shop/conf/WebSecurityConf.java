@@ -43,7 +43,8 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/**").authenticated() //认证访问
                 .and()
                     .formLogin()
-                    .loginPage("/login")//登陆页面
+                    .loginProcessingUrl("/login")
+                    .loginPage("/")//登陆页面
                     .usernameParameter("username")//登陆用户名参数
                     .passwordParameter("password")//登陆密码参数
                 //.defaultSuccessUrl("/api/user/name") //登录成功访问

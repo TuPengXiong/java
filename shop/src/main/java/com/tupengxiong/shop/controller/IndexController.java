@@ -1,13 +1,12 @@
 package com.tupengxiong.shop.controller;
 
 import com.tupengxiong.shop.common.MsgEnum;
+import com.tupengxiong.shop.service.impl.DtSpringSecurityService;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,27 +17,29 @@ import java.util.Map;
 public class IndexController implements ErrorController {
     private static final String ERROR_PATH = "/error";
 
+    @Resource
+    private DtSpringSecurityService dtSpringSecurityService;
+
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
-    @ResponseBody
-    public Map index() {
-        Map map = new HashMap<String, Object>();
-        map.put("code", MsgEnum.SUCCESS.getCode());
-        map.put("msg", MsgEnum.SUCCESS.getMsg());
-        return map;
+    public String index() {
+        if (dtSpringSecurityService.getUser() == null) {
+            return "login";
+        } else {
+            return "index";
+        }
     }
 
-    @RequestMapping(value = "/login", method = {RequestMethod.GET})
-    public String login() {
-        return "login";
+    @RequestMapping(value = "/page/{html}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String page(@PathVariable String html) {
+        if (null != html && html.endsWith(".html")) {
+            return html.split(".html")[0];
+        }
+        return html;
     }
 
     @RequestMapping(value = ERROR_PATH, method = {RequestMethod.GET, RequestMethod.POST})
-    @ResponseBody
-    public Map error() {
-        Map map = new HashMap<String, Object>();
-        map.put("code", MsgEnum.NOT_FOUND_ERROR.getCode());
-        map.put("msg", MsgEnum.NOT_FOUND_ERROR.getMsg());
-        return map;
+    public String error() {
+        return "404";
     }
 
     @RequestMapping(value = "/loginFail", method = {RequestMethod.GET, RequestMethod.POST})

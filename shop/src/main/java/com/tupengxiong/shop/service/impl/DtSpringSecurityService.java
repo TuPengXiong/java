@@ -18,10 +18,15 @@ public class DtSpringSecurityService {
     private UserDao userDao;
 
     public User getUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        String username = userDetails.getUsername();
-        return userDao.findByUsername(username);
+        try {
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+            String username = userDetails.getUsername();
+            return userDao.findByUsername(username);
+        }catch (Exception ex){
+
+        }
+        return null;
     }
 }
