@@ -23,7 +23,7 @@ spring:
 #/{label}/{application}-{profile}.properties
 
 # application 指的是 spring.cloud.config.name
-# profile 指的是 spring.active.profiles
+# profile 指的是 spring.cloud.config.profile
 # label 指的是 git的分支默认是master
 
 # curl localhost:8001/client/dev/master
