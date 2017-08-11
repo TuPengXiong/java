@@ -1,0 +1,29 @@
+server:
+    port: 8001
+spring:
+  application:
+    name: spring-cloud-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/TuPengXiong/java/
+           # 配置git仓库的地址
+          search-paths: config-repo
+          # git仓库地址下的相对地址，可以配置多个，用,分割。
+          username:
+           # git仓库的账号
+          password:
+          # git仓库的密码
+
+#/{application}/{profile}[/{label}]
+#/{application}-{profile}.yml
+#/{label}/{application}-{profile}.yml
+#/{application}-{profile}.properties
+#/{label}/{application}-{profile}.properties
+
+# application 指的是 spring.cloud.config.name
+# profile 指的是 spring.active.profiles
+# label 指的是 git的分支默认是master
+
+# curl localhost:8001/client/dev/master
