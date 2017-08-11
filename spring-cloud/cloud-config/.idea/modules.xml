@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cloud-config.iml" filepath="$PROJECT_DIR$/cloud-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../cloud-config-client/cloud-config-client.iml" filepath="$PROJECT_DIR$/../cloud-config-client/cloud-config-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../spring-cloud-config-repo/spring-cloud-config-repo.iml" filepath="$PROJECT_DIR$/../../../spring-cloud-config-repo/spring-cloud-config-repo.iml" />
     </modules>
   </component>
 </project>
