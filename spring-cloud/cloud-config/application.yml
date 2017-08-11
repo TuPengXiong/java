@@ -1,0 +1,8 @@
+# 禁用 bootstrap
+# spring.cloud.bootstrap.enabled:false
+# spring.cloud.bootstrap.name:bootstrap
+# spring.cloud.bootstrap.location
+
+spring:
+  application:
+    name: cloud-config
