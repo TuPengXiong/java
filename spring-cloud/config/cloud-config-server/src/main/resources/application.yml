@@ -26,4 +26,4 @@ spring:
 # profile 指的是 spring.cloud.config.profile
 # label 指的是 git的分支默认是master
 
-# curl localhost:8001/client/dev/master
+# curl localhost:8001/server/dev/master
