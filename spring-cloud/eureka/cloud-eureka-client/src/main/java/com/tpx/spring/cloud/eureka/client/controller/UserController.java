@@ -1,5 +1,6 @@
 package com.tpx.spring.cloud.eureka.client.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.tpx.spring.cloud.eureka.client.user.service.UserClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -25,9 +26,14 @@ public class UserController {
         return "Hello World!";
     }
 
+    @HystrixCommand(fallbackMethod = "fallback")
     @RequestMapping("/user/{id}")
     public String info(@PathVariable("id") Integer id) {
         return userClientService.info(id);
+    }
+
+    public String fallback(Integer id) {
+        return "some exception occur call fallback method.";
     }
 
     @RequestMapping("/registered")
@@ -35,7 +41,6 @@ public class UserController {
         List<ServiceInstance> list = discoveryClient.getInstances("STORES");
         System.out.println(discoveryClient.getLocalServiceInstance());
         System.out.println("discoveryClient.getServices().size() = " + discoveryClient.getServices().size());
-
         for (String s : discoveryClient.getServices()) {
             System.out.println("services " + s);
             List<ServiceInstance> serviceInstances = discoveryClient.getInstances(s);
@@ -46,9 +51,7 @@ public class UserController {
                 System.out.println("    services:" + s + ":getUri()=" + si.getUri());
                 System.out.println("    services:" + s + ":getMetadata()=" + si.getMetadata());
             }
-
         }
-
         System.out.println(list.size());
         if (list != null && list.size() > 0) {
             System.out.println(list.get(0).getUri());
