@@ -1,12 +1,10 @@
-package com.tpx.spring.cloud.eureka.client;
+package com.tpx.spring.cloud.eureka.user.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Created by tpx on 2017/8/12.

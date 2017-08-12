@@ -28,6 +28,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka-server</artifactId>
         </dependency>
+        <!--Eureka Server加上安全的用户认证.-->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>1.2.2.RELEASE</version>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>
