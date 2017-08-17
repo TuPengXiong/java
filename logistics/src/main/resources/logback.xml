@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework.web" level="ERROR"/>
+    <logger name="com.tupengxiong.shop" level="ERROR"/>
+    <!-- 测试环境+正式环境. 多个使用逗号隔开. -->
+   <!-- <springProfile name="test,prod">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="com.fight.dt.business" level="INFO" />
+    </springProfile>-->
+</configuration>
