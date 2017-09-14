@@ -191,10 +191,10 @@ public class ElasticSearchPlugin {
 	 * @return
 	 * @since JDK 1.7
 	 */
-	public SearchResponse search(String dbName, String tableName, Map<String, Object> mustQuery,
+	public SearchResponse search(String[] dbNames, String[] tableNames, Map<String, Object> mustQuery,
 			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery, Integer from,
 			Integer size) {
-		SearchRequestBuilder seBuilder = client.prepareSearch(dbName).setTypes(tableName);
+		SearchRequestBuilder seBuilder = client.prepareSearch(dbNames).setTypes(tableNames);
 		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
 		if (null != mustQuery && mustQuery.size() > 0) {
 			for (String key : mustQuery.keySet()) {

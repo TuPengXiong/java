@@ -206,7 +206,8 @@ public class CanalThread {
 		Map<String, Object> query = new HashMap<String, Object>();
 		query.put("id", "17");
 		query.put("name", "444");
-		logger.info(elasticSearchPlugin.search("test", "test", query, null, null, null, 0, 1));
+		logger.info(elasticSearchPlugin.search(new String[] { "test" }, new String[] { "test" }, query, null, null,
+				null, 0, 1));
 		elasticSearchPlugin.closeTransportClient();
 	}
 
