@@ -193,15 +193,19 @@ public class CanalThread {
 	}
 
 	/**
-	 * 测试函数
-	 * 
+	 * canal 测试函数
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void main() throws InterruptedException {
-		/*
-		 * CanalThread test = new CanalThread(); test.esThread();
-		 */
+	public void canal() throws InterruptedException {
+		CanalThread test = new CanalThread(); test.esThread();
+	}
+	
+	/**
+	 * search 测试函数
+	 */
+	@Test
+	public void search(){
 		ElasticSearchPlugin elasticSearchPlugin = new ElasticSearchPlugin();
 		Map<String, Object> query = new HashMap<String, Object>();
 		query.put("id", "17");
