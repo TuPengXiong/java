@@ -54,8 +54,8 @@ public class CanalThread {
 	 */
 	public void esThread() throws InterruptedException {
 		// 创建链接
-		CanalConnector connector = CanalConnectors
-				.newSingleConnector(new InetSocketAddress("192.168.145.129", 11111), "example", "", "");
+		CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress("192.168.145.129", 11111),
+				"example", "", "");
 		// CanalConnector connector =
 		// CanalConnectors.newClusterConnector("192.168.145.129:2181",
 		// "example", "", "");
@@ -115,7 +115,6 @@ public class CanalThread {
 
 	}
 
-
 	private class ESThread implements Runnable {
 		private CountDownLatch threadSignal;
 		private Entry entry;
@@ -164,7 +163,7 @@ public class CanalThread {
 			for (Column column : afterColumns) {
 				paramsMap.put(column.getName(), column.getValue());
 				convert.setParamsMap(paramsMap);
-				if(column.getIsKey()){
+				if (column.getIsKey()) {
 					convert.setPrimaryKey(column.getValue());
 				}
 			}
@@ -174,6 +173,7 @@ public class CanalThread {
 			logger.info(JSON.toJSONString(convert));
 			elasticSearchPlugin.createIndexMap(convert);
 		} else { // update
+			logger.info(eventType.getNumber());
 			List<Column> afterColumns = rowData.getAfterColumnsList();
 			Column column_before = rowData.getBeforeColumns(0);
 			ConvertBean convert = new ConvertBean();
@@ -191,15 +191,23 @@ public class CanalThread {
 			elasticSearchPlugin.update(convert);
 		}
 	}
-	
+
 	/**
 	 * 测试函数
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 */
 	@Test
-	public  void main() throws InterruptedException{
-		CanalThread test = new CanalThread();
-		test.esThread();
+	public void main() throws InterruptedException {
+		/*
+		 * CanalThread test = new CanalThread(); test.esThread();
+		 */
+		ElasticSearchPlugin elasticSearchPlugin = new ElasticSearchPlugin();
+		Map<String, Object> query = new HashMap<String, Object>();
+		query.put("id", "17");
+		query.put("name", "444");
+		logger.info(elasticSearchPlugin.search("test", "test", query, null, null, null, 0, 1));
+		elasticSearchPlugin.closeTransportClient();
 	}
 
 }

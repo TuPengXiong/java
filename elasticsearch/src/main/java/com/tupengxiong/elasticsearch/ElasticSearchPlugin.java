@@ -10,10 +10,15 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 
 import com.alibaba.fastjson.JSON;
 
@@ -186,14 +191,42 @@ public class ElasticSearchPlugin {
 	 * @return
 	 * @since JDK 1.7
 	 */
-	public SearchResponse search(String dbName, String tableName, Map<String, Object> query, Map<String, Object> filter,
-			int from, int size) {
-		SearchResponse response = client.prepareSearch(dbName).setTypes(tableName)
-				.setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setQuery(query) // Query
-				.setPostFilter(filter) // Filter
-				.setFrom(from). // from
-				setSize(size). // 数量
-				setExplain(true).execute().actionGet();
+	public SearchResponse search(String dbName, String tableName, Map<String, Object> mustQuery,
+			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery, Integer from,
+			Integer size) {
+		SearchRequestBuilder seBuilder = client.prepareSearch(dbName).setTypes(tableName);
+		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+		if (null != mustQuery && mustQuery.size() > 0) {
+			for (String key : mustQuery.keySet()) {
+				queryBuilder.must(QueryBuilders.matchQuery(key, mustQuery.get(key)));
+			}
+		}
+		if (null != mustNotQuery && mustNotQuery.size() > 0) {
+			for (String key : mustNotQuery.keySet()) {
+				queryBuilder.mustNot(QueryBuilders.matchQuery(key, mustNotQuery.get(key)));
+			}
+		}
+
+		if (null != shouldQuery && shouldQuery.size() > 0) {
+			for (String key : shouldQuery.keySet()) {
+				queryBuilder.should(QueryBuilders.matchQuery(key, shouldQuery.get(key)));
+			}
+		}
+		if (null != filter && filter.size() > 0) {
+			for (String key : filter.keySet()) {
+				queryBuilder.filter(QueryBuilders.matchQuery(key, filter.get(key)));
+			}
+		}
+		if (null != from) {
+			seBuilder.setFrom(from);
+		}
+		if (null != size) {
+			seBuilder.setSize(size);
+		}
+		seBuilder.setQuery(queryBuilder);
+		seBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
+		seBuilder.setExplain(false);//不获取解释信息
+		SearchResponse response = seBuilder.get();
 		logger.debug(JSON.toJSONString(response));
 		return response;
 	}
