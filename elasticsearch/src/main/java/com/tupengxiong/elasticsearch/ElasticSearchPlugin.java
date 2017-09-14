@@ -83,7 +83,7 @@ public class ElasticSearchPlugin {
 		try {
 			IndexResponse response = client
 					.prepareIndex(bean.getdBname(), bean.getTableName(), bean.getPrimaryKey().toString())
-					.setSource(json).get();
+					.setRefresh(true).setSource(json).get();
 			logger.debug("createIndexJson:" + JSON.toJSONString(response));
 			return response.isCreated();
 		} catch (Exception ex) {
@@ -105,7 +105,7 @@ public class ElasticSearchPlugin {
 		try {
 			IndexResponse response = client
 					.prepareIndex(bean.getdBname(), bean.getTableName(), bean.getPrimaryKey().toString())
-					.setSource(bean.getParamsMap()).get();
+					.setRefresh(true).setSource(bean.getParamsMap()).get();
 			logger.debug("createIndexMap:" + JSON.toJSONString(response));
 			return response.isCreated();
 		} catch (Exception ex) {
@@ -225,7 +225,7 @@ public class ElasticSearchPlugin {
 		}
 		seBuilder.setQuery(queryBuilder);
 		seBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
-		seBuilder.setExplain(false);//不获取解释信息
+		seBuilder.setExplain(false);// 不获取解释信息
 		SearchResponse response = seBuilder.get();
 		logger.debug(JSON.toJSONString(response));
 		return response;
