@@ -18,6 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
@@ -194,24 +196,40 @@ public class CanalThread {
 
 	/**
 	 * canal 测试函数
+	 * 
 	 * @throws InterruptedException
 	 */
 	@Test
 	public void canal() throws InterruptedException {
-		CanalThread test = new CanalThread(); test.esThread();
+		CanalThread test = new CanalThread();
+		test.esThread();
 	}
-	
+
 	/**
 	 * search 测试函数
 	 */
 	@Test
-	public void search(){
+	public void search() {
 		ElasticSearchPlugin elasticSearchPlugin = new ElasticSearchPlugin();
 		Map<String, Object> query = new HashMap<String, Object>();
-		query.put("id", "17");
-		query.put("name", "444");
+		// query.put("id", "17");
+		// query.put("name", "444");
+		RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder("id");
+		rangeQueryBuilder.from(20).to(30);
 		logger.info(elasticSearchPlugin.search(new String[] { "test" }, new String[] { "test" }, query, null, null,
-				null, 0, 1));
+				null, rangeQueryBuilder, 0, 10, "id", "desc"));
+		elasticSearchPlugin.closeTransportClient();
+	}
+
+	/**
+	 * search 测试函数
+	 */
+	@Test
+	public void searchByScroll() {
+		ElasticSearchPlugin elasticSearchPlugin = new ElasticSearchPlugin();
+		Map<String, Object> query = new HashMap<String, Object>();
+		logger.info(elasticSearchPlugin.searchByScroll(new String[] { "test" }, new String[] { "test" }, null, null,
+				null, null, null, 10L, 1));
 		elasticSearchPlugin.closeTransportClient();
 	}
 

@@ -15,10 +15,13 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.alibaba.fastjson.JSON;
 
@@ -192,9 +195,9 @@ public class ElasticSearchPlugin {
 	 * @since JDK 1.7
 	 */
 	public SearchResponse search(String[] dbNames, String[] tableNames, Map<String, Object> mustQuery,
-			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery, Integer from,
-			Integer size) {
-		if(null == dbNames){
+			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery,
+			RangeQueryBuilder rangeQueryBuilder, Integer from, Integer size, String sortFiled, String sortOrder) {
+		if (null == dbNames) {
 			return null;
 		}
 		SearchRequestBuilder seBuilder = client.prepareSearch(dbNames);
@@ -202,6 +205,9 @@ public class ElasticSearchPlugin {
 			seBuilder.setTypes(tableNames);
 		}
 		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+		if (null != rangeQueryBuilder) {
+			queryBuilder.must(rangeQueryBuilder);
+		}
 		if (null != mustQuery && mustQuery.size() > 0) {
 			for (String key : mustQuery.keySet()) {
 				queryBuilder.must(QueryBuilders.matchQuery(key, mustQuery.get(key)));
@@ -230,10 +236,82 @@ public class ElasticSearchPlugin {
 			seBuilder.setSize(size);
 		}
 		seBuilder.setQuery(queryBuilder);
+		if (null != sortFiled && null != sortOrder
+				&& (sortOrder.equalsIgnoreCase("ASC") || sortOrder.equalsIgnoreCase("DESC"))) {
+			seBuilder.addSort(sortFiled, SortOrder.valueOf(sortOrder.toUpperCase()));
+		}
 		seBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
 		seBuilder.setExplain(false);// 不获取解释信息
 		SearchResponse response = seBuilder.get();
 		logger.debug(JSON.toJSONString(response));
 		return response;
+	}
+
+	/**
+	 * 搜索数据(排序无关 按 index 顺序返回) searchByScroll
+	 * 
+	 * @author tupengxiong
+	 * @param bean
+	 * @return
+	 * @since JDK 1.7
+	 */
+	@SuppressWarnings("deprecation")
+	public SearchResponse searchByScroll(String[] dbNames, String[] tableNames, Map<String, Object> mustQuery,
+			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery,
+			RangeQueryBuilder rangeQueryBuilder, Long sec, Integer pageSize) {
+		if (null == dbNames) {
+			return null;
+		}
+		// 初始化时只返回 _scroll_id，没有具体的 hits 结果
+		SearchRequestBuilder seBuilder = client.prepareSearch(dbNames);
+		if (sec == null) {
+			sec = 180L;
+		}
+		seBuilder.setScroll(TimeValue.timeValueSeconds(sec));
+		if (null != tableNames && tableNames.length > 0) {
+			seBuilder.setTypes(tableNames);
+		}
+		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+		if (null != mustQuery && mustQuery.size() > 0) {
+			for (String key : mustQuery.keySet()) {
+				queryBuilder.must(QueryBuilders.matchQuery(key, mustQuery.get(key)));
+			}
+		}
+		if (null != rangeQueryBuilder) {
+			queryBuilder.must(rangeQueryBuilder);
+		}
+		if (null != mustNotQuery && mustNotQuery.size() > 0) {
+			for (String key : mustNotQuery.keySet()) {
+				queryBuilder.mustNot(QueryBuilders.matchQuery(key, mustNotQuery.get(key)));
+			}
+		}
+
+		if (null != shouldQuery && shouldQuery.size() > 0) {
+			for (String key : shouldQuery.keySet()) {
+				queryBuilder.should(QueryBuilders.matchQuery(key, shouldQuery.get(key)));
+			}
+		}
+		if (null != filter && filter.size() > 0) {
+			for (String key : filter.keySet()) {
+				queryBuilder.filter(QueryBuilders.matchQuery(key, filter.get(key)));
+			}
+		}
+		// size 控制的是每个分片的返回的数据量而不是整个请求返回的数据量
+		if (null != pageSize) {
+			seBuilder.setSize(pageSize);
+		}
+		seBuilder.setQuery(queryBuilder);
+		// 不获取数据
+		seBuilder.setSearchType(SearchType.SCAN);
+		// 不获取解释信息
+		seBuilder.setExplain(false);
+		SearchResponse scrollResponse = seBuilder.get();
+		// 第一次不返回数据
+		long count = scrollResponse.getHits().getTotalHits();
+		logger.debug("count==>" + count);
+		scrollResponse = client.prepareSearchScroll(scrollResponse.getScrollId()).get();
+		logger.debug(JSON.toJSONString(scrollResponse));
+		logger.debug("getTotalHits==>" + scrollResponse.getHits().getTotalHits());
+		return scrollResponse;
 	}
 }
