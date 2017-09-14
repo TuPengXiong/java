@@ -151,7 +151,7 @@ public class ElasticSearchPlugin {
 		try {
 			DeleteResponse response = client
 					.prepareDelete(bean.getdBname(), bean.getTableName(), bean.getPrimaryKey().toString()).get();
-			logger.debug("createIndexMap:" + JSON.toJSONString(response));
+			logger.debug("delete:" + JSON.toJSONString(response));
 			return response.isFound();
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
@@ -174,7 +174,7 @@ public class ElasticSearchPlugin {
 			UpdateResponse response = client
 					.prepareUpdate(bean.getdBname(), bean.getTableName(), bean.getPrimaryKey().toString())
 					.setDoc(bean.getParamsMap()).get();
-			logger.debug("createIndexMap:" + JSON.toJSONString(response));
+			logger.debug("update:" + JSON.toJSONString(response));
 			return response.isCreated();
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
