@@ -10,6 +10,7 @@
 package com.tupengxiong.elasticsearch;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,9 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
@@ -214,10 +218,14 @@ public class CanalThread {
 		Map<String, Object> query = new HashMap<String, Object>();
 		// query.put("id", "17");
 		// query.put("name", "444");
+		List<RangeQueryBuilder> rangeQueryBuilders = new ArrayList<RangeQueryBuilder>();
 		RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder("id");
+		rangeQueryBuilders.add(rangeQueryBuilder);
+		List<SortBuilder> sortBuilders = new ArrayList<SortBuilder>();
+		sortBuilders.add(new FieldSortBuilder("id").order(SortOrder.DESC));
 		rangeQueryBuilder.from(20).to(30);
 		logger.info(elasticSearchPlugin.search(new String[] { "test" }, new String[] { "test" }, query, null, null,
-				null, rangeQueryBuilder, 0, 10, "id", "desc"));
+				null, rangeQueryBuilders, sortBuilders, null, 0, 10));
 		elasticSearchPlugin.closeTransportClient();
 	}
 

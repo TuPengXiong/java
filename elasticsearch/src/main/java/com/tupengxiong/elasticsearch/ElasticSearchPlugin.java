@@ -5,6 +5,7 @@ import org.elasticsearch.common.settings.Settings;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.alibaba.fastjson.JSON;
@@ -196,7 +198,8 @@ public class ElasticSearchPlugin {
 	 */
 	public SearchResponse search(String[] dbNames, String[] tableNames, Map<String, Object> mustQuery,
 			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery,
-			RangeQueryBuilder rangeQueryBuilder, Integer from, Integer size, String sortFiled, String sortOrder) {
+			List<RangeQueryBuilder> rangeQueryBuilders, List<SortBuilder> sortBuilders,
+			Map<String, Object> aggregations, Integer from, Integer size) {
 		if (null == dbNames) {
 			return null;
 		}
@@ -205,8 +208,10 @@ public class ElasticSearchPlugin {
 			seBuilder.setTypes(tableNames);
 		}
 		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-		if (null != rangeQueryBuilder) {
-			queryBuilder.must(rangeQueryBuilder);
+		if (null != rangeQueryBuilders && rangeQueryBuilders.size() > 0) {
+			for (RangeQueryBuilder rangeQueryBuilder : rangeQueryBuilders) {
+				queryBuilder.must(rangeQueryBuilder);
+			}
 		}
 		if (null != mustQuery && mustQuery.size() > 0) {
 			for (String key : mustQuery.keySet()) {
@@ -229,6 +234,12 @@ public class ElasticSearchPlugin {
 				queryBuilder.filter(QueryBuilders.matchQuery(key, filter.get(key)));
 			}
 		}
+
+		if (null != sortBuilders && sortBuilders.size() > 0) {
+			for (SortBuilder sortBuilder : sortBuilders) {
+				seBuilder.addSort(sortBuilder);
+			}
+		}
 		if (null != from) {
 			seBuilder.setFrom(from);
 		}
@@ -236,12 +247,11 @@ public class ElasticSearchPlugin {
 			seBuilder.setSize(size);
 		}
 		seBuilder.setQuery(queryBuilder);
-		if (null != sortFiled && null != sortOrder
-				&& (sortOrder.equalsIgnoreCase("ASC") || sortOrder.equalsIgnoreCase("DESC"))) {
-			seBuilder.addSort(sortFiled, SortOrder.valueOf(sortOrder.toUpperCase()));
-		}
 		seBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
 		seBuilder.setExplain(false);// 不获取解释信息
+		if (null != aggregations) {// 聚合
+			seBuilder.setAggregations(aggregations);
+		}
 		SearchResponse response = seBuilder.get();
 		logger.debug(JSON.toJSONString(response));
 		return response;
@@ -258,7 +268,7 @@ public class ElasticSearchPlugin {
 	@SuppressWarnings("deprecation")
 	public SearchResponse searchByScroll(String[] dbNames, String[] tableNames, Map<String, Object> mustQuery,
 			Map<String, Object> filter, Map<String, Object> mustNotQuery, Map<String, Object> shouldQuery,
-			RangeQueryBuilder rangeQueryBuilder, Long sec, Integer pageSize) {
+			List<RangeQueryBuilder> rangeQueryBuilders, Long sec, Integer pageSize) {
 		if (null == dbNames) {
 			return null;
 		}
@@ -277,8 +287,10 @@ public class ElasticSearchPlugin {
 				queryBuilder.must(QueryBuilders.matchQuery(key, mustQuery.get(key)));
 			}
 		}
-		if (null != rangeQueryBuilder) {
-			queryBuilder.must(rangeQueryBuilder);
+		if (null != rangeQueryBuilders && rangeQueryBuilders.size() > 0) {
+			for (RangeQueryBuilder rangeQueryBuilder : rangeQueryBuilders) {
+				queryBuilder.must(rangeQueryBuilder);
+			}
 		}
 		if (null != mustNotQuery && mustNotQuery.size() > 0) {
 			for (String key : mustNotQuery.keySet()) {
