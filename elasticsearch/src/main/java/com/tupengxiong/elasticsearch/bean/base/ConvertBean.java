@@ -1,4 +1,4 @@
-package com.tupengxiong.elasticsearch;
+package com.tupengxiong.elasticsearch.bean.base;
 
 import java.util.Map;
 

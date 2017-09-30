@@ -1,10 +1,11 @@
-package com.tupengxiong.elasticsearch;
+package com.tupengxiong.elasticsearch.service;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,14 +19,22 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.tupengxiong.elasticsearch.bean.base.BaseSearchBean;
+import com.tupengxiong.elasticsearch.bean.base.BaseSortBean;
+import com.tupengxiong.elasticsearch.bean.base.ConvertBean;
+import com.tupengxiong.elasticsearch.bean.base.ElasticSearchParams;
+import com.tupengxiong.elasticsearch.bean.base.BaseSearchBean.BuilderType;
+import com.tupengxiong.elasticsearch.bean.base.BaseSearchBean.GtType;
+import com.tupengxiong.elasticsearch.bean.base.BaseSearchBean.LtType;
+import com.tupengxiong.elasticsearch.bean.base.BaseSearchBean.OptType;
 
 /**
  * 
@@ -325,5 +334,135 @@ public class ElasticSearchPlugin {
 		logger.debug(JSON.toJSONString(scrollResponse));
 		logger.debug("getTotalHits==>" + scrollResponse.getHits().getTotalHits());
 		return scrollResponse;
+	}
+
+	public <T> List<T> query(ElasticSearchParams params, Class<T> claz) {
+		List<T> resultList = new ArrayList<T>();
+		if (null == params) {
+			logger.error(new StringBuilder("query params is NULL").toString());
+			return resultList;
+		}
+		SearchRequestBuilder builder = client.prepareSearch(params.getIndex()).setTypes(params.getType());
+		/** 组装查询条件 **/
+		if (params.getBaseSearchBeans() != null) {
+			BoolQueryBuilder booleanQuery = QueryBuilders.boolQuery();
+			for (BaseSearchBean bean : params.getBaseSearchBeans()) {
+				/** 值查询 **/
+				if (bean.getBuilderType() == BuilderType.termQuery) {
+					if (bean.getOptType() == OptType.must) {
+						booleanQuery.must(QueryBuilders.termQuery(bean.getPropertyName(), bean.getPropertyValue()));
+					}
+					if (bean.getOptType() == OptType.mustNot) {
+						booleanQuery.mustNot(QueryBuilders.termQuery(bean.getPropertyName(), bean.getPropertyValue()));
+					}
+					if (bean.getOptType() == OptType.should) {
+						booleanQuery.should(QueryBuilders.termQuery(bean.getPropertyName(), bean.getPropertyValue()));
+					}
+				}
+
+				/** 范围查询 **/
+				if (bean.getBuilderType() == BuilderType.rangeQuery) {
+					if (bean.getOptType() == OptType.must) {
+						if (null == bean.getPropertyName()) {
+							continue;
+						}
+						RangeQueryBuilder rangeBuilder = QueryBuilders.rangeQuery(bean.getPropertyName());
+						if (null != bean.getRangStart()) {
+							if (null != bean.getGtType() && bean.getGtType() == GtType.gt) {
+								rangeBuilder.gt(bean.getRangStart());
+							} else {
+								rangeBuilder.gte(bean.getRangStart());
+							}
+						}
+						if (null != bean.getRangEnd()) {
+							if (null != bean.getLtType() && bean.getLtType() == LtType.lt) {
+								rangeBuilder.lt(bean.getRangEnd());
+							} else {
+								rangeBuilder.lte(bean.getRangEnd());
+							}
+						}
+						if (null != bean.getFormat()) {
+							rangeBuilder.format(bean.getFormat());
+						}
+						booleanQuery.must(rangeBuilder);
+					}
+					if (bean.getOptType() == OptType.mustNot) {
+						if (null == bean.getPropertyName()) {
+							continue;
+						}
+						RangeQueryBuilder rangeBuilder = QueryBuilders.rangeQuery(bean.getPropertyName());
+						if (null != bean.getRangStart()) {
+							if (null != bean.getGtType() && bean.getGtType() == GtType.gt) {
+								rangeBuilder.gt(bean.getRangStart());
+							} else {
+								rangeBuilder.gte(bean.getRangStart());
+							}
+						}
+						if (null != bean.getRangEnd()) {
+							if (null != bean.getLtType() && bean.getLtType() == LtType.lt) {
+								rangeBuilder.lt(bean.getRangEnd());
+							} else {
+								rangeBuilder.lte(bean.getRangEnd());
+							}
+						}
+						if (null != bean.getFormat()) {
+							rangeBuilder.format(bean.getFormat());
+						}
+						booleanQuery.mustNot(rangeBuilder);
+					}
+					if (bean.getOptType() == OptType.should) {
+						if (null == bean.getPropertyName()) {
+							continue;
+						}
+						RangeQueryBuilder rangeBuilder = QueryBuilders.rangeQuery(bean.getPropertyName());
+						if (null != bean.getRangStart()) {
+							if (null != bean.getGtType() && bean.getGtType() == GtType.gt) {
+								rangeBuilder.gt(bean.getRangStart());
+							} else {
+								rangeBuilder.gte(bean.getRangStart());
+							}
+						}
+						if (null != bean.getRangEnd()) {
+							if (null != bean.getLtType() && bean.getLtType() == LtType.lt) {
+								rangeBuilder.lt(bean.getRangEnd());
+							} else {
+								rangeBuilder.lte(bean.getRangEnd());
+							}
+						}
+						if (null != bean.getFormat()) {
+							rangeBuilder.format(bean.getFormat());
+						}
+						booleanQuery.should(rangeBuilder);
+					}
+				}
+			}
+			builder.setQuery(booleanQuery);
+		}
+		/** 排序 **/
+		if (null != params.getBaseSortBeans() && params.getBaseSortBeans().size() > 0) {
+			for (BaseSortBean sortBuilder : params.getBaseSortBeans()) {
+				builder.addSort(sortBuilder.getPropertyName(), SortOrder.valueOf(sortBuilder.getSortOrder().name()));
+			}
+		}
+		/** 数量 **/
+		if (null != params.getFrom()) {
+			builder.setFrom(params.getFrom());
+		} else {
+			builder.setFrom(0);
+		}
+		if (null != params.getSize()) {
+			builder.setSize(params.getSize());
+		} else {
+			builder.setSize(10);
+		}
+		/** 获取数据 **/
+		logger.debug(builder.toString());
+		SearchResponse esresponse = builder.get();
+		logger.debug(esresponse);
+		SearchHits hits = esresponse.getHits();
+		for (int i = 0; i < hits.getHits().length; i++) {
+			resultList.add(JSONObject.parseObject(hits.getHits()[i].getSourceAsString(), claz));
+		}
+		return resultList;
 	}
 }

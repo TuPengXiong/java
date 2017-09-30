@@ -7,7 +7,7 @@
  * 
 */
 
-package com.tupengxiong.elasticsearch;
+package com.tupengxiong.elasticsearch.canal;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
@@ -35,6 +34,8 @@ import com.alibaba.otter.canal.protocol.CanalEntry.EntryType;
 import com.alibaba.otter.canal.protocol.CanalEntry.EventType;
 import com.alibaba.otter.canal.protocol.CanalEntry.RowChange;
 import com.alibaba.otter.canal.protocol.CanalEntry.RowData;
+import com.tupengxiong.elasticsearch.bean.base.ConvertBean;
+import com.tupengxiong.elasticsearch.service.ElasticSearchPlugin;
 import com.alibaba.otter.canal.protocol.Message;
 
 /**
