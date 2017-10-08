@@ -48,15 +48,15 @@ public class WebSocketConf extends BinaryWebSocketHandler implements WebSocketCo
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         //消息处理  表示允许连接的域名，withSockJS()方法表示支持以SockJS方式连接服务器
         registry.addHandler(this, "/websocket")
-                .addInterceptors(new HttpSessionHandshakeInterceptor())
-                .setAllowedOrigins("*");
+                .addInterceptors(new HttpSessionHandshakeInterceptor());
+                //.setAllowedOrigins("*");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //表示允许连接的域名，withSockJS()方法表示支持以SockJS方式连接服务器
         registry.addEndpoint("/webSocket")
-                .setAllowedOrigins("*")
+                //.setAllowedOrigins("*")
                 .withSockJS();
     }
 

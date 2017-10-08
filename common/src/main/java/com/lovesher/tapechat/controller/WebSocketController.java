@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.util.Map;
  * Created by tpx on 2017/10/8.
  */
 @RestController("webSocketController")
+//@RequestMapping("api/webSocket")
 public class WebSocketController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,17 +30,20 @@ public class WebSocketController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     /**
-     * 表示服务端可以接收客户端通过主题“/app/hello”发送过来的消息，客户端需要在主题"/topic/hello"上监听并接收服务端发回的消息
+     * 表示服务端可以接收客户端通过主题“/app/webSocket”发送过来的消息，客户端需要在主题"/topic/greetings"上监听并接收服务端发回的消息
      *
      * @param topic
      * @param headers
      */
     @MessageMapping("/webSocket") //"/webSocket"为WebSocketConf类中registerStompEndpoints()方法配置的
     @SendTo("/topic/greetings")
-    public void greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers) {
+    //@PreAuthorize("isAuthenticated()")
+    public UnionResp<String> greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers, String msg) {
         logger.info("connected successfully....");
         logger.info(topic);
+        logger.info(msg);
         logger.info(headers.toString());
+        return new UnionResp<String>(MsgEnum.SUCCESS.getCode(), MsgEnum.SUCCESS.getMsg(), msg);
     }
 
     /**
@@ -49,6 +54,7 @@ public class WebSocketController {
      */
     @MessageMapping("/message")
     @SendToUser("/message")
+    //@PreAuthorize("isAuthenticated()")
     public UnionResp<String> handleSubscribe() {
         logger.info("handleSubscribe");
         return new UnionResp(MsgEnum.SUCCESS.getCode(), MsgEnum.SUCCESS.getMsg(), MsgEnum.SUCCESS.getMsg());
@@ -60,6 +66,7 @@ public class WebSocketController {
      * @return
      */
     @RequestMapping(path = "/send", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public UnionResp<String> send(String fromUsername, String toUsername, String content) {
         if (null == fromUsername || null == toUsername || null == content) {
             return new UnionResp(MsgEnum.Fail.getCode(), MsgEnum.Fail.getMsg(), "参数错误");

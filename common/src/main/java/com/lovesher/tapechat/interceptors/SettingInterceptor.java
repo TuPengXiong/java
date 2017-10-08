@@ -23,7 +23,7 @@ public class SettingInterceptor implements HandlerInterceptor {
     }
 
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse var2, Object var3, ModelAndView var4) throws Exception {
-
+        httpServletRequest.setAttribute(NET_PATH, getPath(httpServletRequest));
     }
 
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse var2, Object var3, Exception var4) throws Exception {

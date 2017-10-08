@@ -1,56 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Hello WebSocket</title>
-    <script src="http://cdn.bootcss.com/sockjs-client/1.1.1/sockjs.min.js"></script>
-    <script src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.js"></script>
-    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/sockjs-client/1.1.1/sockjs.min.js"></script>
+    <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
+        var url = null;
+        var stompClient = null;
+        $(document).ready(function () {
             //connect();
             //checkoutUserlist();
+            url = document.getElementById('url').value;
         });
-
-        var stompClient = null;
-
         function setConnected(connected) {
             document.getElementById('connect').disabled = connected;
             document.getElementById('disconnect').disabled = !connected;
             document.getElementById('conversationDiv').style.visibility = connected ? 'visible' : 'hidden';
+            document.getElementById('username').style.visibility = connected ? 'hidden' : 'visible';
             document.getElementById('response').innerHTML = '';
         }
 
         //this line.
         function connect() {
             var userid = document.getElementById('name').value;
-            var socket = new SockJS("http://localhost:10030/common/webSocket");
+            var socket = new SockJS(url + "webSocket");
             stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
+            stompClient.connect({}, function (frame) {
                 setConnected(true);
                 console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/greetings', function(greeting){
+                stompClient.subscribe('/topic/greetings', function (greeting) {
+                    console.log(greeting);
                     showGreeting(greeting.body);
                 });
 
-                stompClient.subscribe('/user/' + userid + '/message',function(greeting){
+                stompClient.subscribe('/user/' + userid + '/message', function (greeting) {
                     showGreeting(greeting.body);
                 });
             });
         }
 
-        function sendName() {
-            var name = document.getElementById('name').value;
-            stompClient.send("/app/webSocket", {atytopic:"greetings"}, JSON.stringify({ 'name': name }));
+        function sendMsg() {
+            var msg = document.getElementById('msg').value;
+            if(msg){
+                stompClient.send("/app/webSocket", {atytopic: "/topic/greetings"}, JSON.stringify({'msg': msg}));
+            }
         }
 
         function connectAny() {
-            var socket = new SockJS("http://localhost:10030/common/webSocket");
+            var socket = new SockJS(url + "webSocket");
             stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
+            stompClient.connect({}, function (frame) {
                 setConnected(true);
-                console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/greetings', function(greeting){
+                stompClient.subscribe('/topic/greetings', function (greeting) {
                     showGreeting(greeting.body);
                 });
             });
@@ -61,7 +64,6 @@
                 stompClient.disconnect();
             }
             setConnected(false);
-            console.log("Disconnected");
         }
 
 
@@ -75,7 +77,9 @@
     </script>
 </head>
 <body>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
+<input type="hidden" id="url" th:value="${#httpServletRequest.getAttribute('netPath')}"/>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+    enabled. Please enable
     Javascript and reload this page!</h2></noscript>
 <div>
     <div>
@@ -84,8 +88,15 @@
         <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
     </div>
     <div id="conversationDiv">
-        <label>What is your name?</label><input type="text" id="name" />
-        <button id="sendName" onclick="sendName();">Send</button>
+        <div id="username">
+            <label>请输入您的名字:</label>
+            <input type="text" id="name"/>
+        </div>
+        <div id="message">
+            <label>请输入聊天内容:</label>
+            <textarea th:width="300px" type="text" id="msg"/>
+            <button id="sendMsg" onclick="sendMsg();">发送</button>
+        </div>
         <p id="response"></p>
     </div>
 </div>
