@@ -38,10 +38,9 @@ public class WebSocketController {
     @MessageMapping("/webSocket") //"/webSocket"为WebSocketConf类中registerStompEndpoints()方法配置的
     @SendTo("/topic/greetings")
     //@PreAuthorize("isAuthenticated()")
-    public UnionResp<String> greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers, String msg) {
+    public UnionResp<String> greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers,@Header("msg") String msg) {
         logger.info("connected successfully....");
         logger.info(topic);
-        logger.info(msg);
         logger.info(headers.toString());
         return new UnionResp<String>(MsgEnum.SUCCESS.getCode(), MsgEnum.SUCCESS.getMsg(), msg);
     }
