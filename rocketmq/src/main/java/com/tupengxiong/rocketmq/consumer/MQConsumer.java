@@ -14,7 +14,7 @@ public class MQConsumer {
 
 	public static void run() {
 		DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("PushConsumer");
-		consumer.setNamesrvAddr("192.168.145.129:9876");
+		consumer.setNamesrvAddr("127.0.0.1:9876");
 		consumer.setVipChannelEnabled(false);
 		consumer.setInstanceName("MQConsumer");
 		try {
