@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>商品信息导进导出</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.2/js/fileinput.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h3>导入商品IDExcel</h3>
+    <form id="uploadimg-form" th:action="@{/readExcel}" method="post" enctype="multipart/form-data"
+          contentType="application/x-www-form-urlencoded; charset=utf-8">
+        <input type="file" title="选择文件" name="fileUpload" id="fileUpload"/><br/><br/>
+        <input id="fileBtn" type="submit" class="btn" value="导入商品ID"/><br/><br/>
+    </form>
+
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#uploadimg-form").resetForm().validate({
+            rules: {
+                "fileUpload": {
+                    required: true,
+                    accept: "xls"
+                }
+            },
+            messages: {
+                "fileUpload": {
+                    required: "请选择上传文件",
+                    accept: "文件格式不支持，请上传 xls 格式的文件"
+                }
+            },
+        });
+    });
+</script>
+</body>
+</html>
