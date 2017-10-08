@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Login </title>
+    <title>用户登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link type="text/css" rel="stylesheet" th:href="@{css/login.css}"/>
+    <link th:href="@{css/global.css}" rel="stylesheet"/>
+    <link th:href="@{css/style.css}" rel="stylesheet"/>
+    <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{js/login.js}"></script>
 </head>
 <body>
+<header class="header-title">用户登录</header>
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
-<div th:if="${param.logout}">
-    You have been logged out.
+<div id="home">
+    <form id="login" class="current1" method="post" th:action="@{/login}">
+        <img class="avator" th:src="@{images/head_portrait.png}" width="96" height="96"/>
+        <label>用户名:<input type="text" name="username" style="width:215px;" /><span>用户名为空</span></label>
+        <label>密&nbsp;&nbsp;码:<input type="password" name="password"  /><span>密码为空</span></label>
+        <button type="button">登录</button>
+    </form>
 </div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
 </body>
 </html>

@@ -47,9 +47,9 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                     .loginPage("/")//登陆页面
                     .usernameParameter("username")//登陆用户名参数
                     .passwordParameter("password")//登陆密码参数
-                //.defaultSuccessUrl("/api/user/name") //登录成功访问
-                    .failureHandler(restAuthenticationFailureHandler)
-                    .successHandler(restAuthenticationSuccessHandler)
+                    .defaultSuccessUrl("/chat") //登录成功访问
+                 //   .failureHandler(restAuthenticationFailureHandler)
+                 //   .successHandler(restAuthenticationSuccessHandler)
                     .permitAll()   //登陆页匿名访问
                 .and()
                     .logout()

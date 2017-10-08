@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.security.Principal;
 import java.util.Map;
 
 /**
@@ -38,7 +39,8 @@ public class WebSocketController {
     @MessageMapping("/webSocket") //"/webSocket"为WebSocketConf类中registerStompEndpoints()方法配置的
     @SendTo("/topic/greetings")
     //@PreAuthorize("isAuthenticated()")
-    public UnionResp<String> greeting(@Header("atytopic") String topic, @Headers Map<String, Object> headers,@Header("msg") String msg) {
+    public UnionResp<String> greeting(Principal principal,@Header("atytopic") String topic, @Headers Map<String, Object> headers, @Header("msg") String msg) {
+        logger.info(principal.getName());
         logger.info("connected successfully....");
         logger.info(topic);
         logger.info(headers.toString());
