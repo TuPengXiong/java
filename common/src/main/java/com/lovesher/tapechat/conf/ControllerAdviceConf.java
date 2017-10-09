@@ -1,6 +1,8 @@
 package com.lovesher.tapechat.conf;
 
 import com.lovesher.tapechat.common.MsgEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +22,8 @@ import java.util.Map;
  */
 @ControllerAdvice()
 public class ControllerAdviceConf {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(Exception.class)
     @ResponseBody()
@@ -30,37 +36,38 @@ public class ControllerAdviceConf {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseBody()
-    Map<String, Object> authenticationException(HttpServletRequest request, AuthenticationException ex) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("code", MsgEnum.NOT_LOGIN_ERROR.getCode());
-        map.put("msg", MsgEnum.NOT_LOGIN_ERROR.getMsg());
-        return map;
+    void authenticationException(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) {
+        try {
+            response.sendRedirect(request.getContextPath() + "/login");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    @ResponseBody()
-    Map<String, Object> authenticationException(HttpServletRequest request, AccessDeniedException ex) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", MsgEnum.NOT_ACCESS_ERROR.getMsg());
-        map.put("code", MsgEnum.NOT_ACCESS_ERROR.getCode());
-        return map;
+    void authenticationException(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex) {
+        try {
+            response.sendRedirect(request.getContextPath() + "/login");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    @ResponseBody()
-    Map<String, Object> usernameNotFoundException(HttpServletRequest request, UsernameNotFoundException ex) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", MsgEnum.USERNAME_NOT_FOUND_ERROR.getMsg());
-        map.put("code", MsgEnum.USERNAME_NOT_FOUND_ERROR.getCode());
-        return map;
+    void usernameNotFoundException(HttpServletRequest request, HttpServletResponse response, UsernameNotFoundException ex) {
+        try {
+            response.sendRedirect(request.getContextPath() + "/login?error=true");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
         if (statusCode == null) {
             //@see org.springframework.security.web.WebAttributes
-            //request.getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
+            //response.getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
         return HttpStatus.valueOf(statusCode);

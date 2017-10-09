@@ -22,7 +22,7 @@ import java.util.Map;
  * Created by tpx on 2017/10/8.
  */
 @RestController("webSocketController")
-//@RequestMapping("api/webSocket")
+@RequestMapping("/api/webSocket")
 public class WebSocketController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +38,7 @@ public class WebSocketController {
      */
     @MessageMapping("/webSocket") //"/webSocket"为WebSocketConf类中registerStompEndpoints()方法配置的
     @SendTo("/topic/greetings")
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public UnionResp<String> greeting(Principal principal,@Header("atytopic") String topic, @Headers Map<String, Object> headers, @Header("msg") String msg) {
         logger.info(principal.getName());
         logger.info("connected successfully....");
@@ -55,7 +55,7 @@ public class WebSocketController {
      */
     @MessageMapping("/message")
     @SendToUser("/message")
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public UnionResp<String> handleSubscribe() {
         logger.info("handleSubscribe");
         return new UnionResp(MsgEnum.SUCCESS.getCode(), MsgEnum.SUCCESS.getMsg(), MsgEnum.SUCCESS.getMsg());

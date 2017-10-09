@@ -54,8 +54,7 @@ function createuser($textContent) {
 var url = null;
 var stompClient = null;
 //this line.
-function connect() {
-    var userid = "test";
+function connect(userid) {
     var socket = new SockJS(url + "webSocket");
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {

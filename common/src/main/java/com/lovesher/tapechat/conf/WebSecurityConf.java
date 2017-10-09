@@ -40,7 +40,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/**").permitAll() //匿名访问
-                    .antMatchers("/api/**").authenticated() //认证访问
+                    .antMatchers("/api/**","chat").authenticated() //认证访问
                 .and()
                     .formLogin()
                     .loginProcessingUrl("/login")
@@ -53,6 +53,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                     .permitAll()   //登陆页匿名访问
                 .and()
                     .logout()
+                    .logoutSuccessUrl("/login")
                     .permitAll()   //退出登陆允许访问
                 .and()
                     .cors()

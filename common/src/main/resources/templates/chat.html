@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8"/>
     <title>实时聊天</title>
@@ -10,13 +11,20 @@
     <link th:href="@{css/global.css}" rel="stylesheet"/>
     <link th:href="@{css/style.css}" rel="stylesheet"/>
     <script th:src="@{js/chat.js}"></script>
-    <script type="text/javascript">
+    <script th:inline="javascript">
+        var isLogin = [[${#httpServletRequest.remoteUser}]];
+
+        if(!isLogin){
+             window.location.href="login";
+             return;
+        }
         $(document).ready(function () {
             //checkoutUserlist();
             url = document.getElementById('url').value;
-            connect();
+            connect(isLogin);
             chat("leftBubble","images/head_portrait.png","您好，欢迎一起来聊天!!!");
         });
+
     </script>
 </head>
 <body class="chat-bg">

@@ -8,10 +8,11 @@ import org.springframework.messaging.handler.invocation.HandlerMethodArgumentRes
 import org.springframework.messaging.handler.invocation.HandlerMethodReturnValueHandler;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
+import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.*;
 import org.springframework.web.socket.config.annotation.*;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
@@ -24,7 +25,7 @@ import java.util.List;
 @Configuration
 @EnableWebSocket
 @EnableWebSocketMessageBroker
-public class WebSocketConf extends BinaryWebSocketHandler implements WebSocketConfigurer, WebSocketMessageBrokerConfigurer {
+public class WebSocketConf extends AbstractSecurityWebSocketMessageBrokerConfigurer implements WebSocketConfigurer, WebSocketHandler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -32,24 +33,27 @@ public class WebSocketConf extends BinaryWebSocketHandler implements WebSocketCo
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         logger.info(session.getPrincipal().getName() + "connected..");
     }
+
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         logger.info(session.getPrincipal().getName() + "handleTransportError..");
     }
+
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         logger.info(session.getPrincipal().getName() + "afterConnectionClosed..");
     }
-    public void handleTextMessage(WebSocketSession session, TextMessage message) {
-        logger.debug(session.getRemoteAddress().getHostName() + session.getRemoteAddress().getPort());
-        logger.debug(message.getPayload());
+
+    @Override
+    public boolean supportsPartialMessages() {
+        return false;
     }
 
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         //消息处理  表示允许连接的域名，withSockJS()方法表示支持以SockJS方式连接服务器
-        registry.addHandler(this, "/websocket")
+        registry.addHandler(this, "/webSocket")
                 .addInterceptors(new HttpSessionHandshakeInterceptor());
-                //.setAllowedOrigins("*");
+        //.setAllowedOrigins("*");
     }
 
     @Override
@@ -71,8 +75,44 @@ public class WebSocketConf extends BinaryWebSocketHandler implements WebSocketCo
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
     }
 
+
     @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
+    protected boolean sameOriginDisabled() {
+        return true;
+    }
+
+    @Override
+    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+        if (message instanceof TextMessage) {
+            handleTextMessage(session, (TextMessage) message);
+        } else if (message instanceof BinaryMessage) {
+            handleBinaryMessage(session, (BinaryMessage) message);
+        } else if (message instanceof PongMessage) {
+            handlePongMessage(session, (PongMessage) message);
+        } else {
+            throw new IllegalStateException("Unexpected WebSocket message type: " + message);
+        }
+    }
+
+    public void handleTextMessage(WebSocketSession session, TextMessage message) {
+        logger.info(session.getRemoteAddress().getHostName() + session.getRemoteAddress().getPort());
+        logger.info(message.getPayload());
+    }
+
+    public void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+        logger.info(session.getRemoteAddress().getHostName() + session.getRemoteAddress().getPort());
+        logger.info(new String(message.getPayload().array()));
+    }
+
+    public void handlePongMessage(WebSocketSession session, PongMessage message) {
+        logger.info(session.getRemoteAddress().getHostName() + session.getRemoteAddress().getPort());
+        logger.info(new String(message.getPayload().array()));
+    }
+
+    @Override
+    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+        super.configureInbound(messages);
+        messages.simpDestMatchers("/**").authenticated();
     }
 
     @Override
