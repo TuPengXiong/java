@@ -99,6 +99,30 @@ function disconnect() {
         stompClient.disconnect();
     }
 }
+/***************************************文件上传****************************************/
+function init(username){
+     url = document.getElementById('url').value;
+     connect(username);
+     chat("leftBubble","images/head_portrait.png","您好，欢迎一起来聊天!!!");
+     $("#uploadfile").change(function () {
+                var pic = $('#uploadfile')[0].files[0];
+                var fd = new FormData();
+                fd.append('upfile', pic);
+                $.ajax({
+                    url:"/common/api/image/upload",
+                    type:"post",
+                    // Form数据
+                    data: fd,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success:function(data){
+                        $('#uploadfile').val('');
+                        chat("leftBubble", data.data.url, data.data.url);
+                    }
+                });
+      });
+  }
 /**************************************时间格式化处理************************************/
 function dateFtt(fmt, date) { //author: meizz
     var o = {

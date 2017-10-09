@@ -12,22 +12,22 @@
     <link th:href="@{css/style.css}" rel="stylesheet"/>
     <script th:src="@{js/chat.js}"></script>
     <script th:inline="javascript">
-        var isLogin = [[${#httpServletRequest.remoteUser}]];
-
-        if(!isLogin){
-             window.location.href="login";
-        }
         $(document).ready(function () {
-            //checkoutUserlist();
-            url = document.getElementById('url').value;
-            connect(isLogin);
-            chat("leftBubble","images/head_portrait.png","您好，欢迎一起来聊天!!!");
+             var username = [[${#httpServletRequest.remoteUser}]];
+             if(!username){
+                window.location.href="login";
+             }
+            init(username);
         });
 
     </script>
 </head>
 <body class="chat-bg">
-<header class="header-title">实时聊天</header>
+<header class="header-title">实时聊天
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="退出"/>
+    </form>
+</header>
 <section class="chat-box">
     <span class="chat-trip">此刻对方忙碌，请留言</span>
     <div class="bubbleDiv"></div>
@@ -35,7 +35,7 @@
 <footer class="chat-edit clearfix">
     <p class="chat-info" placeholder="说点什么内容..." contenteditable="true"></p>
     <span class="uploadImg fl">
-        <input type="file" name="uploadfile" class="uploadfile"/>
+        <input type="file" name="uploadfile"  id="uploadfile" accept="image/gif,image/png,image/jpeg,image/jpg,image/bmp" class="uploadfile"/>
     </span>
     <button class="send-btn fr" onclick="sendMsg()">发送</button>
 </footer>
