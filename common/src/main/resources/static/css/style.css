@@ -71,6 +71,8 @@ html {
     padding: 0.4rem 1rem;
     font-size: 1.4rem;
     margin-left: 5rem;
+    max-width: 80%;
+    word-wrap: break-word;
 }
 .leftBubble .topLevel {
     position: absolute;
