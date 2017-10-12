@@ -60,21 +60,39 @@ function connect(userid) {
     stompClient.connect({}, function (frame) {
         stompClient.subscribe('/topic/greetings', function (greeting) {
             var msgJson = JSON.parse(greeting.body);
-            chat("leftBubble", "images/head_portrait.png", msgJson.data);
+            if(msgJson.data.type==0 && msgJson.data.fromUsername!=userid){
+                 chat("leftBubble", msgJson.data.photoUrl, msgJson.data.msg);
+            }else if(msgJson.data.type==1 && msgJson.data.fromUsername!=userid){
+                 chat("leftBubble", msgJson.data.photoUrl, msgJson.data.msg);
+            }
+
         });
 
         stompClient.subscribe('/user/' + userid + '/message', function (greeting) {
             var msgJson = JSON.parse(greeting.body);
             chat("leftBubble", "images/head_portrait.png", msgJson.data);
+             var msgJson = JSON.parse(greeting.body);
+             if(msgJson.data.type==0 && msgJson.data.fromUsername!=userid){
+                  chat("leftBubble", msgJson.data.photoUrl, msgJson.data.msg);
+             }else if(msgJson.data.type==1 && msgJson.data.fromUsername!=userid){
+                  chat("leftBubble", msgJson.data.photoUrl, msgJson.data.msg);
+             }
             //showGreeting(msgJson.data + "-----" + getNowFormatDate());
         });
     });
+
+    stompClient.debug = function(){
+        //TODO
+    }
 }
 
-function sendMsg() {
+function sendMsg(msgType) {
+    if(!msgType){
+      msgType = 'MESSAGE';
+    }
     var $textContent = $('.chat-info').html();
     if ($textContent) {
-        stompClient.send("/app/webSocket", {atytopic: "/topic/greetings", msg: $textContent});
+        stompClient.send("/app/webSocket", {atytopic: "/topic/greetings", msg: $textContent,msgType:msgType});
     }else{
         return;
     }
@@ -88,8 +106,11 @@ function connectAny() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         stompClient.subscribe('/topic/greetings', function (greeting) {
-            var msgJson = JSON.parse(greeting.body);
-            chat("leftBubble", "images/head_portrait.png", msgJson.data);
+            if(msgJson.data.type==0 && msgJson.data.fromUsername!=userid){
+                chat("leftBubble", msgJson.data.photoUrl, msgJson.data.msg);
+            }else if(msgJson.data.type==1 && msgJson.data.fromUsername!=userid){
+                chat("leftBubble", msgJson.data.photoUrl, msgJson.data.msg);
+            }
         });
     });
 }

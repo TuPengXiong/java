@@ -22,16 +22,22 @@ public class Message {
     private Long fromUserId;
 
     /**
+     * 消息来源用户ID
+     */
+    private String fromUsername;
+    /**
      * 消息接收者ID
      */
     private Long toUserId;
 
+    private String toUsername;
     /**
      * 消息类型
      * @see MessageType
      */
     private int type;
 
+    private String photoUrl;
     /**
      * 消息内容
      */
@@ -94,5 +100,29 @@ public class Message {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public String getFromUsername() {
+        return fromUsername;
+    }
+
+    public void setFromUsername(String fromUsername) {
+        this.fromUsername = fromUsername;
+    }
+
+    public String getToUsername() {
+        return toUsername;
+    }
+
+    public void setToUsername(String toUsername) {
+        this.toUsername = toUsername;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

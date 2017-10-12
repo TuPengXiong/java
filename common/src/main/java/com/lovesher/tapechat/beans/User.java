@@ -24,6 +24,7 @@ public class User implements Serializable {
     private String email;
     private Date createTime;
     private Date modifyTime;
+    private String photoUrl;
 
     public String getEmail() {
         return email;
@@ -119,5 +120,13 @@ public class User implements Serializable {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

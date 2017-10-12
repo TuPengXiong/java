@@ -17,4 +17,11 @@ public enum MessageType {
         this.desp = desp;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public String getDesp() {
+        return desp;
+    }
 }
