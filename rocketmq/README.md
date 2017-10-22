@@ -58,3 +58,9 @@ nohup sh mqnamesrv &
 ```
 nohup sh mqbroker -n localhost:9876 autoCreateTopicEnable=true > ~/logs/rocketmqlogs/broker.log 2>&1 
 ```
+
+## 关闭 mqnamesrv mqbroker
+```
+mqshutdown namesrv
+mqshutdown broker
+```
