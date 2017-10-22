@@ -59,6 +59,10 @@ nohup sh mqnamesrv -n 0.0.0.0:9876 &
 nohup sh mqbroker -n 0.0.0.0:9876 autoCreateTopicEnable=true  &
 
 tail -f ~/logs/rocketmqlogs/broker.log 
+
+2017-10-22 08:51:45 INFO BrokerControllerScheduledThread1 - dispatch behind commit log 0 bytes
+2017-10-22 08:51:45 INFO BrokerControllerScheduledThread1 - slave fall behind master, how much, 0 bytes
+2017-10-22 08:51:45 INFO BrokerControllerScheduledThread1 - register broker to name server 0.0.0.0:9876 OK
 ```
 
 ## 关闭 mqnamesrv mqbroker
