@@ -76,3 +76,48 @@ sh tools.sh org.apache.rocketmq.example.quickstart.Consumer
 mqshutdown namesrv
 mqshutdown broker
 ```
+
+## mqadmin
+```
+bash mqadmin 
+
+updateTopic          Update or create topic
+   deleteTopic          Delete topic from broker and NameServer.
+   updateSubGroup       Update or create subscription group
+   deleteSubGroup       Delete subscription group from broker.
+   updateBrokerConfig   Update broker's config
+   updateTopicPerm      Update topic perm
+   topicRoute           Examine topic route info
+   topicStatus          Examine topic Status info
+   topicClusterList     Get cluster info for topic
+   brokerStatus         Fetch broker runtime status data
+   queryMsgById         Query Message by Id
+   queryMsgByKey        Query Message by Key
+   queryMsgByUniqueKey  Query Message by Unique key
+   queryMsgByOffset     Query Message by offset
+   queryMsgByUniqueKey  Query Message by Unique key
+   printMsg             Print Message Detail
+   sendMsgStatus        Send msg to broker.
+   brokerConsumeStats   Fetch broker consume stats data
+   producerConnection   Query producer's socket connection and client version
+   consumerConnection   Query consumer's socket connection, client version and subscription
+   consumerProgress     Query consumers's progress, speed
+   consumerStatus       Query consumer's internal data structure
+   cloneGroupOffset     Clone offset from other group.
+   clusterList          List all of clusters
+   topicList            Fetch all topic list from name server
+   updateKvConfig       Create or update KV config.
+   deleteKvConfig       Delete KV config.
+   wipeWritePerm        Wipe write perm of broker in all name server
+   resetOffsetByTime    Reset consumer offset by timestamp(without client restart).
+   updateOrderConf      Create or update or delete order conf
+   cleanExpiredCQ       Clean expired ConsumeQueue on broker.
+   cleanUnusedTopic     Clean unused topic on broker.
+   startMonitoring      Start Monitoring
+   statsAll             Topic and Consumer tps stats
+   syncDocs             Synchronize wiki and issue to github.com
+   allocateMQ           Allocate MQ
+   checkMsgSendRT       Check message send response time
+   clusterRT            List All clusters Message Send RT
+
+```
