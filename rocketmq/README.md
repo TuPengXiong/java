@@ -30,7 +30,7 @@ JAVA_OPT="${JAVA_OPT} -server -Xms256m -Xmx256m -Xmn128m -XX:PermSize=64m -XX:Ma
 ```
 ## 启动mqnameserver
 ```
-nohup sh mqnamesrv &
+nohup sh mqnamesrv -n 0.0.0.0:9876 &
 ``` 
 * 查看是否启动 jps
 ```
@@ -57,6 +57,8 @@ nohup sh mqnamesrv &
 ## 启动mqbroker 
 ```
 nohup sh mqbroker -n 0.0.0.0:9876 autoCreateTopicEnable=true  &
+
+tail -f ~/logs/rocketmqlogs/broker.log 
 ```
 
 ## 关闭 mqnamesrv mqbroker
