@@ -65,6 +65,12 @@ tail -f ~/logs/rocketmqlogs/broker.log
 2017-10-22 08:51:45 INFO BrokerControllerScheduledThread1 - register broker to name server 0.0.0.0:9876 OK
 ```
 
+## 接收消息和发送消息
+```
+export NAMESRV_ADDR=0.0.0.0:9876
+sh tools.sh org.apache.rocketmq.example.quickstart.Producer
+sh tools.sh org.apache.rocketmq.example.quickstart.Consumer
+```
 ## 关闭 mqnamesrv mqbroker
 ```
 mqshutdown namesrv
