@@ -121,3 +121,11 @@ updateTopic          Update or create topic
    clusterRT            List All clusters Message Send RT
 
 ```
+
+## rocketmq 消息处理
+1. Order Message FIFO 队列消息(有序 先进先出) [example](http://rocketmq.apache.org/docs/order-example/)
+1. Broadcasting 广播消息 [example](http://rocketmq.apache.org/docs/broadcast-example/)
+1. Schedule 延时消息 [example](http://rocketmq.apache.org/docs/schedule-example/)
+1. Batch 批量消息 [example](http://rocketmq.apache.org/docs/batch-example/)
+1. Filter  过滤消息 支持sql语句 [example](http://rocketmq.apache.org/docs/filter-by-sql92-example/)
+1. [more](http://rocketmq.apache.org/docs/quick-start/)
