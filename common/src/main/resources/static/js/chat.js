@@ -138,8 +138,11 @@ function init(username){
                     contentType: false,
                     processData: false,
                     success:function(data){
+                        var url = data.data.url;
+                        var msg  = "<img src='"+ url +"?imageView2/2/w/150/h/150' />";
+                        $('.chat-info').html(msg);
                         $('#uploadfile').val('');
-                        chat("leftBubble", data.data.url, data.data.url);
+                        sendMsg('IMAGE');
                     }
                 });
       });
