@@ -1,7 +1,9 @@
 package com.lovesher.tapechat.plugins.qiniu;
 
 import com.lovesher.tapechat.beans.Image;
+import com.lovesher.tapechat.beans.User;
 import com.lovesher.tapechat.dao.ImageDao;
+import com.lovesher.tapechat.service.impl.DtSpringSecurityService;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
@@ -35,6 +37,8 @@ public class QiNiuImagePlugin {
 
     @Resource
     private ImageDao imageDao;
+    @Resource
+    private DtSpringSecurityService dtSpringSecurityService;
 
     //构造一个带指定Zone对象的配置类 华东
     private Configuration cfg = new Configuration(Zone.zone0());
@@ -71,6 +75,10 @@ public class QiNiuImagePlugin {
             image.setHash(map.get("hash").toString());
             image.setUrl(imagePrefixUrl+image.getKey());
             image.setPrefixUrl(imagePrefixUrl);
+            User user = dtSpringSecurityService.getUser();
+            if(null != user){
+                image.setUserId(user.getId());
+            }
             imageDao.save(image);
             return image;
         } else {
