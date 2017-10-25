@@ -7,6 +7,7 @@
     <groupId>com.lovesher.spring.boot.oauth</groupId>
     <artifactId>oauth-server</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -116,7 +117,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>common</finalName>
+        <finalName>oauth-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
