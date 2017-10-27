@@ -203,7 +203,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>weixn</finalName>
+		<finalName>weixin</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

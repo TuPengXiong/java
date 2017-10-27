@@ -42,7 +42,7 @@ public class WxController {
 	@Resource
 	private MessageTransferTask messageTransferTask;
 
-	private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(100);
+	private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
 
 	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -55,6 +55,7 @@ public class WxController {
 			String value = request.getParameter(name);
 			params.put(name, value);
 		}
+		logger.info(params);
 		params.put("token", "bNjTgyE0IFFkrsFdHp8YNcOwkvoWTAZ0");
 		String resp = "success";
 		String reqcontent = null;
@@ -70,6 +71,8 @@ public class WxController {
 				reqcontent = new String(bytes); // 从字节数组中得到表示实体的字符串
 			} else if (null != params.get("echostr") && !wxService.getSignature(params)) {
 				resp = "error";
+			} else if(null != params.get("echostr") && wxService.getSignature(params)){
+				resp = params.get("echostr");
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
