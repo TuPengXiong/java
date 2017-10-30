@@ -308,7 +308,7 @@ public class Hbase {
         // 创建表
         String tableName = "book";
         String[] family = { "article", "author" };
-        creatTable(tableName, family);
+        //creatTable(tableName, family);
 
         // 为表添加数据
 
@@ -319,12 +319,12 @@ public class Hbase {
                 "Hadoop,HBase,NoSQL" };
         String[] column2 = { "name", "nickname" };
         String[] value2 = { "nicholas", "lee" };
-        addData("rowkey1", tableName, column1, value1, column2, value2);
-        addData("rowkey2", tableName, column1, value1, column2, value2);
-        addData("rowkey3", tableName, column1, value1, column2, value2);
+        //addData("rowkey1", tableName, column1, value1, column2, value2);
+        //addData("rowkey2", tableName, column1, value1, column2, value2);
+        //addData("rowkey3", tableName, column1, value1, column2, value2);
 
         // 遍历查询
-        getResultScann(tableName, "rowkey4", "rowkey5");
+        getResultScann(tableName, "rowkey1", "rowkey3");
         // 根据row key范围遍历查询
         getResultScann(tableName, "rowkey4", "rowkey5");
 

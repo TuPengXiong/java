@@ -18,6 +18,7 @@ public class Image implements Serializable {
     private String key;
     @Column(name = "etag")
     private String hash;
+    private Long userId;
     private String url;
     private String prefixUrl;
     private String md5Name;
@@ -50,6 +51,14 @@ public class Image implements Serializable {
 
     public String getHash() {
         return hash;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public void setHash(String hash) {
