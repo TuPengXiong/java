@@ -77,8 +77,8 @@ public abstract class Producer<E> implements Runnable {
 			if (QUEUE.isEmpty()) {
 				synchronized (this) {
 					try {
-						wait(1000);
-						System.out.println("wait(1000)>>>>生产已经消费完毕,等待生产>>>" + QUEUE.size());
+						wait(5000);
+						System.out.println("wait(5000)>>>>生产已经消费完毕,等待生产>>>" + QUEUE.size());
 					} catch (InterruptedException e) {
 
 						e.printStackTrace();
@@ -89,8 +89,8 @@ public abstract class Producer<E> implements Runnable {
 			if (atomicInteger.get() <= 0) {
 				synchronized (this) {
 					try {
-						System.out.println("wait(5000)>>>>消费线程使用完毕,等待线程任务完成>>>" + atomicInteger.get());
-						wait(5000);
+						System.out.println("wait(1000)>>>>消费线程使用完毕,等待线程任务完成>>>" + atomicInteger.get());
+						wait(1000);
 					} catch (InterruptedException e) {
 
 						e.printStackTrace();
