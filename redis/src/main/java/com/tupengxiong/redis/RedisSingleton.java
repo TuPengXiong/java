@@ -1,6 +1,5 @@
 package com.tupengxiong.redis;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -89,7 +88,6 @@ public class RedisSingleton extends Jedis {
 	 */
 	private static void loadOnProp(Class<?> className, String fileName) {
 		InputStream in =  className.getResourceAsStream(fileName);
-		System.out.println(ClassLoader.getSystemResourceAsStream(fileName));
 		try {
 			pro.load(in);
 		} catch (IOException e) {
