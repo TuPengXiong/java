@@ -65,11 +65,11 @@ public abstract class Producer<E> implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			if (QUEUE.isEmpty()) {
+			if (QUEUE.isEmpty() && atomicInteger.get()>0) {
 				produce();
 			}
-
-			for (int i = 0; i < (atomicInteger.get() > QUEUE.size() ? QUEUE.size() : atomicInteger.get()); i++) {
+			int size = atomicInteger.get() > QUEUE.size() ? QUEUE.size() : atomicInteger.get();
+			for (int i = 0; i < size; i++) {
 				atomicInteger.decrementAndGet();
 				consumerExecutorService.execute(getConsumer(QUEUE.poll()));
 			}
@@ -78,7 +78,7 @@ public abstract class Producer<E> implements Runnable {
 				synchronized (this) {
 					try {
 						wait(1000);
-						System.out.println("wait(1000)>>>>QUEUE>>>" + QUEUE.size());
+						System.out.println("wait(1000)>>>>生产已经消费完毕,等待生产>>>" + QUEUE.size());
 					} catch (InterruptedException e) {
 
 						e.printStackTrace();
@@ -89,8 +89,8 @@ public abstract class Producer<E> implements Runnable {
 			if (atomicInteger.get() <= 0) {
 				synchronized (this) {
 					try {
-						wait(1000);
-						System.out.println("wait(1000)>>>>线程执行完毕>>>" + QUEUE.size());
+						System.out.println("wait(5000)>>>>消费线程使用完毕,等待线程任务完成>>>" + atomicInteger.get());
+						wait(5000);
 					} catch (InterruptedException e) {
 
 						e.printStackTrace();
