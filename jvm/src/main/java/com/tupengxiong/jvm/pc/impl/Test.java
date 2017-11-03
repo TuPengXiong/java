@@ -21,7 +21,7 @@ package com.tupengxiong.jvm.pc.impl;
 public class Test {
 
 	public static void main(String[] args) {
-		ProducerUser producerUser = new ProducerUser(1000,2000);
+		ProducerUser producerUser = new ProducerUser(1,1);
 		new Thread(producerUser).start();
 	}
 }
