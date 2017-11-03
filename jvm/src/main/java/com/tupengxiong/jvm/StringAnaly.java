@@ -1,6 +1,6 @@
 package com.tupengxiong.jvm;
 
-public class Test {
+public class StringAnaly {
 	public static void main(String[] args) {
 		// 方法区的常量池中
 		String str = "abc";
