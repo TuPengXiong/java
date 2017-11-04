@@ -34,7 +34,7 @@ public class WxText extends WxBase implements Serializable {
 
 	private String name;
 
-	private Integer sendStatus = 0;
+	private Integer sendStatus;
 
 	public Integer getSendStatus() {
 		return sendStatus;
@@ -79,14 +79,4 @@ public class WxText extends WxBase implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
-	public String toString() {
-		return "WxText [id=" + id + ", content=" + content + ", msgId=" + msgId + ", getToUserName()=" + getToUserName()
-				+ ", getFromUserName()=" + getFromUserName() + ", getMsgType()=" + getMsgType() + ", getDelStatus()="
-				+ getDelStatus() + ", getCreateTime()=" + getCreateTime() + ", getModifyTime()=" + getModifyTime()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
-				+ "]";
-	}
-
 }

@@ -4,8 +4,6 @@ import java.io.DataInputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tupengxiong.weixin.bean.WxText;
 import com.tupengxiong.weixin.bean.mapper.WxTextMapper;
 import com.tupengxiong.weixin.service.WxService;
-import com.tupengxiong.weixin.task.MessageTransferTask;
 import com.tupengxiong.weixin.utils.TuLingUtils;
 import com.tupengxiong.weixin.utils.XmlForBeanUtils;
 
@@ -38,11 +35,6 @@ public class WxController {
 
 	@Resource
 	private WxTextMapper wxTextMapper;
-
-	@Resource
-	private MessageTransferTask messageTransferTask;
-
-	private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
 
 	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -86,7 +78,6 @@ public class WxController {
 				Integer count = wxTextMapper.wxTextTotalMsgIdCount(wxText.getMsgId());
 				if(count == 0){
 					wxTextMapper.insert(wxText);
-					fixedThreadPool.execute(messageTransferTask);
 					resp = tuLingTools.getWxResp(wxText);
 				}
 			}

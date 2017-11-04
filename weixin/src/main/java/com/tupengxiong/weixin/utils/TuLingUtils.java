@@ -13,7 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,7 +32,7 @@ import com.tupengxiong.weixin.bean.WxText;
 public class TuLingUtils {
 
 	private static final String api_ket = "4aa238fb3ff04fc4bb964060c8485e74";
-	private static final String api_secret = "3ed93627ba6ee059";
+	//private static final String api_secret = "3ed93627ba6ee059";
 	private static final String url = "http://www.tuling123.com/openapi/api";
 	private static final Logger logger = Logger.getLogger(TuLingUtils.class);
 

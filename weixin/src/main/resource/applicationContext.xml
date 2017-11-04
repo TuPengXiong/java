@@ -88,6 +88,12 @@
 		<constructor-arg name="ip" value="${redis.ip}"></constructor-arg>
 		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
 	</bean>
+	<!-- task start -->
+	<bean id="producerWxText" class="com.tupengxiong.weixin.task.producer.ProducerWxText">
+		<constructor-arg name="producerNum" value="1" />
+		<constructor-arg name="consumerNum" ref="1" />
+	</bean>
+	<!-- task end -->
 	<import resource="classpath*:/applicationContext-mapper.xml" />
 	<task:annotation-driven />
 </beans>

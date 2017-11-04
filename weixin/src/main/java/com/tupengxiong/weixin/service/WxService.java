@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,19 +27,30 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.tupengxiong.weixin.redis.RedisPool;
 
-
 @Service
-public class WxService {
-
+public class WxService implements InitializingBean {
 	/**
-	 * 获取access_token
+	 * APPID
+	 */
+	public final static String APPID = "wx23d70d36f886f949";
+	/**
+	 * APPSECRET
+	 */
+	public final static String APPSECRET = "d4624c36b6795d1d99dcf0547af5443d";
+	/**
+	 * 获取access_token URL
 	 */
 	public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
 
 	/**
-	 * 发送客服消息
+	 * 发送客服消息URL
 	 */
 	public static final String SEND_KEFU_MSG_URL = "https://api.weixin.qq.com/cgi-bin/message/custom/send";
+
+	/**
+	 * 发送模板消息URL
+	 */
+	public static final String SEND_TEMPLATE_MSG_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send";
 
 	private static final Logger logger = Logger.getLogger(WxService.class);
 
@@ -50,10 +62,6 @@ public class WxService {
 
 	/**
 	 * getSignature:验证签名/消息验证. <br/>
-	 * TODO(这里描述这个方法适用条件 – 可选).<br/>
-	 * TODO(这里描述这个方法的执行流程 – 可选).<br/>
-	 * TODO(这里描述这个方法的使用方法 – 可选).<br/>
-	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 * 
 	 * @author tupengxiong
 	 * @param params
@@ -99,25 +107,22 @@ public class WxService {
 
 	/**
 	 * getAccessToken:(这里用一句话描述这个方法的作用). <br/>
-	 * TODO(这里描述这个方法适用条件 – 可选).<br/>
-	 * TODO(这里描述这个方法的执行流程 – 可选).<br/>
-	 * TODO(这里描述这个方法的使用方法 – 可选).<br/>
-	 * TODO(这里描述这个方法的注意事项 – 可选).<br/>
 	 * 
 	 * @author tupengxiong
-	 * @param appId
-	 * @param appSecret
+	 * @param APPID
+	 * @param APPSECRET
 	 * @return
 	 * @since JDK 1.7
 	 */
-	public String getAccessToken(String appId, String appSecret, boolean refresh) {
-		if (redisPool.get(appId) != null && !refresh) {
-			return redisPool.get(appId);
+	public String getAccessToken(boolean refresh) {
+		String token = redisPool.get(APPID);
+		if (token != null && !refresh) {
+			return token;
 		}
 		URI uri = null;
 		try {
 			uri = UriComponentsBuilder.fromHttpUrl(ACCESS_TOKEN_URL).queryParam("grant_type", "client_credential")
-					.queryParam("appId", appId).queryParam("secret", appSecret).build().encode("UTF-8").toUri();
+					.queryParam("APPID", APPID).queryParam("secret", APPSECRET).build().encode("UTF-8").toUri();
 		} catch (UnsupportedEncodingException e) {
 			logger.error(new StringBuilder("WxService  getAccessToken UnsupportedEncodingException"));
 			return null;
@@ -127,11 +132,14 @@ public class WxService {
 			try {
 				logger.info(respEntity.getBody());
 				JSONObject json = new JSONObject(respEntity.getBody());
-				String access_token = json.getString("access_token");
-				Integer expires_in = json.getInt("expires_in");
-				redisPool.set(appId, access_token);
-				redisPool.expire(appId, expires_in);
-				logger.info(new StringBuilder("WxService  getAccessToken").append(redisPool.get(appId)));
+				if (json.getString("access_token") == null && !refresh) {
+					getAccessToken(true);
+				} else {
+					String access_token = json.getString("access_token");
+					Integer expires_in = json.getInt("expires_in");
+					redisPool.set(APPID, access_token);
+					redisPool.expire(APPID, expires_in);
+				}
 			} catch (JSONException e) {
 				logger.error(new StringBuilder("WxService  getAccessToken").append(respEntity));
 				return null;
@@ -140,28 +148,45 @@ public class WxService {
 		return null;
 	}
 
-	public Map<String, Object> sendKefuMsg(String appId, JSONObject json) {
+	public Map<String, Object> sendKefuMsg(JSONObject json) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		URI uri = null;
 		try {
-			logger.info(new StringBuilder("WxService  getAccessToken").append(redisPool.get(appId)));
-			uri = UriComponentsBuilder.fromHttpUrl(SEND_KEFU_MSG_URL)
-					.queryParam("access_token", redisPool.get(appId)).build().encode("UTF-8")
-					.toUri();
+			uri = UriComponentsBuilder.fromHttpUrl(SEND_KEFU_MSG_URL).queryParam("access_token", getAccessToken(false))
+					.build().encode("UTF-8").toUri();
 		} catch (UnsupportedEncodingException e) {
-			logger.error("TuLingTools  getResponseFromTuLing UnsupportedEncodingException");
+			logger.error("sendKefuMsg UnsupportedEncodingException");
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> reqEntity = new HttpEntity<String>(json.toString(), headers);
 		ResponseEntity<String> respEntity = restTemplate.exchange(uri, HttpMethod.POST, reqEntity, String.class);
-		if (null != respEntity) {
-			if (!StringUtils.isBlank(respEntity.getBody().toString())) {
-				JSONObject object = new JSONObject(respEntity.getBody().toString());
-				logger.info(respEntity.getBody());
-				map.put("errmsg", object.getString("errmsg"));
-			}
+		logger.info(respEntity.getBody());
+		if (!StringUtils.isBlank(respEntity.getBody())) {
+			JSONObject object = new JSONObject(respEntity.getBody().toString());
+			map.put("errmsg", object.getString("errmsg"));
 		}
 		return map;
+	}
+
+	public void sendTemplateMsg(JSONObject json) {
+		URI uri = null;
+		try {
+			uri = UriComponentsBuilder.fromHttpUrl(SEND_TEMPLATE_MSG_URL)
+					.queryParam("access_token", getAccessToken(false)).build().encode("UTF-8").toUri();
+		} catch (UnsupportedEncodingException e) {
+			logger.error("sendTemplateMsg UnsupportedEncodingException");
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> reqEntity = new HttpEntity<String>(json.toString(), headers);
+		ResponseEntity<String> respEntity = restTemplate.exchange(uri, HttpMethod.POST, reqEntity, String.class);
+		logger.info(respEntity.getBody());
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		logger.info(new StringBuilder().append("AccessTokenTask InitializingBean starting-------"));
+		this.getAccessToken(true);
 	}
 }
