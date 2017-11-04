@@ -89,7 +89,7 @@
 		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
 	</bean>
 	<!-- task start -->
-	<bean id="producerWxText" class="com.tupengxiong.weixin.task.producer.ProducerWxText">
+	<bean id="producerWxText" class="com.tupengxiong.weixin.task.producer.ProducerWxText" lazy-init="false">
 		<constructor-arg name="producerNum" value="1" />
 		<constructor-arg name="consumerNum" ref="1" />
 	</bean>
