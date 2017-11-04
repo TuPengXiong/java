@@ -34,7 +34,7 @@ public class WxText extends WxBase implements Serializable {
 
 	private String name;
 
-	private Integer sendStatus;
+	private Integer sendStatus = 0;
 
 	public Integer getSendStatus() {
 		return sendStatus;

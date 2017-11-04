@@ -20,10 +20,6 @@ public class SpringExt implements ApplicationContextAware {
 	private static ApplicationContext applicationContext;
 	private static final Logger logger = Logger.getLogger(SpringExt.class);
 
-	public void init() {
-		System.out.println("-----init-----");
-	}
-
 	/**
 	 * 加载Spring配置文件时，如果Spring配置文件中所定义的Bean类实现了ApplicationContextAware接口，会自动调用该方法
 	 *
@@ -32,7 +28,6 @@ public class SpringExt implements ApplicationContextAware {
 	 */
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		logger.info("SpringExt setApplicationContext");
 		SpringExt.applicationContext = applicationContext;
 	}
 
@@ -53,7 +48,6 @@ public class SpringExt implements ApplicationContextAware {
 	 * @throws BeansException
 	 */
 	public static Object getBean(String name) throws BeansException {
-		System.out.println("applicationContext===="+applicationContext);
 		return applicationContext.getBean(name);
 	}
 
