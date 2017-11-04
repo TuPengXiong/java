@@ -91,7 +91,7 @@
 	<!-- task start -->
 	<bean id="producerWxText" class="com.tupengxiong.weixin.task.producer.ProducerWxText" lazy-init="false">
 		<constructor-arg name="producerNum" value="1" />
-		<constructor-arg name="consumerNum" ref="1" />
+		<constructor-arg name="consumerNum" value="1" />
 	</bean>
 	<!-- task end -->
 	<import resource="classpath*:/applicationContext-mapper.xml" />
