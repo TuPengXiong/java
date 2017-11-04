@@ -2,13 +2,25 @@
 <web-app id="WebApp_ID" version="3.0"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<display-name>weixin</display-name>
+	<description>weixin dev</description>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml,classpath:applicationContext-mapper.xml,classpath:applicationContext-task.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>springmvc</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				classpath*:/applicationContext.xml
+				classpath:applicationContext.xml,classpath:applicationContext-mapper.xml,classpath:applicationContext-task.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -18,7 +30,6 @@
 		<servlet-name>springmvc</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -32,7 +43,6 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
 	<!-- 连接池 启用 Web 监控统计功能 start -->
 	<filter>
 		<filter-name>DruidWebStatFilter</filter-name>

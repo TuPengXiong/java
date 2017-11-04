@@ -140,6 +140,6 @@ public abstract class Producer<E> implements Runnable,InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		run();
+		new Thread(this).start();
 	}
 }

@@ -43,7 +43,7 @@ public class ConsumerWxText extends Consumer<WxText> {
 
 	@Override
 	public void cosumer() {
-		WxTextMapper wxTextMapper = (WxTextMapper) SpringExt.getBean("wxTextMapper");
+		WxTextMapper wxTextMapper =  (WxTextMapper) SpringExt.getBean(WxTextMapper.class);
 		WxService wxService = (WxService) SpringExt.getBean("wxService");
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);

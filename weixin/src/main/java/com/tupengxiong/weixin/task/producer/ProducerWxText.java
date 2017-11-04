@@ -37,7 +37,7 @@ public class ProducerWxText extends Producer<WxText>{
 
 	@Override
 	public void produce() {
-		WxTextMapper wxTextMapper = (WxTextMapper) SpringExt.getBean("wxTextMapper");
+		WxTextMapper wxTextMapper = (WxTextMapper) SpringExt.getBean(WxTextMapper.class);
 		List<WxText> list = wxTextMapper.selectBySendStatus(WxTextSendStatusEnum.INIT.getStatus(), 0, this.getProducerNum());
 		for(int i=0;i<list.size();i++){
 			WxText wxText = new WxText();
