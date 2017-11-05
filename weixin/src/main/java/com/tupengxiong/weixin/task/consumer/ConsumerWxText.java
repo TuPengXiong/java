@@ -35,7 +35,7 @@ import com.tupengxiong.weixin.task.Producer;
 public class ConsumerWxText extends Consumer<WxText> {
 	private static final Logger logger = Logger.getLogger(ConsumerWxText.class);
 	private static final String OPENID = "otuUIwwrKgYPWIngIkHkiDxfdmSQ";
-	private static final String TEMPLATEID = "GOfCnFlvl5BqDhjB7s9Q1wP63Rkw5YGaHyrP9FPextQ";
+	private static final String TEMPLATEID = "tRHEbmEZPTkkL_yxJErieCv3hlTr9syK1bzE38H0mnc";
 	private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public ConsumerWxText(WxText obj, Producer<WxText> producer) {
@@ -48,32 +48,31 @@ public class ConsumerWxText extends Consumer<WxText> {
 		WxService wxService = (WxService) SpringExt.getBean("wxService");
 		WxText wxText2 = new WxText();
 		wxText2.setId(this.getObj().getId());
-		if(wxService.sendTemplate(OPENID, TEMPLATEID, "https://www.lovesher.com/common/",
-				new String[] {this.getObj().getFromUserName(), this.getObj().getContent(),
-						format.format(this.getObj().getCreateTime()),this.getObj().getName() })){
-			logger.info("SUCCEES==>"+this.getObj().getId());
-			wxText2.setSendStatus(WxTextSendStatusEnum.SUCCESS.getStatus());
-			wxTextMapper.update(wxText2);
-		}else {
-			logger.info("FAILED==>"+this.getObj().getId());
-			wxText2.setSendStatus(WxTextSendStatusEnum.FAIL.getStatus());
-			wxTextMapper.update(wxText2);
-		}
-		/*JSONObject json = new JSONObject();
-		json.put("touser", OPENID);
-		json.put("msgtype", "text");
-		JSONObject jsonContent = new JSONObject();
-		jsonContent.put("content", this.getObj().getContent() + "\r\n[" + this.getObj().getFromUserName() + "]");
-		json.put("text", jsonContent);
-		logger.debug(json.toString());
-		Map<String, Object> map = wxService.sendKefuMsg(json);
-		
-		if (null != map.get("errmsg") && map.get("errmsg").equals("ok")) {
+		if (wxService.sendTemplate(OPENID, TEMPLATEID, "https://www.lovesher.com/common/",
+				new String[] { "公众号【" + this.getObj().getToUserName() + "】有新消息了", this.getObj().getFromUserName(),
+						this.getObj().getContent(), format.format(this.getObj().getCreateTime()),
+						"备注昵称：" + this.getObj().getName() })) {
+			logger.info("SUCCEES==>" + this.getObj().getId());
 			wxText2.setSendStatus(WxTextSendStatusEnum.SUCCESS.getStatus());
 			wxTextMapper.update(wxText2);
 		} else {
+			logger.info("FAILED==>" + this.getObj().getId());
 			wxText2.setSendStatus(WxTextSendStatusEnum.FAIL.getStatus());
 			wxTextMapper.update(wxText2);
-		}*/
+		}
+		/*
+		 * JSONObject json = new JSONObject(); json.put("touser", OPENID);
+		 * json.put("msgtype", "text"); JSONObject jsonContent = new
+		 * JSONObject(); jsonContent.put("content", this.getObj().getContent() +
+		 * "\r\n[" + this.getObj().getFromUserName() + "]"); json.put("text",
+		 * jsonContent); logger.debug(json.toString()); Map<String, Object> map
+		 * = wxService.sendKefuMsg(json);
+		 * 
+		 * if (null != map.get("errmsg") && map.get("errmsg").equals("ok")) {
+		 * wxText2.setSendStatus(WxTextSendStatusEnum.SUCCESS.getStatus());
+		 * wxTextMapper.update(wxText2); } else {
+		 * wxText2.setSendStatus(WxTextSendStatusEnum.FAIL.getStatus());
+		 * wxTextMapper.update(wxText2); }
+		 */
 	}
 }

@@ -41,7 +41,7 @@ public class ProducerWxText extends Producer<WxText>{
 		List<WxText> list = wxTextMapper.selectBySendStatus(WxTextSendStatusEnum.INIT.getStatus(), 0, this.getProducerNum());
 		for(int i=0;i<list.size();i++){
 			WxText wxText = new WxText();
-			wxText.setId(wxText.getId());
+			wxText.setId(list.get(i).getId());
 			wxText.setSendStatus(WxTextSendStatusEnum.TASK.getStatus());
 			wxTextMapper.update(wxText);
 			this.getQUEUE().add(list.get(i));
