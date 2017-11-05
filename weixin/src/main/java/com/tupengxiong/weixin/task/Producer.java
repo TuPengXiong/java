@@ -28,7 +28,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @since JDK 1.7
  * @see
  */
-public abstract class Producer<E> implements Runnable,InitializingBean {
+public abstract class Producer<E> extends Thread implements InitializingBean {
 
 	private static final Logger logger = Logger.getLogger(Producer.class);
 	private final int producerNum;
@@ -140,6 +140,6 @@ public abstract class Producer<E> implements Runnable,InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		new Thread(this).start();
+		start();
 	}
 }

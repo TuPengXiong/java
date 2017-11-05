@@ -29,7 +29,7 @@ import com.tupengxiong.weixin.redis.RedisPool;
 
 @Service
 public class WxService implements InitializingBean {
-	/**
+	/**WxService
 	 * APPID
 	 */
 	public final static String APPID = "wx23d70d36f886f949";
@@ -169,7 +169,7 @@ public class WxService implements InitializingBean {
 		return map;
 	}
 
-	public void sendTemplateMsg(JSONObject json) {
+	public String sendTemplateMsg(JSONObject json) {
 		URI uri = null;
 		try {
 			uri = UriComponentsBuilder.fromHttpUrl(SEND_TEMPLATE_MSG_URL)
@@ -180,8 +180,55 @@ public class WxService implements InitializingBean {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> reqEntity = new HttpEntity<String>(json.toString(), headers);
+		if(null == restTemplate){
+			restTemplate = new RestTemplate();
+		}
 		ResponseEntity<String> respEntity = restTemplate.exchange(uri, HttpMethod.POST, reqEntity, String.class);
 		logger.info(respEntity.getBody());
+		return respEntity.getBody();
+	}
+
+	/**
+	 * 发送模板消息
+	 * 
+	 * @return { "errcode":0, "errmsg":"ok" }
+	 */
+	public boolean sendTemplate(String toUser, String templateId, String url, String... value) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		Map<String, Object> json = new HashMap<String, Object>();
+
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("value", value[0]);
+		data.put("color", "#173177");
+		map.put("first", data);
+
+		for (int i = 1; i < value.length - 1; i++) {
+			data = new HashMap<String, Object>();
+			data.put("value", value[i]);
+			data.put("color", "#173177");
+			map.put("keyword" + i, data);
+		}
+		data = new HashMap<String, Object>();
+		data.put("value", value[value.length - 1]);
+		data.put("color", "#173177");
+		map.put("remark", data);
+
+		json.put("touser", toUser);
+		json.put("template_id", templateId);
+		json.put("url", url);
+		json.put("data", map);
+
+		JSONObject object = new JSONObject(json);
+		
+		System.out.println(object);
+		String resp = sendTemplateMsg(object);
+		JSONObject respJson = new JSONObject(resp);
+		if (null !=respJson && respJson.get("errmsg").equals("ok") && respJson.get("msgid")!=null) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
