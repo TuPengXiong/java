@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tupengxiong.weixin.bean.WxText;
 import com.tupengxiong.weixin.bean.mapper.WxTextMapper;
+import com.tupengxiong.weixin.redis.RedisPool;
 import com.tupengxiong.weixin.service.WxService;
 import com.tupengxiong.weixin.utils.TuLingUtils;
 import com.tupengxiong.weixin.utils.XmlForBeanUtils;
@@ -35,6 +36,9 @@ public class WxController {
 
 	@Resource
 	private WxTextMapper wxTextMapper;
+	
+	@Resource
+	private RedisPool redisPool;
 
 	@RequestMapping("/wxNotify")
 	public void wxNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -75,8 +79,9 @@ public class WxController {
 			if (type.equals("text")) {
 				WxText wxText = xmlForBeanUtils.parseToWxText(reqcontent);
 				//防重
-				Integer count = wxTextMapper.wxTextTotalMsgIdCount(wxText.getMsgId());
-				if(count == 0){
+				//Integer count = wxTextMapper.wxTextTotalMsgIdCount(wxText.getMsgId());
+				if(redisPool.setnx(this.getClass().getName().replace(".", ":")+":"+wxText.getMsgId(), wxText.getMsgId()) ==1){
+					redisPool.expire(this.getClass().getName().replace(".", ":")+":"+wxText.getMsgId(), 5);;
 					wxTextMapper.insert(wxText);
 					resp = tuLingTools.getWxResp(wxText);
 				}

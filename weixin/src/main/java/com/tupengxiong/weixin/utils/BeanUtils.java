@@ -49,7 +49,7 @@ public class BeanUtils {
 				method = obj.getClass().getDeclaredMethod("set" + element.getName(), classType);
 				method.setAccessible(true);
 			} catch (NoSuchFieldException e) {
-				logger.error(new StringBuilder("NoSuchFieldException className=").append(className.getName())
+				logger.debug(new StringBuilder("NoSuchFieldException className=").append(className.getName())
 						.append(" Field = ").append(fieldName));
 			}
 			if (null == field) {
@@ -60,29 +60,29 @@ public class BeanUtils {
 					method = obj.getClass().getSuperclass().getDeclaredMethod("set" + element.getName(), classType);
 					method.setAccessible(true);
 				} catch (NoSuchFieldException e) {
-					logger.error(new StringBuilder("NoSuchFieldException className=").append(className.getName())
+					logger.debug(new StringBuilder("NoSuchFieldException className=").append(className.getName())
 							.append(" Field = ").append(fieldName));
 				}
 
 			}
 			convert(classType, method, element.getText(), obj);
 		} catch (NoSuchMethodException e) {
-			logger.error(new StringBuilder("NoSuchMethodException className=").append(className.getName())
+			logger.debug(new StringBuilder("NoSuchMethodException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		} catch (IllegalAccessException e) {
-			logger.error(new StringBuilder("IllegalAccessException className=").append(className.getName())
+			logger.debug(new StringBuilder("IllegalAccessException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		} catch (IllegalArgumentException e) {
-			logger.error(new StringBuilder("IllegalArgumentException className=").append(className.getName())
+			logger.debug(new StringBuilder("IllegalArgumentException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		} catch (InvocationTargetException e) {
-			logger.error(new StringBuilder("InvocationTargetException className=").append(className.getName())
+			logger.debug(new StringBuilder("InvocationTargetException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		} catch (ParseException e) {
-			logger.error(new StringBuilder("ParseException className=").append(className.getName())
+			logger.debug(new StringBuilder("ParseException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		} catch (SecurityException e) {
-			logger.error(new StringBuilder("SecurityException className=").append(className.getName())
+			logger.debug(new StringBuilder("SecurityException className=").append(className.getName())
 					.append(" Method =set").append(element.getName()));
 		}
 

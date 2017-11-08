@@ -29,8 +29,8 @@ import com.tupengxiong.weixin.redis.RedisPool;
 
 @Service
 public class WxService implements InitializingBean {
-	/**WxService
-	 * APPID
+	/**
+	 * WxService APPID
 	 */
 	public final static String APPID = "wx23d70d36f886f949";
 	/**
@@ -117,6 +117,7 @@ public class WxService implements InitializingBean {
 	public String getAccessToken(boolean refresh) {
 		String token = redisPool.get(APPID);
 		if (token != null && !refresh) {
+			logger.info("access_token" + token);
 			return token;
 		}
 		URI uri = null;
@@ -180,7 +181,7 @@ public class WxService implements InitializingBean {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> reqEntity = new HttpEntity<String>(json.toString(), headers);
-		if(null == restTemplate){
+		if (null == restTemplate) {
 			restTemplate = new RestTemplate();
 		}
 		ResponseEntity<String> respEntity = restTemplate.exchange(uri, HttpMethod.POST, reqEntity, String.class);
@@ -221,11 +222,10 @@ public class WxService implements InitializingBean {
 		json.put("data", map);
 
 		JSONObject object = new JSONObject(json);
-		
-		System.out.println(object);
+
 		String resp = sendTemplateMsg(object);
 		JSONObject respJson = new JSONObject(resp);
-		if (null !=respJson && respJson.get("errmsg").equals("ok") && respJson.get("msgid")!=null) {
+		if (null != respJson && respJson.get("errmsg").equals("ok") && respJson.get("msgid") != null) {
 			return true;
 		}
 		return false;

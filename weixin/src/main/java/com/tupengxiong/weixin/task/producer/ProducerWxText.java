@@ -50,9 +50,13 @@ public class ProducerWxText extends Producer<WxText>{
 
 	@Override
 	public Consumer<WxText> getConsumer(WxText e) {
-		
-		return new ConsumerWxText(e, this);
+		ProducerWxText producerWxText = (ProducerWxText) SpringExt.getBean(ProducerWxText.class);
+		return new ConsumerWxText(e, producerWxText);
 	}
 
+	@Override
+	public String getLogName() {
+		return "ProducerWxText";
+	}
 }
   

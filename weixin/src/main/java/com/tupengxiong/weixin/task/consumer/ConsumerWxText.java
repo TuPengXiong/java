@@ -11,8 +11,6 @@ package com.tupengxiong.weixin.task.consumer;
 
 import java.text.SimpleDateFormat;
 
-import org.apache.log4j.Logger;
-
 import com.tupengxiong.weixin.bean.WxText;
 import com.tupengxiong.weixin.bean.enums.WxTextSendStatusEnum;
 import com.tupengxiong.weixin.bean.mapper.WxTextMapper;
@@ -33,7 +31,6 @@ import com.tupengxiong.weixin.task.Producer;
  * @see
  */
 public class ConsumerWxText extends Consumer<WxText> {
-	private static final Logger logger = Logger.getLogger(ConsumerWxText.class);
 	private static final String OPENID = "otuUIwwrKgYPWIngIkHkiDxfdmSQ";
 	private static final String TEMPLATEID = "tRHEbmEZPTkkL_yxJErieCv3hlTr9syK1bzE38H0mnc";
 	private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -60,19 +57,10 @@ public class ConsumerWxText extends Consumer<WxText> {
 			wxText2.setSendStatus(WxTextSendStatusEnum.FAIL.getStatus());
 			wxTextMapper.update(wxText2);
 		}
-		/*
-		 * JSONObject json = new JSONObject(); json.put("touser", OPENID);
-		 * json.put("msgtype", "text"); JSONObject jsonContent = new
-		 * JSONObject(); jsonContent.put("content", this.getObj().getContent() +
-		 * "\r\n[" + this.getObj().getFromUserName() + "]"); json.put("text",
-		 * jsonContent); logger.debug(json.toString()); Map<String, Object> map
-		 * = wxService.sendKefuMsg(json);
-		 * 
-		 * if (null != map.get("errmsg") && map.get("errmsg").equals("ok")) {
-		 * wxText2.setSendStatus(WxTextSendStatusEnum.SUCCESS.getStatus());
-		 * wxTextMapper.update(wxText2); } else {
-		 * wxText2.setSendStatus(WxTextSendStatusEnum.FAIL.getStatus());
-		 * wxTextMapper.update(wxText2); }
-		 */
+	}
+
+	@Override
+	public String getLogName() {
+		return "ProducerWxText";
 	}
 }

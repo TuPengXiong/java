@@ -30,7 +30,8 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public abstract class Producer<E> extends Thread implements InitializingBean {
 
-	private static final Logger logger = Logger.getLogger(Producer.class);
+	private Logger logger = Logger.getLogger(getLogName());
+	
 	private final int producerNum;
 
 	private final int consumerNum;
@@ -55,23 +56,18 @@ public abstract class Producer<E> extends Thread implements InitializingBean {
 		atomicInteger = new AtomicInteger(consumerNum);
 	}
 
-	/*
-	 * public Producer() { this.consumerNum = 1; this.producerNum = 1; QUEUE =
-	 * new LinkedBlockingQueue<E>(producerNum); consumerExecutorService =
-	 * Executors.newScheduledThreadPool(consumerNum); atomicInteger = new
-	 * AtomicInteger(consumerNum); }
-	 */
-
 	public abstract void produce();
+
+	public abstract String getLogName();
 
 	public abstract Consumer<E> getConsumer(E e);
 
 	@Override
 	public void run() {
 		while (true) {
-			if (QUEUE.isEmpty() && atomicInteger.get()>0) {
+			if (QUEUE.isEmpty() && atomicInteger.get() > 0) {
 				produce();
-				
+
 				if (QUEUE.isEmpty()) {
 					synchronized (this) {
 						try {

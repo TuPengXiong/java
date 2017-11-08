@@ -77,6 +77,15 @@ public class RedisPool {
 			this.pool.returnResourceObject(jedis);
 		}
 	}
+	
+	public Long setnx(String key, String value) {
+		Jedis jedis = getJedisInPool();
+		try {
+			return jedis.setnx(key, value);
+		} finally {
+			this.pool.returnResourceObject(jedis);
+		}
+	}
 
 	public String get(String key) {
 		Jedis jedis = getJedisInPool();

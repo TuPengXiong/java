@@ -26,10 +26,9 @@ public abstract class Consumer<E> implements Runnable {
 
 	private E obj;
 	private Producer<E> producer;
-
+	public Logger logger = Logger.getLogger(getLogName());
 	public abstract void cosumer();
-
-	private static final Logger logger = Logger.getLogger(Producer.class);
+	public abstract String getLogName();
 
 	public Consumer(E obj, Producer<E> producer) {
 		this.obj = obj;
