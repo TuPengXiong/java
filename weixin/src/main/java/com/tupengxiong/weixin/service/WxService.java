@@ -134,7 +134,7 @@ public class WxService implements InitializingBean {
 				logger.info(respEntity.getBody());
 				JSONObject json = new JSONObject(respEntity.getBody());
 				if (json.getString("access_token") == null && !refresh) {
-					getAccessToken(true);
+					return getAccessToken(true);
 				} else {
 					String access_token = json.getString("access_token");
 					Integer expires_in = json.getInt("expires_in");
