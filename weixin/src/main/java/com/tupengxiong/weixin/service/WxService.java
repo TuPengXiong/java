@@ -134,12 +134,13 @@ public class WxService implements InitializingBean {
 				logger.info(respEntity.getBody());
 				JSONObject json = new JSONObject(respEntity.getBody());
 				if (json.getString("access_token") == null && !refresh) {
-					return getAccessToken(true);
+					 getAccessToken(true);
 				} else {
 					String access_token = json.getString("access_token");
 					Integer expires_in = json.getInt("expires_in");
 					redisPool.set(APPID, access_token);
 					redisPool.expire(APPID, expires_in);
+					return access_token;
 				}
 			} catch (JSONException e) {
 				logger.error(new StringBuilder("WxService  getAccessToken").append(respEntity));
