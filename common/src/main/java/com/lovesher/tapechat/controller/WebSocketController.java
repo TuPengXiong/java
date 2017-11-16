@@ -56,6 +56,7 @@ public class WebSocketController {
         logger.info("connected successfully....");
         logger.info(topic);
         logger.info(headers.toString());
+        logger.info(headers.get("simpSessionId").toString());
         User user = dtSpringSecurityService.getUser();
         Message message = new Message();
         message.setCreateTime(new Date());

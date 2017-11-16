@@ -4,21 +4,16 @@ import com.lovesher.tapechat.common.MsgEnum;
 import com.lovesher.tapechat.service.impl.DtSpringSecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Headers;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by tpx on 2017/8/8.
@@ -32,6 +27,12 @@ public class IndexController implements ErrorController {
     private DtSpringSecurityService dtSpringSecurityService;
 
     private static final String ERROR_PATH = "/error";
+
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public void index(HttpServletRequest request, HttpServletResponse response) {
@@ -58,5 +59,19 @@ public class IndexController implements ErrorController {
 
     public String getErrorPath() {
         return ERROR_PATH;
+    }
+
+
+    @RequestMapping(value = "/mail", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String sendSimpleEmail()
+    {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("tupengxiong@qq.com");
+        message.setTo("tupengxiong@qq.com");
+        message.setSubject("主题：简单邮件");
+        message.setText("测试邮件内容");
+        javaMailSender.send(message);
+        return "success!!";
     }
 }
