@@ -30,7 +30,7 @@ public class HttpServer {
 							// HTTP 请求消息解码器
 							ch.pipeline().addLast("http-decoder", new HttpRequestDecoder());
 							// HttpObjectAggregator解码器，将多个消息转换成单一的FullHttpRequest或者FullHTtpResponse，原因是HTTP解码器在每个HTTP消息中会生成多个消息对象（HttpRequst、HttpResponse、Httpontent/LastHttpContent）。
-							ch.pipeline().addLast("http-aggregator", new HttpObjectAggregator(65536));
+							ch.pipeline().addLast("http-aggregator", new HttpObjectAggregator(nettyConfigure.getAggregator()));
 							// HTTP响应编码器
 							ch.pipeline().addLast("http-encoder", new HttpResponseEncoder());
 							// Chunked
