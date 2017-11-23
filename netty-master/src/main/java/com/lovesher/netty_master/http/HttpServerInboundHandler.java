@@ -34,14 +34,19 @@ public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		if (msg instanceof FullHttpRequest) {
+			StringBuffer stringBuffer = new StringBuffer();
 			FullHttpRequest request = (FullHttpRequest) msg;
 			HttpMethod method = request.getMethod();
 			HttpVersion httpVersion = request.getProtocolVersion();
+			stringBuffer.append(httpVersion.text()).append("\r");
+			stringBuffer.append(method.name()).append("\r\n");
+			stringBuffer.append(request.getUri()).append("\r\n");
 			System.out.println("httpVersion>>>>>>>>>>>>>>" + httpVersion.text());
 			System.out.println("method>>>>>>>>>>>>>>" + method.name());
 			System.out.println("Uri>>>>>>>>>>>>>>" + request.getUri());
 			HttpHeaders headers = request.headers();
 			for(Map.Entry<String, String> map: headers.entries()){
+				stringBuffer.append("headers>>>>>>>>>>"+map.getKey() +">>>>>>>>"+ map.getValue()).append("\r\n");
 				System.out.println("headers>>>>>>>>>>"+map.getKey() +">>>>>>>>"+ map.getValue());
 			}
 			
@@ -49,17 +54,19 @@ public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
 			final StringBuilder contentSb = new StringBuilder();
 			contentSb.append(content.toString(CharsetUtil.UTF_8));
 			System.out.println("content>>>>>>>>>>>>>>" + contentSb.toString());
+			stringBuffer.append("content>>>>>>>>>>>>>>" + contentSb.toString()).append("\r\n");
 			QueryStringDecoder decoderQuery = new QueryStringDecoder(request.getUri());
 			Map<String, List<String>> uriAttributes = decoderQuery.parameters();
 			for (Map.Entry<String, List<String>> attr : uriAttributes.entrySet()) {
 				System.out.println(attr.getKey() + ">>>>>>>>>>>>>>>>>" + attr.getValue());
+				stringBuffer.append(attr.getKey() + ">>>>>>>>>>>>>>>>>" + attr.getValue()).append("\r\n");
 			}
 			FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
 			// Thread.sleep(10000L);
 			response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/html; charset=UTF-8");
 			int i = httpReceiveTotal.incrementAndGet();
 			// 转发
-			String responseMessage = "false============>" + i + ">>>>" + contentSb.toString();
+			String responseMessage = "false============>" + i + ">>>>" + stringBuffer.toString();
 			ByteBuf buffer = Unpooled.copiedBuffer(responseMessage, CharsetUtil.UTF_8);
 			response.content().writeBytes(buffer);
 			// 释放缓冲区
