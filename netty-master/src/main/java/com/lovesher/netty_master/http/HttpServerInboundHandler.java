@@ -40,6 +40,11 @@ public class HttpServerInboundHandler extends ChannelInboundHandlerAdapter {
 			System.out.println("httpVersion>>>>>>>>>>>>>>" + httpVersion.text());
 			System.out.println("method>>>>>>>>>>>>>>" + method.name());
 			System.out.println("Uri>>>>>>>>>>>>>>" + request.getUri());
+			HttpHeaders headers = request.headers();
+			for(Map.Entry<String, String> map: headers.entries()){
+				System.out.println("headers>>>>>>>>>>"+map.getKey() +">>>>>>>>"+ map.getValue());
+			}
+			
 			ByteBuf content = request.content();
 			final StringBuilder contentSb = new StringBuilder();
 			contentSb.append(content.toString(CharsetUtil.UTF_8));
