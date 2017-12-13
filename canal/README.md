@@ -1,4 +1,6 @@
-# 阿里巴巴开源项目  canal
+# 阿里巴巴开源项目  canal 
+
+[本文来源](https://github.com/alibaba/canal/)
 
 1. 伪装成mysql集群 从节点 
 1. 主从复制获取主库的二进制日志信息 行级
