@@ -19,27 +19,22 @@ public class SimpleCanalClientExample {
 	public static void main(String args[]) {
 		// 创建链接
 		CanalConnector connector = CanalConnectors
-				.newSingleConnector(new InetSocketAddress("192.168.145.129", 11111), "example", "", "");
+				.newSingleConnector(new InetSocketAddress("127.0.0.1", 11111), "example", "", "");
 		int batchSize = 1000;
-		int emptyCount = 0;
 		try {
 			connector.connect();
 			connector.subscribe(".*\\..*");
 			connector.rollback();
-			int totalEmptyCount = 120;
-			while (emptyCount < totalEmptyCount) {
+			while (true) {
 				Message message = connector.getWithoutAck(batchSize); // 获取指定数量的数据
 				long batchId = message.getId();
 				int size = message.getEntries().size();
 				if (batchId == -1 || size == 0) {
-					emptyCount++;
-					System.out.println("empty count : " + emptyCount);
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 					}
 				} else {
-					emptyCount = 0;
 					// System.out.printf("message[batchId=%s,size=%s] \n",
 					// batchId, size);
 					printEntry(message.getEntries());
@@ -49,7 +44,6 @@ public class SimpleCanalClientExample {
 				// connector.rollback(batchId); // 处理失败, 回滚数据
 			}
 
-			System.out.println("empty too many times, exit");
 		} finally {
 			connector.disconnect();
 		}
@@ -72,9 +66,10 @@ public class SimpleCanalClientExample {
 			}
 
 			EventType eventType = rowChage.getEventType();
-			System.out.println(String.format("================&gt; binlog[%s:%s] , name[%s,%s] , eventType : %s",
-					entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
-					entry.getHeader().getSchemaName(), entry.getHeader().getTableName(), eventType));
+			System.out.println("binlog>>>>>>>>" + entry.getHeader().getLogfileName()+":"+entry.getHeader().getLogfileOffset());
+			System.out.println("数据库名:>>>>>>>>" + entry.getHeader().getSchemaName());
+			System.out.println("表名:>>>>>>>>" + entry.getHeader().getTableName());
+			System.out.println("数据库操作类型:>>>>>>>>" + eventType);
 
 			for (RowData rowData : rowChage.getRowDatasList()) {
 				if (eventType == EventType.DELETE) {
@@ -82,9 +77,9 @@ public class SimpleCanalClientExample {
 				} else if (eventType == EventType.INSERT) {
 					printColumn(rowData.getAfterColumnsList());
 				} else {
-					System.out.println("-------&gt; before");
+					System.out.println("数据库更新操作之前数据getBeforeColumnsList>>>>>>>>>>>>>>");
 					printColumn(rowData.getBeforeColumnsList());
-					System.out.println("-------&gt; after");
+					System.out.println("数据库更新操作之后数据getAfterColumnsList");
 					printColumn(rowData.getAfterColumnsList());
 				}
 			}
@@ -93,7 +88,7 @@ public class SimpleCanalClientExample {
 
 	private static void printColumn(List<Column> columns) {
 		for (Column column : columns) {
-			System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
+			System.out.println("字段:" + column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
 		}
 	}
 }
