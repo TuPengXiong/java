@@ -1,6 +1,7 @@
 package com.tupengxiong.rocketmq.producer;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
@@ -14,21 +15,11 @@ public class MQProducer {
 		producer.setInstanceName("Producer");
 		try {
 			producer.start();
-
-			Message msg = new Message("PushTopic", "push", "1", "Just for test.".getBytes());
-
-			SendResult result = producer.send(msg);
-			System.out.println("id:" + result.getMsgId() + " result:" + result.getSendStatus());
-
-			msg = new Message("PushTopic", "push", "2", "Just for test.".getBytes());
-
-			result = producer.send(msg);
-			System.out.println("id:" + result.getMsgId() + " result:" + result.getSendStatus());
-
-			msg = new Message("PullTopic", "pull", "1", "Just for test.".getBytes());
-
-			result = producer.send(msg);
-			System.out.println("id:" + result.getMsgId() + " result:" + result.getSendStatus());
+			for(int i=0;i<10;i++){
+				Message msg = new Message("PushTopic", "pull", "1", ("content"+i).getBytes());
+				SendResult result = producer.send(msg);
+				System.out.println(JSON.toJSONString(result));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

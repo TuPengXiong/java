@@ -44,8 +44,11 @@ public class BroadcastConsumer {
 		consumer.registerMessageListener(new MessageListenerConcurrently() {
 
 			@Override
-			public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-				System.out.printf(Thread.currentThread().getName() + " Receive New Messages: " + msgs + "%n");
+			public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext context) {
+				System.out.println(list.size());
+				for(MessageExt messageExt:list){
+					System.out.println(new String(messageExt.getBody()));
+				}
 				return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 			}
 		});
