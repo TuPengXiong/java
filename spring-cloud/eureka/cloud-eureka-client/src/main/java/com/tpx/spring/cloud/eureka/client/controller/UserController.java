@@ -1,6 +1,7 @@
 package com.tpx.spring.cloud.eureka.client.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.tpx.spring.cloud.eureka.client.VerifyCodeUtils;
 import com.tpx.spring.cloud.eureka.client.user.service.UserClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -9,6 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,7 +43,7 @@ public class UserController {
     }
 
     @RequestMapping("/registered")
-    public String getRegistered() {
+    public List<String> getRegistered() {
         List<ServiceInstance> list = discoveryClient.getInstances("STORES");
         System.out.println(discoveryClient.getLocalServiceInstance());
         System.out.println("discoveryClient.getServices().size() = " + discoveryClient.getServices().size());
@@ -56,6 +62,26 @@ public class UserController {
         if (list != null && list.size() > 0) {
             System.out.println(list.get(0).getUri());
         }
-        return null;
+        return discoveryClient.getServices();
+    }
+
+    @RequestMapping("/code")
+    public void code(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+
+        //生成随机字串
+        String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+        //存入会话session
+        HttpSession session = request.getSession(true);
+        //删除以前的
+        session.removeAttribute("verCode");
+        session.setAttribute("verCode", verifyCode.toLowerCase());
+        //生成图片
+        int w = 100, h = 30;
+        VerifyCodeUtils.outputImage(w, h, response.getOutputStream(), verifyCode);
+
     }
 }
