@@ -38,4 +38,61 @@ public class ThreadFIFO {
 		BaseThread t3 = new BaseThread("t3", 2L, countDownLatch);
 		t3.start();
 	}
+
+	
+	private static class BaseThread extends Thread {
+
+		private String nameThread;
+		private Long sleepTimeSec;
+		private CountDownLatch countDownLatch;
+
+		public BaseThread(String nameThread, Long sleepTimeSec, CountDownLatch countDownLatch) {
+			this.nameThread = nameThread;
+			this.sleepTimeSec = sleepTimeSec;
+			this.countDownLatch = countDownLatch;
+		}
+
+		public BaseThread(String nameThread) {
+			this.nameThread = nameThread;
+		}
+
+		public BaseThread(String nameThread, Long sleepTimeSec) {
+			this.nameThread = nameThread;
+			this.sleepTimeSec = sleepTimeSec;
+		}
+
+		@Override
+		public void run() {
+			try {
+				if (null != sleepTimeSec && sleepTimeSec > 0) {
+					Thread.sleep(sleepTimeSec * 1000L);
+				}
+				System.out.println("thread name--------------" + nameThread + "-----------------");
+			} catch (InterruptedException e) {
+
+				e.printStackTrace();
+			} finally {
+				if (countDownLatch != null) {
+					countDownLatch.countDown();
+				}
+			}
+		}
+
+		public String getNameThread() {
+			return nameThread;
+		}
+
+		public void setNameThread(String nameThread) {
+			this.nameThread = nameThread;
+		}
+
+		public Long getSleepTimeSec() {
+			return sleepTimeSec;
+		}
+
+		public void setSleepTimeSec(Long sleepTimeSec) {
+			this.sleepTimeSec = sleepTimeSec;
+		}
+
+	}
 }
