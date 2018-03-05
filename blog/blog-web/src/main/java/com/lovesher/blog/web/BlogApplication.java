@@ -19,7 +19,7 @@ import org.springframework.context.annotation.PropertySource;
  */
 @SpringBootApplication
 @PropertySource(value={"classpath:blog.properties"})
-@ImportResource(locations={"classpath:applicationContext.xml"})
+@ImportResource(locations={"classpath:applicationContext.xml","classpath:applicationContext-mapper.xml"})
 public class BlogApplication 
 {
 	public static void main(String[] args) {
