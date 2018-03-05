@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovesher.blog.resposity.mapper.ArticleMapper">
+
+	<!-- 结果映射 resultMap-->
+	<resultMap id="BaseResultMap" type="com.lovesher.blog.resposity.bean.Article">
+		 <result column="id" property="id"/>
+		 <result column="title" property="title"/>
+		 <result column="article_text" property="articleText"/>
+		 <result column="article_source" property="articleSource"/>
+		 <result column="user_id" property="userId"/>
+		 <result column="public_state" property="publicState"/>
+		 <result column="top_state" property="topState"/>
+		 <result column="create_time" property="createTime"/>
+		 <result column="modify_time" property="modifyTime"/>
+		 <result column="label_id" property="labelId"/>
+		 <result column="assort_id" property="assortId"/>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		`id`,`title`,`article_text`,`article_source`,`user_id`,`public_state`,`top_state`,`create_time`,`modify_time`,`label_id`,`assort_id`
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultMap="BaseResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_article
+		 WHERE `id` = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById">
+		 DELETE FROM t_article
+		 WHERE `id` = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.lovesher.blog.resposity.bean.Article">
+		 INSERT INTO t_article
+ 		(`title`,`article_text`,`article_source`,`user_id`,`public_state`,`top_state`,`create_time`,`modify_time`,`label_id`,`assort_id`) 
+		 VALUES 
+ 		(#{title},#{articleText},#{articleSource},#{userId},#{publicState},#{topState},#{createTime},#{modifyTime},#{labelId},#{assortId}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="update" parameterType="com.lovesher.blog.resposity.bean.Article">
+		 UPDATE t_article
+		 SET 
+			 <if test="title !=null"> `title` = #{title},</if>
+			 <if test="articleText !=null"> `article_text` = #{articleText},</if>
+			 <if test="articleSource !=null"> `article_source` = #{articleSource},</if>
+			 <if test="userId !=null"> `user_id` = #{userId},</if>
+			 <if test="publicState !=null"> `public_state` = #{publicState},</if>
+			 <if test="topState !=null"> `top_state` = #{topState},</if>
+			 <if test="createTime !=null"> `create_time` = #{createTime},</if>
+			 <if test="modifyTime !=null"> `modify_time` = #{modifyTime},</if>
+			 <if test="labelId !=null"> `label_id` = #{labelId},</if>
+			 <if test="assortId !=null"> `assort_id` = #{assortId},</if>
+		 `id` = `id`		 WHERE `id` = #{id}
+	</update>
+
+</mapper>

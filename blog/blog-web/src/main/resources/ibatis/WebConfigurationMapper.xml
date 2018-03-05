@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovesher.blog.resposity.mapper.WebConfigurationMapper">
+
+	<!-- 结果映射 resultMap-->
+	<resultMap id="BaseResultMap" type="com.lovesher.blog.resposity.bean.WebConfiguration">
+		 <result column="id" property="id"/>
+		 <result column="title" property="title"/>
+		 <result column="subtitle" property="subtitle"/>
+		 <result column="statu" property="statu"/>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		`id`,`title`,`subtitle`,`statu`
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultMap="BaseResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_web_configuration
+		 WHERE `id` = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById">
+		 DELETE FROM t_web_configuration
+		 WHERE `id` = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.lovesher.blog.resposity.bean.WebConfiguration">
+		 INSERT INTO t_web_configuration
+ 		(`title`,`subtitle`,`statu`) 
+		 VALUES 
+ 		(#{title},#{subtitle},#{statu}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="update" parameterType="com.lovesher.blog.resposity.bean.WebConfiguration">
+		 UPDATE t_web_configuration
+		 SET 
+			 <if test="title !=null"> `title` = #{title},</if>
+			 <if test="subtitle !=null"> `subtitle` = #{subtitle},</if>
+			 <if test="statu !=null"> `statu` = #{statu},</if>
+		 `id` = `id`		 WHERE `id` = #{id}
+	</update>
+
+</mapper>

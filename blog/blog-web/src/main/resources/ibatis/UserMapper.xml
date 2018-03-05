@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovesher.blog.resposity.mapper.UserMapper">
+
+	<!-- 结果映射 resultMap-->
+	<resultMap id="BaseResultMap" type="com.lovesher.blog.resposity.bean.User">
+		 <result column="id" property="id"/>
+		 <result column="user_name" property="userName"/>
+		 <result column="real_name" property="realName"/>
+		 <result column="phone" property="phone"/>
+		 <result column="email" property="email"/>
+		 <result column="create_time" property="createTime"/>
+		 <result column="modify_time" property="modifyTime"/>
+		 <result column="status" property="status"/>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		`id`,`user_name`,`real_name`,`phone`,`email`,`create_time`,`modify_time`,`status`
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultMap="BaseResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_user
+		 WHERE `id` = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById">
+		 DELETE FROM t_user
+		 WHERE `id` = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.lovesher.blog.resposity.bean.User">
+		 INSERT INTO t_user
+ 		(`user_name`,`real_name`,`phone`,`email`,`create_time`,`modify_time`,`status`) 
+		 VALUES 
+ 		(#{userName},#{realName},#{phone},#{email},#{createTime},#{modifyTime},#{status}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="update" parameterType="com.lovesher.blog.resposity.bean.User">
+		 UPDATE t_user
+		 SET 
+			 <if test="userName !=null"> `user_name` = #{userName},</if>
+			 <if test="realName !=null"> `real_name` = #{realName},</if>
+			 <if test="phone !=null"> `phone` = #{phone},</if>
+			 <if test="email !=null"> `email` = #{email},</if>
+			 <if test="createTime !=null"> `create_time` = #{createTime},</if>
+			 <if test="modifyTime !=null"> `modify_time` = #{modifyTime},</if>
+			 <if test="status !=null"> `status` = #{status},</if>
+		 `id` = `id`		 WHERE `id` = #{id}
+	</update>
+
+</mapper>

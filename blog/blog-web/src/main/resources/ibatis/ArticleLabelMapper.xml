@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lovesher.blog.resposity.mapper.ArticleLabelMapper">
+
+	<!-- 结果映射 resultMap-->
+	<resultMap id="BaseResultMap" type="com.lovesher.blog.resposity.bean.ArticleLabel">
+		 <result column="id" property="id"/>
+		 <result column="label_name" property="labelName"/>
+		 <result column="create_time" property="createTime"/>
+		 <result column="modify_time" property="modifyTime"/>
+		 <result column="user_id" property="userId"/>
+	</resultMap>
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		`id`,`label_name`,`create_time`,`modify_time`,`user_id`
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectById" resultMap="BaseResultMap">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM t_article_label
+		 WHERE `id` = #{id}
+	</select>
+
+	<!--删除：根据主键ID删除-->
+	<delete id="deleteById">
+		 DELETE FROM t_article_label
+		 WHERE `id` = #{id}
+	</delete>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="com.lovesher.blog.resposity.bean.ArticleLabel">
+		 INSERT INTO t_article_label
+ 		(`label_name`,`create_time`,`modify_time`,`user_id`) 
+		 VALUES 
+ 		(#{labelName},#{createTime},#{modifyTime},#{userId}) 
+	</insert>
+
+	<!-- 修 改-->
+	<update id="update" parameterType="com.lovesher.blog.resposity.bean.ArticleLabel">
+		 UPDATE t_article_label
+		 SET 
+			 <if test="labelName !=null"> `label_name` = #{labelName},</if>
+			 <if test="createTime !=null"> `create_time` = #{createTime},</if>
+			 <if test="modifyTime !=null"> `modify_time` = #{modifyTime},</if>
+			 <if test="userId !=null"> `user_id` = #{userId},</if>
+		 `id` = `id`		 WHERE `id` = #{id}
+	</update>
+
+</mapper>

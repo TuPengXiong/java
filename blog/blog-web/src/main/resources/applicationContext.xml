@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.3.xsd	
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd"
+	default-lazy-init="true">
+
+	<context:property-placeholder location="classpath*:/blog.properties"
+		ignore-resource-not-found="true" ignore-unresolvable="true" />
+	<context:component-scan base-package="com.lovesher.blog">
+		<!-- <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" 
+			/> -->
+	</context:component-scan>
+
+	<!--阿里druid数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!--数据库基本信息配置 -->
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="filters" value="${filters}" />
+		<!--最大并发连接数 -->
+		<property name="maxActive" value="${maxActive}" />
+		<!--初始化连接数量 -->
+		<property name="initialSize" value="${initialSize}" />
+		<!--配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${maxWait}" />
+		<!--最小空闲连接数 -->
+		<property name="minIdle" value="${minIdle}" />
+		<!--配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+		<!--配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />
+		<property name="validationQuery" value="${validationQuery}" />
+		<property name="testWhileIdle" value="${testWhileIdle}" />
+		<property name="testOnBorrow" value="${testOnBorrow}" />
+		<property name="testOnReturn" value="${testOnReturn}" />
+		<property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}" />
+		<!--打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="${removeAbandoned}" />
+		<!--1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+		<!--关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="${logAbandoned}" />
+	</bean>
+
+	<!-- 多数据源 -->
+	<!-- <bean id="dataSourceGroup" class="org.apache.ibatis.ds.CDatasource"> 
+		<property name="targetDataSources"> <map key-type="java.lang.Integer"> <entry 
+		key="0" value-ref="dataSource1" /> </map> </property> <property name="defaultTargetDataSource" 
+		ref="dataSource1" /> </bean> -->
+
+	<bean id="dataSourceTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="dataSourceTransactionManager" />
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="mapperLocations" value="classpath:ibatis/*.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 验证码 -->
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+		<property name="config">
+			<bean class="com.google.code.kaptcha.util.Config">
+				<constructor-arg>
+					<props>
+						<prop key="kaptcha.border">no</prop>
+						<prop key="kaptcha.border.color">105,179,90</prop>
+						<prop key="kaptcha.textproducer.font.color">0,0,0</prop>
+						<prop key="kaptcha.image.width">130</prop>
+						<prop key="kaptcha.textproducer.font.size">30</prop>
+						<!-- <prop key="kaptcha.noise.impl">net.showcoo.Noise</prop> -->
+						<prop key="kaptcha.image.height">40</prop>
+						<prop key="kaptcha.textproducer.char.space">5</prop>
+						<prop key="kaptcha.session.key">_CAPTCHA_SESSION_KEY_</prop>
+						<prop key="kaptcha.background.clear.from">white</prop>
+						<prop key="kaptcha.background.clear.to">white</prop>
+						<prop key="kaptcha.textproducer.char.string">1234567890abcdefghijklmnpqrstuvwxyz</prop>
+						<prop key="kaptcha.textproducer.char.length">4</prop>
+						<prop key="kaptcha.textproducer.font.names">Tahoma,Arial,微软雅黑</prop>
+						<prop key="kaptcha.obscurificator.impl">com.google.code.kaptcha.impl.ShadowGimpy</prop>
+					</props>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+
+</beans>
