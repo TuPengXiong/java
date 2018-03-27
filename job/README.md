@@ -1,40 +1,40 @@
 ﻿http://mesos.apache.org/documentation/latest/building/
 
-# Install a recent kernel for full support of process isolation.
+* Install a recent kernel for full support of process isolation.
 ```
 $ sudo rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 $ sudo rpm -Uvh http://www.elrepo.org/elrepo-release-6-6.el6.elrepo.noarch.rpm
 $ sudo yum --enablerepo=elrepo-kernel install -y kernel-lt
 ```
-# Make the just installed kernel the one booted by default, and reboot.
+* Make the just installed kernel the one booted by default, and reboot.
 ```
 $ sudo sed -i 's/default=1/default=0/g' /boot/grub/grub.conf
 $ sudo reboot
 ```
-# Install a few utility tools. This also forces an update of `nss`,
-# which is necessary for the Java bindings to build properly.
+* Install a few utility tools. This also forces an update of `nss`,
+* which is necessary for the Java bindings to build properly.
 ```
 $ sudo yum install -y tar wget git which nss
 ```
 
-# 'Mesos > 0.21.0' requires a C++ compiler with full C++11 support,
-# (e.g. GCC > 4.8) which is available via 'devtoolset-2'.
-# Fetch the Scientific Linux CERN devtoolset repo file.
+* 'Mesos > 0.21.0' requires a C++ compiler with full C++11 support,
+* (e.g. GCC > 4.8) which is available via 'devtoolset-2'.
+* Fetch the Scientific Linux CERN devtoolset repo file.
 ```
 $ sudo wget -O /etc/yum.repos.d/slc6-devtoolset.repo http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
 ```
-# Import the CERN GPG key.
+* Import the CERN GPG key.
 ```
 $ sudo rpm --import http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/RPM-GPG-KEY-cern
 ```
-# Fetch the Apache Maven repo file.
+* Fetch the Apache Maven repo file.
 ```
 $ sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
 ```
 
-# 'Mesos > 0.21.0' requires 'subversion > 1.8' devel package, which is
-# not available in the default repositories.
-# Create a WANdisco SVN repo file to install the correct version:
+* 'Mesos > 0.21.0' requires 'subversion > 1.8' devel package, which is
+* not available in the default repositories.
+* Create a WANdisco SVN repo file to install the correct version:
 ```
 $ sudo bash -c 'cat > /etc/yum.repos.d/wandisco-svn.repo <<EOF
 [WANdiscoSVN]
@@ -45,42 +45,42 @@ gpgcheck=1
 gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
 EOF'
 ```
-# Install essential development tools.
+* Install essential development tools.
 ```
 $ sudo yum groupinstall -y "Development Tools"
 ```
-# Install 'devtoolset-2-toolchain' which includes GCC 4.8.2 and related packages.
+* Install 'devtoolset-2-toolchain' which includes GCC 4.8.2 and related packages.
 ```
 $ sudo yum install -y devtoolset-2-toolchain
 ```
-# Install other Mesos dependencies.
+* Install other Mesos dependencies.
 ```
 $ sudo yum install -y apache-maven python-devel python-six python-virtualenv java-1.7.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
 ```
-# Enter a shell with 'devtoolset-2' enabled.
+* Enter a shell with 'devtoolset-2' enabled.
 ```
 $ scl enable devtoolset-2 bash
 $ g++ --version  # Make sure you've got GCC > 4.8!
 ```
-# Process isolation is using cgroups that are managed by 'cgconfig'.
-# The 'cgconfig' service is not started by default on CentOS 6.6.
-# Also the default configuration does not attach the 'perf_event' subsystem.
-# To do this, add 'perf_event = /cgroup/perf_event;' to the entries in '/etc/cgconfig.conf'.
+* Process isolation is using cgroups that are managed by 'cgconfig'.
+* The 'cgconfig' service is not started by default on CentOS 6.6.
+* Also the default configuration does not attach the 'perf_event' subsystem.
+* To do this, add 'perf_event = /cgroup/perf_event;' to the entries in '/etc/cgconfig.conf'.
 ```
 $ sudo yum install -y libcgroup
 $ sudo service cgconfig start
 ```
 
-## Building Mesos 
-# Change working directory.
+* Building Mesos 
+* Change working directory.
 ```
 $ cd mesos
 ```
-# Bootstrap (Only required if building from git repository).
+* Bootstrap (Only required if building from git repository).
 ```
 $ ./bootstrap
 ```
-# Configure and build.
+* Configure and build.
 ```
 $ mkdir build
 $ cd build
@@ -89,7 +89,7 @@ $ make
 $ make install 
 ```
 
-# elastic-job-schedule
+* elastic-job-schedule
 ```
 git clone https://github.com/elasticjob/elastic-job-lite.git
 git checkout 2.1.5
