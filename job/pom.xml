@@ -136,18 +136,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		 <filters> <!-- 指定使用的 filter -->
-          <filter>src/main/resources/config/${runtime.env}/shop.properties</filter>
-          <filter>src/main/resources/config/${runtime.env}/log4j.properties</filter>
-          <filter>src/main/resources/config/${runtime.env}/dscm.properties</filter>
-        </filters>
-         <resources>
-          <resource> <!-- 配置需要被替换的资源文件路径, *.properties 应该在 src/main/resource 目录下 -->
-            <directory>src/main/resources</directory>
-            <filtering>true</filtering> <!-- 是否使用过滤器 -->
-          </resource>
-        </resources>
-        
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
