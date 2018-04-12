@@ -1,4 +1,4 @@
-package com.tupengxiong.jvm;
+package com.tupengxiong.jvm.beans;
 
 import java.util.Date;
 
@@ -7,14 +7,14 @@ import java.util.Date;
  *
  */
 public class User {
-private Long id;
-	
+	private Long id;
+
 	private String username;
-	
+
 	private String password;
-	
+
 	private Date createTime;
-	
+
 	private Date updateTime;
 
 	public Long getId() {
@@ -55,5 +55,23 @@ private Long id;
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public User(Long id, String username, String password, Date createTime, Date updateTime) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.createTime = createTime;
+		this.updateTime = updateTime;
+	}
+
+	public User(Long id) {
+		super();
+		this.id = id;
+	}
+
+	public User() {
+		super();
 	}
 }

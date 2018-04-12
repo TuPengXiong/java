@@ -11,7 +11,7 @@ package com.tupengxiong.jvm.pc.impl;
 
 import java.util.Date;
 
-import com.tupengxiong.jvm.User;
+import com.tupengxiong.jvm.beans.User;
 import com.tupengxiong.jvm.pc.Consumer;
 import com.tupengxiong.jvm.pc.Producer;
 

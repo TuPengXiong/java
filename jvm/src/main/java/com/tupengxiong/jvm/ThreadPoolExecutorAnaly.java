@@ -261,8 +261,7 @@ public class ThreadPoolExecutorAnaly {
 
 		@Override
 		public void run() {
-			System.out
-					.println(Thread.currentThread().getName() + ">>>MyTask2>>" + threadPoolExecutorAnaly.setPoolSize());
+			System.out.println(Thread.currentThread().getName() + ">>>MyTask2>>" + threadPoolExecutorAnaly.setPoolSize());
 			System.out.println("end.......................................");
 		}
 

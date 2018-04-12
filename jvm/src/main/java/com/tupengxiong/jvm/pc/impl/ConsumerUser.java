@@ -10,7 +10,7 @@
 package com.tupengxiong.jvm.pc.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.tupengxiong.jvm.User;
+import com.tupengxiong.jvm.beans.User;
 import com.tupengxiong.jvm.pc.Consumer;
 import com.tupengxiong.jvm.pc.Producer;
 
