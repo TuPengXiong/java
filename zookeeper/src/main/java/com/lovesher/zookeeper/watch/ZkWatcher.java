@@ -33,11 +33,10 @@ public class ZkWatcher implements Watcher{
 	
 	private static CountDownLatch countDownLatch = new CountDownLatch(1);
 	
-	@SuppressWarnings("static-access")
 	public void process(WatchedEvent event) {
-		if(event.getType() == event.getType().None && event.getState() == event.getState().SyncConnected){
+		if(event.getType() == Event.EventType.None && event.getState() == Event.KeeperState.SyncConnected){
 			countDownLatch.countDown();
-		}else if(event.getType() == event.getType().None){
+		}else if(event.getType() == Event.EventType.None){
 			countDownLatch = new CountDownLatch(1); 
 		}
 		LOGGER.info("ZkWatcher process:"+JSON.toJSONString(event));
