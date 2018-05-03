@@ -7,7 +7,13 @@
  * 
 */  
   
-package com.lovesher.proxy;  
+package com.lovesher.proxy;
+
+import com.lovesher.proxy.support.CGLib.CGLibProxy;
+import com.lovesher.proxy.support.CGLib.MethodInterceptor;
+import com.lovesher.proxy.support.java.InvocationHandler;
+import com.lovesher.proxy.support.java.JavaProxy;
+
 /** 
  * ClassName:ProxyFactory <br/> 
  * Function: TODO ADD FUNCTION. <br/> 
@@ -20,5 +26,12 @@ package com.lovesher.proxy;
  */
 public class ProxyFactory {
 
+	public static Object getCGLibProxy(Class<?>[] interfaces,MethodInterceptor interceptor){
+		return CGLibProxy.getProxy(interfaces, interceptor);
+	}
+	
+	public static Object getJavaProxy(Class<?>[] interfaces,InvocationHandler invocationHandler){
+		return JavaProxy.getProxy(interfaces, invocationHandler);
+	}
 }
   

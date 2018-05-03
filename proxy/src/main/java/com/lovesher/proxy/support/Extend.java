@@ -7,7 +7,7 @@
  * 
 */  
   
-package com.lovesher.proxy.support.java;  
+package com.lovesher.proxy.support;  
 /** 
  * ClassName:ExtendProxy <br/> 
  * Function: TODO ADD FUNCTION. <br/> 
@@ -18,14 +18,12 @@ package com.lovesher.proxy.support.java;
  * @since    JDK 1.7
  * @see       
  */
-public abstract class ExtendProxy {
+public abstract class Extend {
 
 	
-	void doBefore() {
-	}
+	public abstract void doBefore();
 	
 	
-	void doAfter() {
-	}
+	public abstract void doAfter();
 }
   
