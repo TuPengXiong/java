@@ -9,7 +9,9 @@
 
 package com.lovesher.aspect;
 
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
@@ -72,6 +74,13 @@ public class Aspect{
     @Before("aspectHelloServiceTarget()")
     public void aspectHelloServiceTargetBefore() {
         System.out.println("aspectHelloServiceTargetBefore........");
+    }
+    
+    @Around("aspectHelloServiceTarget()")
+    public void aspectHelloServiceTargetAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        System.out.println("aspectHelloServiceTargetAround START........");
+        System.out.println("aspectHelloServiceTargetAround:"+proceedingJoinPoint.proceed());
+        System.out.println("aspectHelloServiceTargetAround END........");
     }
     
     @After("aspectHelloServiceTarget()")
