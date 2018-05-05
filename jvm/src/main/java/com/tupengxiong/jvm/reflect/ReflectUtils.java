@@ -94,7 +94,6 @@ public class ReflectUtils {
 
 	public void invokeSetMethod(Object obj, String field, Object value) {
 		
-		System.out.println("method:"+JSON.toJSONString(field));
 		Class<?> claz = obj.getClass();
 		Field clazField = getFiled(claz, field);
 		if (null == clazField) {
