@@ -8,10 +8,19 @@ import java.nio.channels.FileChannel;
 public class NioTest {
 	
 	public static void main(String[] args) throws IOException {
-		channelBuffer();
+		testChannelToBuffer();
+		testFileChannelToChannel();
 	}
 
-	private static void channelBuffer() throws IOException{
+	/**
+	 * channel to buffer
+	 * @Title: testChannelToBuffer   
+	 * @Description: channel to buffer  
+	 * @param: @throws IOException      
+	 * @return: void      
+	 * @throws
+	 */
+	private static void testChannelToBuffer() throws IOException{
 		String name = NioTest.class.getClassLoader().getResource("README.md").getPath();
 		RandomAccessFile aFile = new RandomAccessFile(name, "rw");
 		/**
@@ -75,6 +84,41 @@ public class NioTest {
 		
 		//关闭文件channel流
 		aFile.close();
+	}
+	
+	/**
+	 * 从文件channelFrom to channelTo
+	 * @Title: testFileChannelToChannel   
+	 * @Description: 从文件channelFrom to channelTo
+	 * @param: @throws FileNotFoundException      
+	 * @return: void      
+	 * @throws IOException
+	 */
+	@SuppressWarnings("resource")
+	private static void testFileChannelToChannel() throws IOException{
+		String name = NioTest.class.getClassLoader().getResource("README.md").getPath();
+		RandomAccessFile aFile = new RandomAccessFile(name, "rw");
+		/**
+		 * 获取文件channel FileChannelImpl
+		 */
+		FileChannel fromChannel = aFile.getChannel();
+		
+		String nameTo = NioTest.class.getClassLoader().getResource("README1.md").getPath();
+		System.out.println(nameTo);
+		RandomAccessFile aFileTo = new RandomAccessFile(nameTo, "rw");
+		/**
+		 * 获取文件channel FileChannelImpl
+		 */
+		FileChannel toChannel = aFileTo.getChannel();
+		
+		long position = 0;
+		long count = fromChannel.size();
+		//to <- from
+		//System.out.println(toChannel.transferFrom(fromChannel, position, count));
+		System.out.println(fromChannel.transferTo(position, count, toChannel));
+		
+		toChannel.close();
+		fromChannel.close();
 	}
 	
 }
