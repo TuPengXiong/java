@@ -9,8 +9,8 @@ public class SelectionKeyFactory {
 
 	/**
 	 * 
-	 * @Title: getSelectionKey   
-	 * @Description: getSelectionKey   
+	 * @Title: channelRegisterToSelector   
+	 * @Description: channelRegisterToSelector   
 	 * @param: @param selectableChannel
 	 * @param: @param selector
 	 * @param: @param ops 
@@ -25,7 +25,7 @@ public class SelectionKeyFactory {
 	 * @return: SelectionKey      
 	 * @throws
 	 */
-	public static SelectionKey getSelectionKey(SelectableChannel selectableChannel,Selector selector,int ops, Object att) throws ClosedChannelException{
+	public static SelectionKey channelRegisterToSelector(SelectableChannel selectableChannel,Selector selector,int ops, Object att) throws ClosedChannelException{
 		return selectableChannel.register(selector, ops , att);
 	}
 }

@@ -1,6 +1,8 @@
+# JVM （java visual machine） 
+```
 package com.tupengxiong.jvm;
 
-public class StringAnaly {
+public class Test {
 	public static void main(String[] args) {
 		// 方法区的常量池中
 		String str = "abc";
@@ -26,3 +28,5 @@ public class StringAnaly {
 		System.out.println(str1.hashCode() == str2.hashCode());
 	}
 }
+
+```
