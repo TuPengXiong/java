@@ -53,7 +53,7 @@ public class FileSystemFactory {
 			fileSystem = FileSystemFactory.getFileSystem(new URI("hdfs://192.168.152.130:9000"),
 					ConfigurationFactory.getConfiguration(), "tpx");
 
-			Path userPath = new Path("/user/tpx");
+			Path userPath = new Path("/");
 			FileStatus status[] = fileSystem.listStatus(userPath);
 			for (int i = 0; i < status.length; i++) {
 				FileStatus fileStatus = status[i];
