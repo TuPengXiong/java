@@ -48,10 +48,10 @@ public class JobFactory {
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException, InterruptedException, URISyntaxException {
 		Configuration configuration = ConfigurationFactory.getConfiguration();
-		configuration.set("fs.defaultFS", "hdfs://master:9000");
+		configuration.set("fs.defaultFS", "hdfs://192.168.152.130:9000");
 		Job job = getJob(configuration, "testJobName");
-		String inputPath = "hdfs://master:9000/input/hello";
-		String outputPath = "hdfs://master:9000/output/hello";
+		String inputPath = "hdfs://192.168.152.130:9000/input/hello";
+		String outputPath = "hdfs://192.168.152.130:9000/output/hello";
 		//获取文件系统
 		FileSystem fileSystem = FileSystemFactory.getFileSystem(new URI(inputPath), configuration);
 		//检查文件是否存在

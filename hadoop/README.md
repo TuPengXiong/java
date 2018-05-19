@@ -12,6 +12,24 @@
 
 * map 将input split 后交给map处理 
 * map 处理后得到的output 进行partion sort merge 存放在磁盘上
-* reduce 将  map merge后的数据提取 进行reduce处理                                                                                                                                                                         
+* reduce 将  map merge后的数据提取 进行reduce处理        
+
+
+## [eclipse plugin](https://github.com/winghc/hadoop2x-eclipse-plugin.git)
+```
+git clone https://github.com/winghc/hadoop2x-eclipse-plugin.git
+cd hadoop2x-eclipse-plugin
+cd src/contrib/eclipse-plugin
+
+ant download http://ant.apache.org/bindownload.cgi
+
+ant jar -Dversion=2.9.0 -Dhadoop.version=2.9.0 -Declipse.home=/d/dev/eclipse -Dhadoop.home=/d/dev/hadoop-2.9.0/hadoop-2.9.0
+
+```         
+
+## java win 需要hadoop.dll winutil.exe
+
+* https://github.com/steveloughran/winutil  
+                                                                                                                                                        
 
 
