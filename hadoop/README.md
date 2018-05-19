@@ -6,6 +6,12 @@
 * secondNamenode 主要是负责将namenode 所有的文件索引fsname文件 和操作日志edits文件合并产生新的edits 并传输到namenode上
 * datanode 主要是存放文件,文件超过指定大小会分为多个datanode, datanode 会根据配置文件的集群数量会备份
 
+## mapreduce
+
 ### mapreduce 是一个分布式计算框架 离线式计算 （流式实时计算 storm） 
+
+* map 将input split 后交给map处理 
+* map 处理后得到的output 进行partion sort merge 存放在磁盘上
+* reduce 将  map merge后的数据提取 进行reduce处理                                                                                                                                                                         
 
 
