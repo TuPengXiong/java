@@ -50,8 +50,8 @@ public class FileSystemFactory {
 		FileSystem fileSystem = null;
 		Logger logger = Logger.getLogger(FileSystemFactory.class);
 		try {
-			fileSystem = FileSystemFactory.getFileSystem(new URI("hdfs://192.168.152.130:9000"),
-					ConfigurationFactory.getConfiguration(), "tpx");
+			fileSystem = FileSystemFactory.getFileSystem(new URI("hdfs://node1:9000"),
+					ConfigurationFactory.getConfiguration(), "root");
 
 			Path userPath = new Path("/");
 			FileStatus status[] = fileSystem.listStatus(userPath);

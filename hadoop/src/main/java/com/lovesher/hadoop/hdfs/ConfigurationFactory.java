@@ -18,6 +18,6 @@ public class ConfigurationFactory {
 
 	public static void main(String[] args) {
 		Configuration configuration = ConfigurationFactory.getConfiguration();
-		configuration.set("fs.defaultFS", "hdfs://master:9000");
+		configuration.set("fs.defaultFS", "hdfs://node1:9000");
 	}
 }
