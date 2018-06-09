@@ -32,7 +32,7 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/**").permitAll() //匿名访问
+                    .antMatchers("/oauth/*").permitAll() //匿名访问
                     .antMatchers("/api/**").authenticated() //认证访问
                 .and()
                     .formLogin()
