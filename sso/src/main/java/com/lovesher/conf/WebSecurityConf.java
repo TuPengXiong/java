@@ -12,10 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.lovesher.entryPoint.DtLoginUrlAuthenticationEntryPoint;
+import com.lovesher.filters.login.plugins.LoginFilterPlugin;
 import com.lovesher.service.DtUserDetailsService;
-
-import javax.annotation.Resource;
 
 /**
  * Created by tpx on 2017/7/12.
@@ -25,8 +26,10 @@ import javax.annotation.Resource;
 @EnableGlobalMethodSecurity(securedEnabled=true , prePostEnabled = true)
 public class WebSecurityConf extends WebSecurityConfigurerAdapter {
 
-    @Resource
+	@Autowired
     private DtUserDetailsService dtUserDetailsService;
+    @Autowired
+    private DtLoginUrlAuthenticationEntryPoint dtLoginUrlAuthenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,10 +39,14 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                     .antMatchers("/api/**").authenticated() //认证访问
                 .and()
                     .formLogin()
+                    .loginPage("/login")
                     .permitAll()   //登陆页匿名访问
                 .and()
                     .logout()
+                    .logoutSuccessUrl("/logoutSuccess")
                     .permitAll()   //退出登陆允许访问
+                .and()
+                	.exceptionHandling().authenticationEntryPoint(dtLoginUrlAuthenticationEntryPoint)
                 .and()
                     .cors()
                 .and()
@@ -47,6 +54,17 @@ public class WebSecurityConf extends WebSecurityConfigurerAdapter {
                 .and()
                     .csrf()
                     .disable(); //防注入
+        
+			    //@see org.springframework.security.config.annotation.web.builders.FilterComparator
+			    //LoginUrlAuthenticationEntryPoint
+			    //	.addFilterBefore(new Phonefilter(), UsernamePasswordAuthenticationFilter.class)
+                for(LoginFilterPlugin loginFilterPlugin:dtLoginUrlAuthenticationEntryPoint.getLoginFilters().values()){
+                	http
+		                .formLogin()
+		                .loginPage(loginFilterPlugin.getLoginUrl())
+		                .permitAll();   //登陆页匿名访问
+                	http.addFilterBefore(loginFilterPlugin, UsernamePasswordAuthenticationFilter.class);
+                }
     }
 
     @Bean

@@ -9,6 +9,7 @@ import com.lovesher.beans.Client;
 
 @Repository
 public interface ClientDao extends JpaRepository<Client, Long> {
+	
     Client findByClientId(String clientId);
 
     Page<Client> findAll(Pageable pageable);
