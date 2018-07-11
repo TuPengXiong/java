@@ -28,7 +28,7 @@ public class WordReader implements IRichSpout {
 	@Override
 	public void ack(Object msgId) {
 		getLogger().info("ack WordReader");
-		System.out.println("OK:" + msgId);
+		getLogger().info("OK:" + msgId);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class WordReader implements IRichSpout {
 	@Override
 	public void fail(Object msgId) {
 		getLogger().info("fail WordReader");
-		System.out.println("FAIL:" + msgId);
+		getLogger().info("FAIL:" + msgId);
 	}
 
 	/**

@@ -3,6 +3,7 @@ package com.lovesher.storm;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -18,7 +19,7 @@ import com.lovesher.storm.spouts.WordReader;
 
 public class TopologyMain {
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println("TopologyMain start.........");
+		Logger.getLogger(TopologyMain.class).info("TopologyMain start.........");
 		// 定义拓扑
 		TopologyBuilder builder = new TopologyBuilder();
 		//数据源
@@ -29,32 +30,32 @@ public class TopologyMain {
 
 		// 配置
 		Config conf = new Config();
-		conf.put("wordsFile", "/usr/local/apache-storm-1.2.1/bin/test.txt");
+		conf.put("wordsFile", TopologyMain.class.getResource("/test.txt").getPath());
 		conf.setDebug(false);
-		List<String> zkServers = new ArrayList<String>();
-		zkServers.add("192.168.37.133");
+		/*List<String> zkServers = new ArrayList<String>();
+		zkServers.add("127.0.0.1");
 		conf.put(Config.STORM_ZOOKEEPER_SERVERS, zkServers);
 		conf.put(Config.STORM_ZOOKEEPER_PORT, 2181);
-		conf.put(Config.STORM_LOCAL_HOSTNAME, "192.168.37.133");
+		conf.put(Config.STORM_LOCAL_HOSTNAME, "127.0.0.1");*/
 
 		// 运行拓扑
-		conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 1);
+		//conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 1);
 		//本地模式
-		/*try{
-			LocalCluster cluster = new LocalCluster();
-			cluster.submitTopology("Getting-Started-Topologie", conf, builder.createTopology());
-			Thread.sleep(1000);
-			cluster.shutdown();
+		LocalCluster cluster = new LocalCluster();
+		try{
+			cluster.submitTopology("test", conf, builder.createTopology());
 		}catch(Exception e){
 			e.printStackTrace();
-		}*/
+		}
+		Thread.sleep(15000);
+		cluster.shutdown();
 		//生产环境
-		try {
+		/*try {
 			StormSubmitter.submitTopology("Getting-Started-Topologie", conf, builder.createTopology());
 		} catch (AlreadyAliveException | InvalidTopologyException | AuthorizationException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
-		System.out.println("TopologyMain shutdown.........");
+		Logger.getLogger(TopologyMain.class).info("TopologyMain shutdown.........");
 	}
 }
