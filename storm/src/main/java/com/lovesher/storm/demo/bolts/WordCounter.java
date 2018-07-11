@@ -1,4 +1,4 @@
-package com.lovesher.storm.bolts;
+package com.lovesher.storm.demo.bolts;
 
 import java.util.HashMap;
 import java.util.Map;

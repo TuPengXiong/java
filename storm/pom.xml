@@ -13,7 +13,41 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<runtime.env>src/main/resources/config/dev</runtime.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<runtime.env>src/main/resources/config/test</runtime.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>test168</id>
+			<properties>
+				<runtime.env>src/main/resources/config/test168</runtime.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>prev</id>
+			<properties>
+				<runtime.env>src/main/resources/config/prev</runtime.env>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<runtime.env>src/main/resources/config/prod</runtime.env>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -25,6 +59,64 @@
 			<groupId>org.apache.storm</groupId>
 			<artifactId>storm-core</artifactId>
 			<version>1.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cloudy.dscm</groupId>
+			<artifactId>cloudy-dscm</artifactId>
+			<version>1.0.37</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cloudy.cddl</groupId>
+			<artifactId>cloudy-cddl</artifactId>
+			<version>1.0.37</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aidai.dc.loanbusiness</groupId>
+			<artifactId>loanbusiness-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.3.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.1.2</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.20.0-GA</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.2.0</version>
 		</dependency>
 	</dependencies>
 
@@ -40,6 +132,51 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>copy-properties</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${runtime.env}</directory>
+									<includes>
+										<include>*.properties</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>lib</outputDirectory>
+							<excludeArtifactIds>
+								junit
+							</excludeArtifactIds>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin> -->
 		</plugins>
 	</build>
 </project>

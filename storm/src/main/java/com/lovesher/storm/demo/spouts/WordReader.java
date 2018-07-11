@@ -1,9 +1,10 @@
-package com.lovesher.storm.spouts;
+package com.lovesher.storm.demo.spouts;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.apache.storm.spout.SpoutOutputCollector;
@@ -12,6 +13,10 @@ import org.apache.storm.topology.IRichSpout;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
+import org.cloudy.fastjson.JSON;
+
+import com.aidai.dc.loanbusiness.service.BorrowTenderService;
+import com.lovesher.storm.listener.SpringContextExt;
 
 @SuppressWarnings("serial")
 public class WordReader implements IRichSpout {
@@ -48,6 +53,10 @@ public class WordReader implements IRichSpout {
 	@Override
 	public void nextTuple() {
 		getLogger().info("nextTuple WordReader");
+		BorrowTenderService borrowTenderService = SpringContextExt.getBean("borrowTenderService",BorrowTenderService.class);
+		Random rand = new Random();
+		Long randNum = (long) (rand.nextInt(923069 - 909949) + 909949);
+		getLogger().info(JSON.toJSONString(borrowTenderService.selectById(randNum)));
 		/**
 		 * 这个方法会不断的被调用，直到整个文件都读完了，我们将等待并返回。
 		 */
