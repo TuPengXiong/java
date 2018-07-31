@@ -23,6 +23,7 @@ public class Test {
 	public static void main(String[] args) {
 		ProducerUser producerUser = new ProducerUser(1,1);
 		new Thread(producerUser).start();
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 	}
 }
   
