@@ -1,15 +1,10 @@
 package com.tupengxiong.jvm.security;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-
-import javax.crypto.Cipher;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
@@ -26,7 +21,8 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
  */
 public class RSA {
 
-	public static final String SIGN_ALGORITHMS = "SHA1WithRSA";
+	//SHA1WithRSA(RSA) SHA256WithRSA(RSA2)
+	public static final String SIGN_ALGORITHMS = "SHA256WithRSA";
 	
 	public static final String CHARSET = "UTF-8";
 
@@ -95,47 +91,6 @@ public class RSA {
 	}
 
 	/**
-	 * 解密
-	 * 
-	 * @param content
-	 *            密文
-	 * @param private_key
-	 *            商户私钥
-	 * @param input_charset
-	 *            编码格式
-	 * @return 解密后的字符串
-	 */
-	public static String decrypt(String content, String private_key) throws Exception {
-		PrivateKey prikey = getPrivateKey(private_key);
-
-		Cipher cipher = Cipher.getInstance("RSA");
-		cipher.init(Cipher.DECRYPT_MODE, prikey);
-
-		InputStream ins = new ByteArrayInputStream(Base64.decode(content));
-		ByteArrayOutputStream writer = new ByteArrayOutputStream();
-		// rsa解密的字节大小最多是128，将需要解密的内容，按128位拆开解密
-		byte[] buf = new byte[128];
-		int bufl;
-
-		while ((bufl = ins.read(buf)) != -1) {
-			byte[] block = null;
-
-			if (buf.length == bufl) {
-				block = buf;
-			} else {
-				block = new byte[bufl];
-				for (int i = 0; i < bufl; i++) {
-					block[i] = buf[i];
-				}
-			}
-
-			writer.write(cipher.doFinal(block));
-		}
-
-		return new String(writer.toByteArray(), CHARSET);
-	}
-
-	/**
 	 * 得到私钥
 	 * 
 	 * @param key
@@ -158,5 +113,15 @@ public class RSA {
 	}
 	
 	public static void main(String[] args) {
+		
+		String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs0MZ1NrPejKB3Uq1LMq0/GBPw/Mfvb9tcAlXEAt8t89gksig8iBi/D+jXHkDFM0XqXnK0sRrIxK1qCnMNpxefqRNyC7EGC10u/pJHs+M1s6CKoONlUkwezeQikdyPkwGn19NeOXUeTBxiOQjiy7+O7FBFcW1jxuSktRGyt+eIrx9pDEPYI8Na55rbpmjbQlffZ6D4BDk6wPDccz5S8niuBKFBo29IKsLT3q4ONGCsqNPZDUqRNlrKyo0GRS4685YLM8Agz5Hipu6TlLPSwtwcPL+IZl4bTP9iThW3CmvqrpXvKj1xUiMPkGu7HRnuKGj+XjFRPe9BQ3EBem5cvGTUQIDAQAB";
+		String privateKey = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzQxnU2s96MoHdSrUsyrT8YE/D8x+9v21wCVcQC3y3z2CSyKDyIGL8P6NceQMUzRepecrSxGsjErWoKcw2nF5+pE3ILsQYLXS7+kkez4zWzoIqg42VSTB7N5CKR3I+TAafX0145dR5MHGI5COLLv47sUEVxbWPG5KS1EbK354ivH2kMQ9gjw1rnmtumaNtCV99noPgEOTrA8NxzPlLyeK4EoUGjb0gqwtPerg40YKyo09kNSpE2WsrKjQZFLjrzlgszwCDPkeKm7pOUs9LC3Bw8v4hmXhtM/2JOFbcKa+qule8qPXFSIw+Qa7sdGe4oaP5eMVE970FDcQF6bly8ZNRAgMBAAECggEAAgNe5uUOL3EhxDpyjm44Wh06yBiS4q6jq/5u299FJ0tM6lkWdaGneu28B+3T+wfSnDSh8nwCOAKdx6WwhWx8Iy/1L6pWyW65QOMurwnlqwPmslOH44VO5hNZrDPhNJHmASQw2oq6OCIzJDZrr8R3VnRHJtdxkoncu4lmwiCAxiMS8hgGfq9wJZsWx21NbLCktAMilikWlb79FF2DAwwKgzjLEpdYkg/5SkIwlRhUkVe+RqDAxd5HmRHHofN/fdEeCS1KVqqInELtM0Hy9g2Eu4021kvJBjK8SeT2O0jwhp7ACwWTSjPGJ4L5ukJlUac1NXISekBb27sCFsOw7lelgQKBgQDo06IxjX9bbk+AJ/7htuaDLzC7IFdrvGa/i8f7D/7kXkCH9zfdb+Ine2zTWb4plVAoh9xqERZQbRwtpKjJE0T0otW/Htpv7Jh63/IRE4633ZePYJor9R1vOTO2kbAEPRicwj+DTsCYXDY4AXUKenSPP5kQ5U7Zi1FLKUB7vduTCwKBgQDFGqe0iKZcwb97GKnDzRGuKk+psIiEt84ejtt4eVb5CsHi1teOgUqBqRrRpFLFDemLmebfSlo/JIg3PnaQx6EXnEuCzG85bXpkPJY7bvj4NBJBAt4k0ptBkl2gNICxJYkm4jJh2D97FoV34Tcpv2JYrDX+ABCAqW9RSfR6N6rskwKBgB1jGQXIJlsUAVTbt4Al5dKJEk2MN3yRuyZSLluyGSoZ+2st+Q8qIBF7srC6kxYMkqGLBHce0QI1w2i/b85xcDKwmuoUqt2Vr2lS+urM3Sa4AXlHaC5EMgLn5W8V1HG0hHbEzd91ATo56V4IUQ2Rh0TNcjR/vQQYYZprCoiT3jMhAoGAEAMWVKg1O5vRvmJGiE2Efi2ZwyNAM+fqqrjYQ3U4B4tELPVfFYiTUO037If44WE788dQ5hrYMgD5v+MnJqPRBmYADGQnNPcb1kDFw5ZES4WPZhChk0Q4sJ7/VCBvw/RUq//8L86teYZe2VpGbPHLP4Dd8gB3Vrxs+qGTZspW7FkCgYEA0rxeXfZ35KunCdxN/ClEta13AUEZ3e2ESUqELrfQN9NrP6VhXVKOluOVrqOV/RWSFyNeBrOcYEfbBIz+WJBKrM4M6H7LB2QPLYz6htyCOmE01Cfd4rjZfeG/39UwdCV0lNYBy+J+Ih2/sqJUGWBPBZqjhnEo1En4STuBeUyk+wI=";
+	
+		System.out.println(publicKey);
+		System.out.println(privateKey);
+		String sign = sign("a=123", privateKey);
+		System.out.println(sign);
+		System.out.println(verify("a=123", sign, publicKey));
+		
 	}
 }
