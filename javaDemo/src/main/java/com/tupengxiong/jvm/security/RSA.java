@@ -5,6 +5,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
@@ -111,6 +115,27 @@ public class RSA {
 
 		return privateKey;
 	}
+	
+	/**
+     * 
+     * @param sortedParams
+     * @return
+     */
+    public static String getSignContent(Map<String, Object> sortedParams) {
+        StringBuffer content = new StringBuffer();
+        List<String> keys = new ArrayList<String>(sortedParams.keySet());
+        Collections.sort(keys);
+        int index = 0;
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            Object value = sortedParams.get(key);
+            if (StringUtils.areNotEmpty(key, (String)value)) {
+                content.append((index == 0 ? "" : "&") + key + "=" + value);
+                index++;
+            }
+        }
+        return content.toString();
+    }
 	
 	public static void main(String[] args) {
 		
