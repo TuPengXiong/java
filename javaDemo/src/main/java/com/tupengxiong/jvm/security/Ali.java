@@ -53,9 +53,9 @@ public class Ali {
 		//map.put("notify_url", "https://www.lovesher.com/common/aliPay/notify");
 		map.put("biz_content", JSON.toJSONString(dataMap));
 		map.put("sign_type", "RSA2");
-		String content = RSA.getSignContent(map);
+		String content = SHA256WithRSA.getSignContent(map);
 		
-		String sign = RSA.sign(content, privateKey);
+		String sign = SHA256WithRSA.sign(content, privateKey);
 		map.put("sign", sign);
 		
 		
@@ -64,10 +64,10 @@ public class Ali {
 		String resp = HttpUtils.post(url, map);
 		
 		map.remove("sign");
-		System.out.println(RSA.verify(content, sign, publicKey));
+		System.out.println(SHA256WithRSA.verify(content, sign, publicKey));
 		
 		System.out.println(resp);
-		System.out.println(RSA.verify(content, sign, publicKey));
+		System.out.println(SHA256WithRSA.verify(content, sign, publicKey));
 		
 		System.out.println(JSON.parseObject(resp).getJSONObject("alipay_trade_precreate_response").getString("qr_code"));
 		
@@ -77,7 +77,7 @@ public class Ali {
 		
 		sign = respJson.getString("sign");
 		System.out.println("sign--------" +sign);
-		System.out.println(RSA.verify(content, sign, publicKey));
+		System.out.println(SHA256WithRSA.verify(content, sign, publicKey));
 	}
 }
   
