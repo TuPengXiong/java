@@ -21,30 +21,23 @@ import sun.misc.BASE64Encoder;
 
 public class RSA {
 
-	public static String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQgEoj3z9JrdPNI23DbMQkl3gkGuDke7iBr5yrYyqolkTyxuBLWFwHNuGv4VKOj9fXg61QxpaJ/fxDBvMvmkBSRowHBloGFceVTx8wV/8u0DcjvTCu0IZ1zp6wjG6xBn5j66Sg/q+9hvaY2p7fkKmsvcW6VoNPgQHU1Cf01DLZmQIDAQAB+oXcINOiE3AsuZ4VJmwNZg9Y/7fY+OFRS2JAh5YMsrv2qyoGP+Z9ksre26NYR+Lt91B2lhdwJHLpQpziaANZm/ONb31fj/lwIDAQAB";
-	public static String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANCASiPfP0mt080jbcNsxCSXeCQa4OR7uIGvnKtjKqiWRPLG4EtYXAc24a/hUo6P19eDrVDGlon9/EMG8y+aQFJGjAcGWgYVx5VPHzBX/y7QNyO9MK7QhnXOnrCMbrEGfmPrpKD+r72G9pjant+Qqay9xbpWg0+BAdTUJ/TUMtmZAgMBAAECgYBSozY/Z4FW+31h5fPgK+DFu/8TGFAgXuTvCaJnz2Md9IkZTDejxT6cYWUr53toI5zhvz/XLw6FXNQ54KxMJq/s9PiZYUgq/PMrnyU4gBSTm5BmiWjdaGicVEZ1lofHjpkAchPNW/CzwxD8AeKI7QaObE+EkWbLAi6sa+nRdHKgrQJBAOwYLD2DncU15XCKS0RNzTrNohdBQcisOPHdtQO0CGZlxx3xjuU4WL6/EpdmbjTeYbOSDKCmY5vyVbYZdOWfEs8CQQDiFIwWpvW2WLxLVw3i2P55WmMMXuecwEzg++ae3Ht7nW0zNcWSsyvHh40sM8XqEzmWOzMY6JOePbkuVfWTc4cXAkBRzf5mQhiEoKwjVofF3v9hhKbJT/8vPR1uENgLtHHEqTdZFL3ihqeZUDNs6jz9bKCFy/E8KOsSueEg+6kZdwjZAkEAj2RW4fstd2VasDJb5ViaNqAEmJENOBej60L6KCJR07qqy0M8t+oaR2iLOtDvo6Jj8QxFQXQqRMCDVodAxjANKwJAL3KuaqA6kdy9RxdV3uP8nRXLY7C/1ZIK6U0pyZqKXEwpD+7Ar3hwwhPz9TeuoqjB/cCknZjw70BQFQ0/VUHW2g==";
+	public static final String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDQgEoj3z9JrdPNI23DbMQkl3gkGuDke7iBr5yrYyqolkTyxuBLWFwHNuGv4VKOj9fXg61QxpaJ/fxDBvMvmkBSRowHBloGFceVTx8wV/8u0DcjvTCu0IZ1zp6wjG6xBn5j66Sg/q+9hvaY2p7fkKmsvcW6VoNPgQHU1Cf01DLZmQIDAQAB+oXcINOiE3AsuZ4VJmwNZg9Y/7fY+OFRS2JAh5YMsrv2qyoGP+Z9ksre26NYR+Lt91B2lhdwJHLpQpziaANZm/ONb31fj/lwIDAQAB";
+	public static final String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANCASiPfP0mt080jbcNsxCSXeCQa4OR7uIGvnKtjKqiWRPLG4EtYXAc24a/hUo6P19eDrVDGlon9/EMG8y+aQFJGjAcGWgYVx5VPHzBX/y7QNyO9MK7QhnXOnrCMbrEGfmPrpKD+r72G9pjant+Qqay9xbpWg0+BAdTUJ/TUMtmZAgMBAAECgYBSozY/Z4FW+31h5fPgK+DFu/8TGFAgXuTvCaJnz2Md9IkZTDejxT6cYWUr53toI5zhvz/XLw6FXNQ54KxMJq/s9PiZYUgq/PMrnyU4gBSTm5BmiWjdaGicVEZ1lofHjpkAchPNW/CzwxD8AeKI7QaObE+EkWbLAi6sa+nRdHKgrQJBAOwYLD2DncU15XCKS0RNzTrNohdBQcisOPHdtQO0CGZlxx3xjuU4WL6/EpdmbjTeYbOSDKCmY5vyVbYZdOWfEs8CQQDiFIwWpvW2WLxLVw3i2P55WmMMXuecwEzg++ae3Ht7nW0zNcWSsyvHh40sM8XqEzmWOzMY6JOePbkuVfWTc4cXAkBRzf5mQhiEoKwjVofF3v9hhKbJT/8vPR1uENgLtHHEqTdZFL3ihqeZUDNs6jz9bKCFy/E8KOsSueEg+6kZdwjZAkEAj2RW4fstd2VasDJb5ViaNqAEmJENOBej60L6KCJR07qqy0M8t+oaR2iLOtDvo6Jj8QxFQXQqRMCDVodAxjANKwJAL3KuaqA6kdy9RxdV3uP8nRXLY7C/1ZIK6U0pyZqKXEwpD+7Ar3hwwhPz9TeuoqjB/cCknZjw70BQFQ0/VUHW2g==";
 
-	private static String rsaPrivateKey = "rsaPrivateKey";
-	private static String rsaPublicKey = "rsaPublicKey";
+	private static final String RSAPRIVATEKEY = "rsaPrivateKey";
+	private static final String RSAPUBLICKEY = "rsaPublicKey";
+	
+	public static final String SIGN_ALGORITHMS = "SHA256WithRSA";
+	
+	public static final String CHARSET = "UTF-8";
 
-	private static String algorithm = "RSA"; //$NON-NLS-1$
+	private static final String ALGORITHM = "RSA"; //$NON-NLS-1$
 	private static final int MAX_ENCRYPT_BLOCK = 117;
 	private static final int MAX_DECRYPT_BLOCK = 128;
 	
-
-	public static void main(String[] args) throws Exception {
-		String data = "111"; //$NON-NLS-1$
-
-		String test1 = encrypt(privateKey, data);
-		String testDecrypt1 = decrypt(publicKey, test1);
-		System.out.println(testDecrypt1);
-		
-		Map<String, Object> keyMap = initKey();
-		String test = encrypt(getPrivateKey(keyMap), data);
-		String testDecrypt = decrypt(getPublicKey(keyMap), test);
-		System.out.println(testDecrypt);
-
-	}
+	//SIZE=1024 MAX_DECRYPT_BLOCK=128|SIZE=2048 MAX_DECRYPT_BLOCK=256
+	private static final int SIZE = 1024;
+	
 
 	/**
 	 * 初始化密钥
@@ -52,10 +45,10 @@ public class RSA {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Map<String, Object> initKey() throws Exception {
+	public static Map<String, Object> initKey(int size) throws Exception {
 
-		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-		keyPairGenerator.initialize(1024);
+		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
+		keyPairGenerator.initialize(size);
 
 		KeyPair keyPair = keyPairGenerator.generateKeyPair();
 		// 公钥
@@ -65,8 +58,8 @@ public class RSA {
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
 
 		Map<String, Object> keyMap = new HashMap<String, Object>(2);
-		keyMap.put(rsaPrivateKey, privateKey);
-		keyMap.put(rsaPublicKey, publicKey);
+		keyMap.put(RSAPRIVATEKEY, privateKey);
+		keyMap.put(RSAPUBLICKEY, publicKey);
 		return keyMap;
 	}
 
@@ -79,7 +72,7 @@ public class RSA {
 	 */
 	public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
 
-		Key key = (Key) keyMap.get(rsaPrivateKey);
+		Key key = (Key) keyMap.get(RSAPRIVATEKEY);
 
 		return encryptBASE64(key.getEncoded());
 	}
@@ -93,7 +86,7 @@ public class RSA {
 	 */
 	public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
 
-		Key key = (Key) keyMap.get(rsaPublicKey);
+		Key key = (Key) keyMap.get(RSAPUBLICKEY);
 
 		return encryptBASE64(key.getEncoded());
 	}
@@ -120,9 +113,9 @@ public class RSA {
 	public static String encrypt(String key, String data) throws Exception {
 		byte[] decode = new BASE64Decoder().decodeBuffer(key);
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(decode);
-		KeyFactory kf = KeyFactory.getInstance(algorithm);
+		KeyFactory kf = KeyFactory.getInstance(ALGORITHM);
 		PrivateKey generatePrivate = kf.generatePrivate(pkcs8EncodedKeySpec);
-		Cipher ci = Cipher.getInstance(algorithm);
+		Cipher ci = Cipher.getInstance(ALGORITHM);
 		ci.init(Cipher.ENCRYPT_MODE, generatePrivate);
 
 		byte[] bytes = data.getBytes();
@@ -160,9 +153,9 @@ public class RSA {
 		// PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new
 		// PKCS8EncodedKeySpec(decode); //java底层 RSA公钥只支持X509EncodedKeySpec这种格式
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(decode);
-		KeyFactory kf = KeyFactory.getInstance(algorithm);
+		KeyFactory kf = KeyFactory.getInstance(ALGORITHM);
 		PublicKey generatePublic = kf.generatePublic(x509EncodedKeySpec);
-		Cipher ci = Cipher.getInstance(algorithm);
+		Cipher ci = Cipher.getInstance(ALGORITHM);
 		ci.init(Cipher.DECRYPT_MODE, generatePublic);
 
 		byte[] bytes = new BASE64Decoder().decodeBuffer(data);
@@ -186,5 +179,74 @@ public class RSA {
 		byte[] byteArray = byteArrayOutputStream.toByteArray();
 		return new String(byteArray);
 	}
+	
+	/**
+	 * RSA验签名检查
+	 * 
+	 * @param content
+	 *            待签名数据
+	 * @param sign
+	 *            签名值
+	 * @param public_key
+	 *            公钥
+	 * @return 布尔值
+	 */
+	public static boolean verifySha256(String content, String sign, String public_key) throws Exception {
+		KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+		byte[] encodedKey = new BASE64Decoder().decodeBuffer(public_key);
+		PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
 
+		java.security.Signature signature = java.security.Signature.getInstance(SIGN_ALGORITHMS);
+
+		signature.initVerify(pubKey);
+		signature.update(content.getBytes(CHARSET));
+
+		boolean bverify = signature.verify(new BASE64Decoder().decodeBuffer(sign));
+		return bverify;
+	}
+	
+	/**
+	 * RSA签名
+	 * 
+	 * @param content
+	 *            待签名数据
+	 * @param privateKey
+	 *            商户私钥
+	 * @param input_charset
+	 *            编码格式
+	 * @return 签名值
+	 */
+	public static String signSha256(String content, String privateKey) throws Exception {
+		PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(new BASE64Decoder().decodeBuffer(privateKey));
+		KeyFactory keyf = KeyFactory.getInstance(ALGORITHM);
+		PrivateKey priKey = keyf.generatePrivate(priPKCS8);
+
+		java.security.Signature signature = java.security.Signature.getInstance(SIGN_ALGORITHMS);
+
+		signature.initSign(priKey);
+		signature.update(content.getBytes(CHARSET));
+
+		byte[] signed = signature.sign();
+
+		return new BASE64Encoder().encode(signed);
+	}
+
+	public static void main(String[] args) throws Exception {
+		String data = "{\"a\":\"1\"}"; //$NON-NLS-1$
+
+		String test1 = encrypt(privateKey, data);
+		String testDecrypt1 = decrypt(publicKey, test1);
+		System.out.println(testDecrypt1);
+		
+		Map<String, Object> keyMap = initKey(SIZE);
+		String test = encrypt(getPrivateKey(keyMap), data);
+		String testDecrypt = decrypt(getPublicKey(keyMap), test);
+		System.out.println(testDecrypt);
+		
+		String signContent = signSha256(data, getPrivateKey(keyMap));
+		System.out.println(signContent);
+		
+		System.out.println(verifySha256(data, signContent, getPublicKey(keyMap)));
+		
+	}
 }
