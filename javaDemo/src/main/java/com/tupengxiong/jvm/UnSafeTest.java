@@ -1,6 +1,7 @@
 package com.tupengxiong.jvm;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.locks.LockSupport;
 
 import sun.misc.Unsafe;
 
@@ -12,7 +13,7 @@ import sun.misc.Unsafe;
  * @date 2018年10月10日 上午11:12:45 
  *
  */
-public class UnSafeTest {
+public class UnSafeTest implements Runnable{
 
 	public static Unsafe getUnsafe() {
 		try {
@@ -43,6 +44,7 @@ public class UnSafeTest {
 
 	
 	/**
+	 * @throws InterruptedException 
 	 * 
 		12
 	get:0
@@ -63,7 +65,7 @@ public class UnSafeTest {
 
 	* @throws
 	 */
-	public static void main(String[] args) throws InstantiationException {
+	public static void main(String[] args) throws InstantiationException, InterruptedException {
 
 		// 类中提供的3个本地方法allocateMemory、reallocateMemory、freeMemory分别用于分配内存，扩充内存和释放内存，与C语言中的3个方法对应。
 
@@ -94,5 +96,24 @@ public class UnSafeTest {
 		System.out.println("get:" + unsafe.getIntVolatile(unSafeTest, valueOffset));
 
 		System.out.println(unSafeTest.value);
+		
+		Thread thread = new Thread(unSafeTest);
+		
+		// @see java.util.concurrent.locks.LockSupport 
+		thread.start();
+		
+		//LockSupport.park(thread);
+		unsafe.park(true,5000L);
+		
+		//LockSupport.unpark(thread);
+		unsafe.unpark(thread);
+	}
+
+
+	@Override
+	public void run() {
+		while(true){
+			System.out.println(Thread.currentThread().getName() + " running......");
+		}
 	}
 }
