@@ -27,3 +27,9 @@ SELECT @@tx_isolation;
 ```
 set  [glogal | session]  transaction isolation level 隔离级别名称;
 ```
+
+* Linux 相同列 排序去重 前 10
+```
+ cat catalina.out |sort |uniq -c|sort -k 1 -nr|head -10
+
+```
